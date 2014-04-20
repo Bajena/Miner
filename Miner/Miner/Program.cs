@@ -1,4 +1,5 @@
 using System;
+using Miner.GameCore;
 
 namespace Miner
 {
@@ -10,7 +11,7 @@ namespace Miner
         /// </summary>
         static void Main(string[] args)
         {
-            using (Game1 game = new Game1())
+            using (MinerGame game = new MinerGame())
             {
                 game.Run();
             }
