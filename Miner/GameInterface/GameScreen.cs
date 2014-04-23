@@ -93,7 +93,6 @@ namespace Miner
 
         EScreenState screenState = EScreenState.TransitionOn;
 
-
         /// <summary>
         /// There are two possible reasons why a screen might be transitioning
         /// off. It could be temporarily going away to make room for another
@@ -110,7 +109,6 @@ namespace Miner
 
         bool isExiting = false;
 
-
         /// <summary>
         /// Checks whether this screen is active and can respond to user input.
         /// </summary>
@@ -125,7 +123,6 @@ namespace Miner
         }
 
         bool otherScreenHasFocus;
-
 
         /// <summary>
         /// Gets the manager that this screen belongs to.

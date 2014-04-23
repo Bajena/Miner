@@ -32,9 +32,6 @@ namespace Miner
     public class ScreenManager : DrawableGameComponent
     {
         #region Fields
-
-        private const string StateFilename = "ScreenManagerState.xml";
-
         List<GameScreen> screens = new List<GameScreen>();
         List<GameScreen> tempScreensList = new List<GameScreen>();
 
@@ -72,19 +69,6 @@ namespace Miner
             get { return font; }
         }
 
-
-        /// <summary>
-        /// If true, the manager prints out a list of all the screens
-        /// each time it is updated. This can be useful for making sure
-        /// everything is being added and removed at the right times.
-        /// </summary>
-        public bool TraceEnabled
-        {
-            get { return traceEnabled; }
-            set { traceEnabled = value; }
-        }
-
-
         /// <summary>
         /// Gets a blank texture that can be used by the screens.
         /// </summary>
@@ -92,7 +76,6 @@ namespace Miner
         {
             get { return blankTexture; }
         }
-
 
         #endregion
 
@@ -105,11 +88,7 @@ namespace Miner
         public ScreenManager(Game game)
             : base(game)
         {
-            // we must set EnabledGestures before we can query for them, but
-            // we don't assume the game wants to read them.
-            TouchPanel.EnabledGestures = GestureType.None;
         }
-
 
         /// <summary>
         /// Initializes the screen manager component.
@@ -207,26 +186,7 @@ namespace Miner
                         coveredByOtherScreen = true;
                 }
             }
-
-            // Print debug trace?
-            if (traceEnabled)
-                TraceScreens();
         }
-
-
-        /// <summary>
-        /// Prints a list of all the screens, for debugging.
-        /// </summary>
-        void TraceScreens()
-        {
-            List<string> screenNames = new List<string>();
-
-            foreach (GameScreen screen in screens)
-                screenNames.Add(screen.GetType().Name);
-
-            Debug.WriteLine(string.Join(", ", screenNames.ToArray()));
-        }
-
 
         /// <summary>
         /// Tells each screen to draw itself.
@@ -241,7 +201,6 @@ namespace Miner
                 screen.Draw(gameTime);
             }
         }
-
 
         #endregion
 
