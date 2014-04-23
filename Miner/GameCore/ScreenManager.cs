@@ -43,8 +43,6 @@ namespace Miner
 
         bool isInitialized;
 
-        bool traceEnabled;
-
         #endregion
 
         #region Properties
@@ -100,7 +98,6 @@ namespace Miner
             isInitialized = true;
         }
 
-
         /// <summary>
         /// Load your graphics content.
         /// </summary>
@@ -150,9 +147,7 @@ namespace Miner
             // Make a copy of the master screen list, to avoid confusion if
             // the process of updating one screen adds or removes others.
             tempScreensList.Clear();
-
-            foreach (GameScreen screen in screens)
-                tempScreensList.Add(screen);
+			tempScreensList.AddRange(screens);
 
             bool otherScreenHasFocus = !Game.IsActive;
             bool coveredByOtherScreen = false;
@@ -253,7 +248,6 @@ namespace Miner
         {
             return screens.ToArray();
         }
-
 
         /// <summary>
         /// Helper draws a translucent black fullscreen sprite, used for fading
