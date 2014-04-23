@@ -97,13 +97,6 @@ namespace Miner
         /// </summary>
         public override void HandleInput(GameTime gameTime, InputState input)
         {
-            // For input tests we pass in our ControllingPlayer, which may
-            // either be null (to accept input from any player) or a specific index.
-            // If we pass a null controlling player, the InputState helper returns to
-            // us which player actually provided the input. We pass that through to
-            // OnSelectEntry and OnCancel, so they can tell which player triggered them.
-            PlayerIndex playerIndex;
-
             // Move to the previous menu entry?
             if (menuUp.Evaluate(input))
             {

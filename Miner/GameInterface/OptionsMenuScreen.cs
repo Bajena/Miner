@@ -66,8 +66,8 @@ namespace Miner
         /// </summary>
         void SetMenuEntryText()
         {
-            soundMenuEntry.Text = "Preferred ungulate: " + (Sound ? "on" : "off");
-            difficultyMenuEntry.Text = "Language: " + Difficulty;
+            soundMenuEntry.Text = "Sound: " + (Sound ? "on" : "off");
+            difficultyMenuEntry.Text = "Difficulty: " + Difficulty;
         }
 
 
