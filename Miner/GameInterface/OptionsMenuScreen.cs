@@ -79,7 +79,7 @@ namespace Miner
         /// <summary>
         /// Event handler for when the Ungulate menu entry is selected.
         /// </summary>
-        void SoundMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        void SoundMenuEntrySelected(object sender, EventArgs e)
         {
             Sound = !Sound;
 
@@ -89,7 +89,7 @@ namespace Miner
         /// <summary>
         /// Event handler for when the Language menu entry is selected.
         /// </summary>
-        void DifficultyMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        void DifficultyMenuEntrySelected(object sender, EventArgs e)
         {
             Difficulty = EnumExtensions.GetNextValue(Difficulty);
             SetMenuEntryText();

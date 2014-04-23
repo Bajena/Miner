@@ -105,7 +105,7 @@ namespace Miner
             PlayerIndex playerIndex;
 
             // Move to the previous menu entry?
-            if (menuUp.Evaluate(input, ControllingPlayer, out playerIndex))
+            if (menuUp.Evaluate(input))
             {
                 selectedEntry--;
 
@@ -114,7 +114,7 @@ namespace Miner
             }
 
             // Move to the next menu entry?
-            if (menuDown.Evaluate(input, ControllingPlayer, out playerIndex))
+            if (menuDown.Evaluate(input))
             {
                 selectedEntry++;
 
@@ -122,13 +122,13 @@ namespace Miner
                     selectedEntry = 0;
             }
 
-            if (menuSelect.Evaluate(input, ControllingPlayer, out playerIndex))
+            if (menuSelect.Evaluate(input))
             {
-                OnSelectEntry(selectedEntry, playerIndex);
+                OnSelectEntry(selectedEntry);
             }
-            else if (menuCancel.Evaluate(input, ControllingPlayer, out playerIndex))
+            else if (menuCancel.Evaluate(input))
             {
-                OnCancel(playerIndex);
+                OnCancel();
             }
         }
 
@@ -136,16 +136,16 @@ namespace Miner
         /// <summary>
         /// Handler for when the user has chosen a menu entry.
         /// </summary>
-        protected virtual void OnSelectEntry(int entryIndex, PlayerIndex playerIndex)
+        protected virtual void OnSelectEntry(int entryIndex)
         {
-            menuEntries[entryIndex].OnSelectEntry(playerIndex);
+            menuEntries[entryIndex].OnSelectEntry();
         }
 
 
         /// <summary>
         /// Handler for when the user has cancelled the menu.
         /// </summary>
-        protected virtual void OnCancel(PlayerIndex playerIndex)
+        protected virtual void OnCancel()
         {
             ExitScreen();
         }
@@ -154,9 +154,9 @@ namespace Miner
         /// <summary>
         /// Helper overload makes it easy to use OnCancel as a MenuEntry event handler.
         /// </summary>
-        protected void OnCancel(object sender, PlayerIndexEventArgs e)
+        protected void OnCancel(object sender, EventArgs e)
         {
-            OnCancel(e.PlayerIndex);
+            OnCancel();
         }
 
 
@@ -187,7 +187,7 @@ namespace Miner
                 // each entry is to be centered horizontally
                 position.X = ScreenManager.GraphicsDevice.Viewport.Width / 2 - menuEntry.GetWidth(this) / 2;
 
-                if (ScreenState == ScreenState.TransitionOn)
+                if (ScreenState == EScreenState.TransitionOn)
                     position.X -= transitionOffset * 256;
                 else
                     position.X += transitionOffset * 512;

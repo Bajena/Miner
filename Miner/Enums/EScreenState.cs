@@ -8,7 +8,7 @@ namespace Miner.Enums
     /// <summary>
     /// Enum describes the screen transition state.
     /// </summary>
-    public enum ScreenState
+    public enum EScreenState
     {
         TransitionOn,
         Active,

@@ -78,16 +78,16 @@ namespace Miner
         /// <summary>
         /// Event raised when the menu entry is selected.
         /// </summary>
-        public event EventHandler<PlayerIndexEventArgs> Selected;
+        public event EventHandler Selected;
 
 
         /// <summary>
         /// Method for raising the Selected event.
         /// </summary>
-        protected internal virtual void OnSelectEntry(PlayerIndex playerIndex)
+        protected internal virtual void OnSelectEntry()
         {
             if (Selected != null)
-                Selected(this, new PlayerIndexEventArgs(playerIndex));
+                Selected(this, null);
         }
 
 

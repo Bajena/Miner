@@ -33,8 +33,8 @@ namespace Miner
 
         // These delegate types map to the methods on InputState. We use these to simplify the evalute method
         // by allowing us to map the appropriate delegates and invoke them, rather than having two separate code paths.
-        private delegate bool ButtonPress(Buttons button, PlayerIndex? controllingPlayer, out PlayerIndex player);
-        private delegate bool KeyPress(Keys key, PlayerIndex? controllingPlayer, out PlayerIndex player);
+        private delegate bool ButtonPress(Buttons button);
+        private delegate bool KeyPress(Keys key);
 
         /// <summary>
         /// Initializes a new InputAction.
@@ -60,36 +60,27 @@ namespace Miner
         /// <param name="controllingPlayer">The player to test, or null to allow any player.</param>
         /// <param name="player">If controllingPlayer is null, this is the player that performed the action.</param>
         /// <returns>True if the action occurred, false otherwise.</returns>
-        public bool Evaluate(InputState state, PlayerIndex? controllingPlayer, out PlayerIndex player)
+        public bool Evaluate(InputState state)
         {
             // Figure out which delegate methods to map from the state which takes care of our "newPressOnly" logic
             ButtonPress buttonTest;
             KeyPress keyTest;
             if (newPressOnly)
             {
-                buttonTest = state.IsNewButtonPress;
                 keyTest = state.IsNewKeyPress;
             }
             else
             {
-                buttonTest = state.IsButtonPressed;
                 keyTest = state.IsKeyPressed;
             }
 
             // Now we simply need to invoke the appropriate methods for each button and key in our collections
-            foreach (Buttons button in buttons)
-            {
-                if (buttonTest(button, controllingPlayer, out player))
-                    return true;
-            }
             foreach (Keys key in keys)
             {
-                if (keyTest(key, controllingPlayer, out player))
+                if (keyTest(key))
                     return true;
             }
 
-            // If we got here, the action is not matched
-            player = PlayerIndex.One;
             return false;
         }
     }

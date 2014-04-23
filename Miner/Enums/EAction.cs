@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Miner.Enums
 {
+    /// <summary>
+    /// Describes player action
+    /// </summary>
     public enum EAction
     {
         MoveRight,

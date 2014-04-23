@@ -85,13 +85,13 @@ namespace Miner
         /// <summary>
         /// Gets the current screen transition state.
         /// </summary>
-        public ScreenState ScreenState
+        public EScreenState ScreenState
         {
             get { return screenState; }
             protected set { screenState = value; }
         }
 
-        ScreenState screenState = ScreenState.TransitionOn;
+        EScreenState screenState = EScreenState.TransitionOn;
 
 
         /// <summary>
@@ -119,8 +119,8 @@ namespace Miner
             get
             {
                 return !otherScreenHasFocus &&
-                       (screenState == ScreenState.TransitionOn ||
-                        screenState == ScreenState.Active);
+                       (screenState == EScreenState.TransitionOn ||
+                        screenState == EScreenState.Active);
             }
         }
 
@@ -138,66 +138,6 @@ namespace Miner
 
         ScreenManager screenManager;
 
-
-        /// <summary>
-        /// Gets the index of the player who is currently controlling this screen,
-        /// or null if it is accepting input from any player. This is used to lock
-        /// the game to a specific player profile. The main menu responds to input
-        /// from any connected gamepad, but whichever player makes a selection from
-        /// this menu is given control over all subsequent screens, so other gamepads
-        /// are inactive until the controlling player returns to the main menu.
-        /// </summary>
-        public PlayerIndex? ControllingPlayer
-        {
-            get { return controllingPlayer; }
-            internal set { controllingPlayer = value; }
-        }
-
-        PlayerIndex? controllingPlayer;
-
-
-        /// <summary>
-        /// Gets the gestures the screen is interested in. Screens should be as specific
-        /// as possible with gestures to increase the accuracy of the gesture engine.
-        /// For example, most menus only need Tap or perhaps Tap and VerticalDrag to operate.
-        /// These gestures are handled by the ScreenManager when screens change and
-        /// all gestures are placed in the InputState passed to the HandleInput method.
-        /// </summary>
-        public GestureType EnabledGestures
-        {
-            get { return enabledGestures; }
-            protected set
-            {
-                enabledGestures = value;
-
-                // the screen manager handles this during screen changes, but
-                // if this screen is active and the gesture types are changing,
-                // we have to update the TouchPanel ourself.
-                if (ScreenState == ScreenState.Active)
-                {
-                    TouchPanel.EnabledGestures = value;
-                }
-            }
-        }
-
-        GestureType enabledGestures = GestureType.None;
-
-        /// <summary>
-        /// Gets whether or not this screen is serializable. If this is true,
-        /// the screen will be recorded into the screen manager's state and
-        /// its Serialize and Deserialize methods will be called as appropriate.
-        /// If this is false, the screen will be ignored during serialization.
-        /// By default, all screens are assumed to be serializable.
-        /// </summary>
-        public bool IsSerializable
-        {
-            get { return isSerializable; }
-            protected set { isSerializable = value; }
-        }
-
-        bool isSerializable = true;
-        
-        
         /// <summary>
         /// Activates the screen. Called when the screen is added to the screen manager or if the game resumes
         /// from being paused or tombstoned.
@@ -208,7 +148,6 @@ namespace Miner
         /// </param>
         public virtual void Activate(bool instancePreserved) { }
 
-        
         /// <summary>
         /// Deactivates the screen. Called when the game is being deactivated due to pausing or tombstoning.
         /// </summary>
@@ -233,7 +172,7 @@ namespace Miner
             if (isExiting)
             {
                 // If the screen is going away to die, it should transition off.
-                screenState = ScreenState.TransitionOff;
+                screenState = EScreenState.TransitionOff;
 
                 if (!UpdateTransition(gameTime, transitionOffTime, 1))
                 {
@@ -247,12 +186,12 @@ namespace Miner
                 if (UpdateTransition(gameTime, transitionOffTime, 1))
                 {
                     // Still busy transitioning.
-                    screenState = ScreenState.TransitionOff;
+                    screenState = EScreenState.TransitionOff;
                 }
                 else
                 {
                     // Transition finished!
-                    screenState = ScreenState.Hidden;
+                    screenState = EScreenState.Hidden;
                 }
             }
             else
@@ -261,12 +200,12 @@ namespace Miner
                 if (UpdateTransition(gameTime, transitionOnTime, -1))
                 {
                     // Still busy transitioning.
-                    screenState = ScreenState.TransitionOn;
+                    screenState = EScreenState.TransitionOn;
                 }
                 else
                 {
                     // Transition finished!
-                    screenState = ScreenState.Active;
+                    screenState = EScreenState.Active;
                 }
             }
         }

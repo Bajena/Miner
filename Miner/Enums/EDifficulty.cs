@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Miner.Enums
 {
+    /// <summary>
+    /// Game difficulty
+    /// </summary>
     public enum EDifficulty
     {
         Easy,
