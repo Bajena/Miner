@@ -1,16 +1,5 @@
-#region File Description
-//-----------------------------------------------------------------------------
-// MainMenuScreen.cs
-//
-// Microsoft XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
-#endregion
-
-#region Using Statements
 using Microsoft.Xna.Framework;
 using System;
-#endregion
 
 namespace Miner
 {
@@ -19,9 +8,6 @@ namespace Miner
     /// </summary>
     class MainMenuScreen : MenuScreen
     {
-        #region Initialization
-
-
         /// <summary>
         /// Constructor fills in the menu contents.
         /// </summary>
@@ -43,12 +29,6 @@ namespace Miner
             MenuEntries.Add(optionsMenuEntry);
             MenuEntries.Add(exitMenuEntry);
         }
-
-
-        #endregion
-
-        #region Handle Input
-
 
         /// <summary>
         /// Event handler for when the Play Game menu entry is selected.
@@ -93,6 +73,6 @@ namespace Miner
         }
 
 
-        #endregion
+        
     }
 }

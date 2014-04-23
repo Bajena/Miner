@@ -1,13 +1,3 @@
-#region File Description
-//-----------------------------------------------------------------------------
-// ScreenManager.cs
-//
-// Microsoft XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
-#endregion
-
-#region Using Statements
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -19,7 +9,6 @@ using System.IO;
 using System.IO.IsolatedStorage;
 using System.Xml.Linq;
 using Miner.Enums;
-#endregion
 
 namespace Miner
 {
@@ -31,7 +20,6 @@ namespace Miner
     /// </summary>
     public class ScreenManager : DrawableGameComponent
     {
-        #region Fields
         List<GameScreen> screens = new List<GameScreen>();
         List<GameScreen> tempScreensList = new List<GameScreen>();
 
@@ -42,11 +30,6 @@ namespace Miner
         Texture2D blankTexture;
 
         bool isInitialized;
-
-        #endregion
-
-        #region Properties
-
 
         /// <summary>
         /// A default SpriteBatch shared by all the screens. This saves
@@ -74,11 +57,6 @@ namespace Miner
         {
             get { return blankTexture; }
         }
-
-        #endregion
-
-        #region Initialization
-
 
         /// <summary>
         /// Constructs a new screen manager component.
@@ -129,12 +107,6 @@ namespace Miner
                 screen.Unload();
             }
         }
-
-
-        #endregion
-
-        #region Update and Draw
-
 
         /// <summary>
         /// Allows each screen to run logic.
@@ -197,11 +169,6 @@ namespace Miner
             }
         }
 
-        #endregion
-
-        #region Public Methods
-
-
         /// <summary>
         /// Adds a new screen to the screen manager.
         /// </summary>
@@ -259,6 +226,6 @@ namespace Miner
             spriteBatch.Draw(blankTexture, GraphicsDevice.Viewport.Bounds, Color.Black * alpha);
             spriteBatch.End();
         }
-        #endregion
+        
     }
 }

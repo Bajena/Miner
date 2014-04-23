@@ -1,18 +1,7 @@
-#region File Description
-//-----------------------------------------------------------------------------
-// OptionsMenuScreen.cs
-//
-// Microsoft XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
-#endregion
-
-#region Using Statements
 using Microsoft.Xna.Framework;
 using Miner.Enums;
 using Miner.Extensions;
 using System;
-#endregion
 
 namespace Miner
 {
@@ -23,18 +12,12 @@ namespace Miner
     /// </summary>
     class OptionsMenuScreen : MenuScreen
     {
-        #region Fields
-
         MenuEntry soundMenuEntry;
         MenuEntry difficultyMenuEntry;
 
         static EDifficulty Difficulty = EDifficulty.Medium;
         static bool Sound = true;
-        #endregion
-
-        #region Initialization
-
-
+        
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -70,12 +53,6 @@ namespace Miner
             difficultyMenuEntry.Text = "Difficulty: " + Difficulty;
         }
 
-
-        #endregion
-
-        #region Handle Input
-
-
         /// <summary>
         /// Event handler for when the Ungulate menu entry is selected.
         /// </summary>
@@ -94,6 +71,6 @@ namespace Miner
             Difficulty = EnumExtensions.GetNextValue(Difficulty);
             SetMenuEntryText();
         }
-        #endregion
+        
     }
 }

@@ -1,13 +1,3 @@
-#region File Description
-//-----------------------------------------------------------------------------
-// MenuScreen.cs
-//
-// XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
-#endregion
-
-#region Using Statements
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
@@ -16,7 +6,6 @@ using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Input;
 using Miner;
 using Miner.Enums;
-#endregion
 
 namespace Miner
 {
@@ -26,8 +15,6 @@ namespace Miner
     /// </summary>
     abstract class MenuScreen : GameScreen
     {
-        #region Fields
-
         List<MenuEntry> menuEntries = new List<MenuEntry>();
         int selectedEntry = 0;
         string menuTitle;
@@ -37,11 +24,6 @@ namespace Miner
         InputAction menuSelect;
         InputAction menuCancel;
 
-        #endregion
-
-        #region Properties
-
-
         /// <summary>
         /// Gets the list of menu entries, so derived classes can add
         /// or change the menu contents.
@@ -50,12 +32,6 @@ namespace Miner
         {
             get { return menuEntries; }
         }
-
-
-        #endregion
-
-        #region Initialization
-
 
         /// <summary>
         /// Constructor.
@@ -84,12 +60,6 @@ namespace Miner
                 new Keys[] { Keys.Escape },
                 true);
         }
-
-
-        #endregion
-
-        #region Handle Input
-
 
         /// <summary>
         /// Responds to user input, changing the selected entry and accepting
@@ -151,12 +121,6 @@ namespace Miner
         {
             OnCancel();
         }
-
-
-        #endregion
-
-        #region Update and Draw
-
 
         /// <summary>
         /// Allows the screen the chance to position the menu entries. By default
@@ -256,6 +220,6 @@ namespace Miner
         }
 
 
-        #endregion
+        
     }
 }

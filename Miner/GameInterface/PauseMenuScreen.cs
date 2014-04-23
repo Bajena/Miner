@@ -9,9 +9,6 @@ namespace Miner
     /// </summary>
     class PauseMenuScreen : MenuScreen
     {
-        #region Initialization
-
-
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -30,12 +27,6 @@ namespace Miner
             MenuEntries.Add(resumeGameMenuEntry);
             MenuEntries.Add(quitGameMenuEntry);
         }
-
-
-        #endregion
-
-        #region Handle Input
-
 
         /// <summary>
         /// Event handler for when the Quit Game menu entry is selected.
@@ -64,6 +55,6 @@ namespace Miner
         }
 
 
-        #endregion
+        
     }
 }

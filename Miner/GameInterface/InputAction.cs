@@ -18,13 +18,11 @@ namespace Miner
     /// </summary>
     public class InputAction
     {
-        private readonly Buttons[] buttons;
         private readonly Keys[] keys;
         private readonly bool newPressOnly;
 
         // These delegate types map to the methods on InputState. We use these to simplify the evalute method
         // by allowing us to map the appropriate delegates and invoke them, rather than having two separate code paths.
-        private delegate bool ButtonPress(Buttons button);
         private delegate bool KeyPress(Keys key);
 
         /// <summary>
@@ -38,7 +36,6 @@ namespace Miner
         {
             // Store the buttons and keys. If the arrays are null, we create a 0 length array so we don't
             // have to do null checks in the Evaluate method
-            this.buttons = buttons != null ? buttons.Clone() as Buttons[] : new Buttons[0];
             this.keys = keys != null ? keys.Clone() as Keys[] : new Keys[0];
 
             this.newPressOnly = newPressOnly;
@@ -54,7 +51,6 @@ namespace Miner
         public bool Evaluate(InputState state)
         {
             // Figure out which delegate methods to map from the state which takes care of our "newPressOnly" logic
-            ButtonPress buttonTest;
             KeyPress keyTest;
             if (newPressOnly)
             {

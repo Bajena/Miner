@@ -1,20 +1,9 @@
-#region File Description
-//-----------------------------------------------------------------------------
-// MessageBoxScreen.cs
-//
-// Microsoft XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
-#endregion
-
-#region Using Statements
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Miner;
-#endregion
 
 namespace Miner
 {
@@ -24,33 +13,24 @@ namespace Miner
     /// </summary>
     class MessageBoxScreen : GameScreen
     {
-        #region Fields
-
         string message;
         Texture2D gradientTexture;
 
         InputAction menuSelect;
         InputAction menuCancel;
 
-        #endregion
-
-        #region Events
-
         public event EventHandler<EventArgs> Accepted;
         public event EventHandler<EventArgs> Cancelled;
 
-        #endregion
-
-        #region Initialization
-
-
-        /// <summary>
-        /// Constructor automatically includes the standard "A=ok, B=cancel"
-        /// usage text prompt.
-        /// </summary>
-        public MessageBoxScreen(string message)
-            : this(message, true)
-        { }
+	    /// <summary>
+	    /// Constructor automatically includes the standard "A=ok, B=cancel"
+	    /// usage text prompt.
+	    /// </summary>
+	    public MessageBoxScreen(string message)
+		    : this(message, true)
+	    {
+		    
+	    }
 
 
         /// <summary>
@@ -98,19 +78,11 @@ namespace Miner
             }
         }
 
-
-        #endregion
-
-        #region Handle Input
-
-
         /// <summary>
         /// Responds to user input, accepting or cancelling the message box.
         /// </summary>
         public override void HandleInput(GameTime gameTime, InputState input)
         {
-            PlayerIndex playerIndex;
-
             // We pass in our ControllingPlayer, which may either be null (to
             // accept input from any player) or a specific index. If we pass a null
             // controlling player, the InputState helper returns to us which player
@@ -133,12 +105,6 @@ namespace Miner
                 ExitScreen();
             }
         }
-
-
-        #endregion
-
-        #region Draw
-
 
         /// <summary>
         /// Draws the message box.
@@ -179,8 +145,5 @@ namespace Miner
 
             spriteBatch.End();
         }
-
-
-        #endregion
     }
 }

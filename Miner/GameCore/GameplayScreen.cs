@@ -1,13 +1,3 @@
-#region File Description
-//-----------------------------------------------------------------------------
-// GameplayScreen.cs
-//
-// Microsoft XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
-#endregion
-
-#region Using Statements
 using System;
 using System.Threading;
 using Microsoft.Xna.Framework;
@@ -15,7 +5,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Miner;
-#endregion
 
 namespace Miner
 {
@@ -26,8 +15,6 @@ namespace Miner
     /// </summary>
     class GameplayScreen : GameScreen
     {
-        #region Fields
-
         ContentManager content;
         SpriteFont gameFont;
 
@@ -36,11 +23,6 @@ namespace Miner
         float pauseAlpha;
 
         InputAction pauseAction;
-
-        #endregion
-
-        #region Initialization
-
 
         /// <summary>
         /// Constructor.
@@ -95,10 +77,7 @@ namespace Miner
         {
             content.Unload();
         }
-        #endregion
-
-        #region Update and Draw
-
+        
         /// <summary>
         /// Updates the state of the game. This method checks the GameScreen.IsActive
         /// property, so the game will stop updating when the pause menu is active,
@@ -184,6 +163,6 @@ namespace Miner
                 ScreenManager.FadeBackBufferToBlack(alpha);
             }
         }
-        #endregion
+        
     }
 }

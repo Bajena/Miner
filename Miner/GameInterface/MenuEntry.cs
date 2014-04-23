@@ -1,18 +1,7 @@
-#region File Description
-//-----------------------------------------------------------------------------
-// MenuEntry.cs
-//
-// XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
-#endregion
-
-#region Using Statements
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Miner;
-#endregion
 
 namespace Miner
 {
@@ -24,8 +13,6 @@ namespace Miner
     /// </summary>
     class MenuEntry
     {
-        #region Fields
-
         /// <summary>
         /// The text rendered for this entry.
         /// </summary>
@@ -44,11 +31,6 @@ namespace Miner
         /// each frame in Update.
         /// </summary>
         Vector2 position;
-
-        #endregion
-
-        #region Properties
-
 
         /// <summary>
         /// Gets or sets the text of this menu entry.
@@ -69,12 +51,6 @@ namespace Miner
             set { position = value; }
         }
 
-
-        #endregion
-
-        #region Events
-
-
         /// <summary>
         /// Event raised when the menu entry is selected.
         /// </summary>
@@ -90,12 +66,6 @@ namespace Miner
                 Selected(this, null);
         }
 
-
-        #endregion
-
-        #region Initialization
-
-
         /// <summary>
         /// Constructs a new menu entry with the specified text.
         /// </summary>
@@ -104,23 +74,11 @@ namespace Miner
             this.text = text;
         }
 
-
-        #endregion
-
-        #region Update and Draw
-
-
         /// <summary>
         /// Updates the menu entry.
         /// </summary>
         public virtual void Update(MenuScreen screen, bool isSelected, GameTime gameTime)
         {
-            // there is no such thing as a selected item on Windows Phone, so we always
-            // force isSelected to be false
-#if WINDOWS_PHONE
-            isSelected = false;
-#endif
-
             // When the menu selection changes, entries gradually fade between
             // their selected and deselected appearance, rather than instantly
             // popping to the new state.
@@ -138,12 +96,6 @@ namespace Miner
         /// </summary>
         public virtual void Draw(MenuScreen screen, bool isSelected, GameTime gameTime)
         {
-            // there is no such thing as a selected item on Windows Phone, so we always
-            // force isSelected to be false
-#if WINDOWS_PHONE
-            isSelected = false;
-#endif
-
             // Draw the selected entry in yellow, otherwise white.
             Color color = isSelected ? Color.Yellow : Color.White;
 
@@ -187,6 +139,6 @@ namespace Miner
         }
 
 
-        #endregion
+        
     }
 }

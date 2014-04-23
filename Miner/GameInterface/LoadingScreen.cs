@@ -22,17 +22,10 @@ namespace Miner
     /// </summary>
     class LoadingScreen : GameScreen
     {
-        #region Fields
-
         bool loadingIsSlow;
         bool otherScreensAreGone;
 
         GameScreen[] screensToLoad;
-
-        #endregion
-
-        #region Initialization
-
 
         /// <summary>
         /// The constructor is private: loading screens should
@@ -46,7 +39,6 @@ namespace Miner
 
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
         }
-
 
         /// <summary>
         /// Activates the loading screen.
@@ -64,12 +56,6 @@ namespace Miner
 
             screenManager.AddScreen(loadingScreen);
         }
-
-
-        #endregion
-
-        #region Update and Draw
-
 
         /// <summary>
         /// Updates the loading screen.
@@ -146,6 +132,6 @@ namespace Miner
         }
 
 
-        #endregion
+        
     }
 }
