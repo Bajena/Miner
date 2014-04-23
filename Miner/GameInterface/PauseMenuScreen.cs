@@ -1,7 +1,6 @@
-using Microsoft.Xna.Framework;
 using System;
 
-namespace Miner
+namespace Miner.GameInterface
 {
     /// <summary>
     /// The pause menu comes up over the top of the game,

@@ -2,27 +2,25 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input.Touch;
 using Microsoft.Xna.Framework.Input;
-using Miner;
 using Miner.Enums;
 
-namespace Miner
+namespace Miner.GameInterface
 {
     /// <summary>
     /// Base class for screens that contain a menu of options. The user can
     /// move up and down to select an entry, or cancel to back out of the screen.
     /// </summary>
-    abstract class MenuScreen : GameScreen
+    public abstract class MenuScreen : GameScreen
     {
         List<MenuEntry> menuEntries = new List<MenuEntry>();
         int selectedEntry = 0;
         string menuTitle;
 
-        InputAction menuUp;
-        InputAction menuDown;
-        InputAction menuSelect;
-        InputAction menuCancel;
+        protected InputAction MenuUp;
+        protected InputAction MenuDown;
+        protected InputAction MenuSelect;
+        protected InputAction MenuCancel;
 
         /// <summary>
         /// Gets the list of menu entries, so derived classes can add
@@ -43,20 +41,16 @@ namespace Miner
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
 
-            menuUp = new InputAction(
-                new Buttons[] { Buttons.DPadUp, Buttons.LeftThumbstickUp }, 
+            MenuUp = new InputAction(
                 new Keys[] { Keys.Up },
                 true);
-            menuDown = new InputAction(
-                new Buttons[] { Buttons.DPadDown, Buttons.LeftThumbstickDown },
+            MenuDown = new InputAction(
                 new Keys[] { Keys.Down },
                 true);
-            menuSelect = new InputAction(
-                new Buttons[] { Buttons.A, Buttons.Start },
+            MenuSelect = new InputAction(
                 new Keys[] { Keys.Enter, Keys.Space },
                 true);
-            menuCancel = new InputAction(
-                new Buttons[] { Buttons.B, Buttons.Back },
+            MenuCancel = new InputAction(
                 new Keys[] { Keys.Escape },
                 true);
         }
@@ -68,7 +62,7 @@ namespace Miner
         public override void HandleInput(GameTime gameTime, InputState input)
         {
             // Move to the previous menu entry?
-            if (menuUp.Evaluate(input))
+            if (MenuUp.IsCalled(input))
             {
                 selectedEntry--;
 
@@ -77,7 +71,7 @@ namespace Miner
             }
 
             // Move to the next menu entry?
-            if (menuDown.Evaluate(input))
+            if (MenuDown.IsCalled(input))
             {
                 selectedEntry++;
 
@@ -85,11 +79,11 @@ namespace Miner
                     selectedEntry = 0;
             }
 
-            if (menuSelect.Evaluate(input))
+            if (MenuSelect.IsCalled(input))
             {
                 OnSelectEntry(selectedEntry);
             }
-            else if (menuCancel.Evaluate(input))
+            else if (MenuCancel.IsCalled(input))
             {
                 OnCancel();
             }

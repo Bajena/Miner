@@ -1,9 +1,8 @@
-using Microsoft.Xna.Framework;
+using System;
 using Miner.Enums;
 using Miner.Extensions;
-using System;
 
-namespace Miner
+namespace Miner.GameInterface
 {
     /// <summary>
     /// The options screen is brought up over the top of the main menu

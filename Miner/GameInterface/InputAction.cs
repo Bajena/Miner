@@ -1,8 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework.Input;
 
-namespace Miner
+namespace Miner.GameInterface
 {
     /// <summary>
     /// Defines an action that is designated by some set of buttons and/or keys.
@@ -32,10 +30,10 @@ namespace Miner
         /// <param name="keys">An array of keys that can trigger the action.</param>
         /// <param name="newPressOnly">Whether the action only occurs on the first press of one of the buttons/keys, 
         /// false if it occurs each frame one of the buttons/keys is down.</param>
-        public InputAction(Buttons[] buttons, Keys[] keys, bool newPressOnly)
+        public InputAction(Keys[] keys, bool newPressOnly)
         {
             // Store the buttons and keys. If the arrays are null, we create a 0 length array so we don't
-            // have to do null checks in the Evaluate method
+            // have to do null checks in the IsCalled method
             this.keys = keys != null ? keys.Clone() as Keys[] : new Keys[0];
 
             this.newPressOnly = newPressOnly;
@@ -48,17 +46,17 @@ namespace Miner
         /// <param name="controllingPlayer">The player to test, or null to allow any player.</param>
         /// <param name="player">If controllingPlayer is null, this is the player that performed the action.</param>
         /// <returns>True if the action occurred, false otherwise.</returns>
-        public bool Evaluate(InputState state)
+        public bool IsCalled(InputState state)
         {
             // Figure out which delegate methods to map from the state which takes care of our "newPressOnly" logic
             KeyPress keyTest;
             if (newPressOnly)
             {
-                keyTest = state.IsNewKeyPress;
+                keyTest = state.IsKeyReleased;
             }
             else
             {
-                keyTest = state.IsKeyPressed;
+                keyTest = state.IsKeyDown;
             }
 
             // Now we simply need to invoke the appropriate methods for each button and key in our collections

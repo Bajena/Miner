@@ -1,10 +1,10 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Miner;
 using Miner.Enums;
+using Miner.GameCore;
 
-namespace Miner
+namespace Miner.GameInterface
 {
     /// <summary>
     /// The loading screen coordinates transitions between the menu system and the

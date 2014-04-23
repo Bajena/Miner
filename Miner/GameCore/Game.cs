@@ -1,9 +1,8 @@
 using System;
-using Miner;
 using Microsoft.Xna.Framework;
-using Miner.GameCore;
+using Miner.GameInterface;
 
-namespace Miner
+namespace Miner.GameCore
 {
     public class MinerGame : Microsoft.Xna.Framework.Game
     {
@@ -44,7 +43,7 @@ namespace Miner
         {
             screenManager.AddScreen(new BackgroundScreen());
 
-            screenManager.AddScreen(new MainMenuScreen());
+            screenManager.AddScreen(new NamePromptMenuScreen());
         }
 
         /// <summary>

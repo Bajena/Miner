@@ -1,9 +1,7 @@
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+using System.Linq;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Input.Touch;
 
-namespace Miner
+namespace Miner.GameInterface
 {
     /// <summary>
     /// Helper for reading input from keyboard, gamepad, and touch input. This class 
@@ -40,7 +38,7 @@ namespace Miner
         /// If this is null, it will accept input from any player. When a keypress
         /// is detected, the output playerIndex reports which player pressed it.
         /// </summary>
-        public bool IsKeyPressed(Keys key)
+        public bool IsKeyDown(Keys key)
         {
                 return CurrentKeyboardState.IsKeyDown(key);
           
@@ -52,9 +50,16 @@ namespace Miner
         /// If this is null, it will accept input from any player. When a keypress
         /// is detected, the output playerIndex reports which player pressed it.
         /// </summary>
-        public bool IsNewKeyPress(Keys key)
+        public bool IsKeyReleased(Keys key)
         {
             return (CurrentKeyboardState.IsKeyDown(key) && LastKeyboardState.IsKeyUp(key));
         }
+
+	    public Keys[] GetReleasedKeys()
+	    {
+		    var previousPressedKeys = LastKeyboardState.GetPressedKeys();
+
+		    return previousPressedKeys.Where(IsKeyReleased).ToArray();
+	    }
     }
 }

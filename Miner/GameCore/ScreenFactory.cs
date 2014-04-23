@@ -1,7 +1,7 @@
 using System;
-using Miner;
+using Miner.GameInterface;
 
-namespace Miner
+namespace Miner.GameCore
 {
     /// <summary>
     /// Our game's implementation of IScreenFactory which can handle creating the screens

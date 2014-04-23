@@ -1,10 +1,9 @@
 using System;
-using System.IO;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input.Touch;
 using Miner.Enums;
+using Miner.GameCore;
 
-namespace Miner
+namespace Miner.GameInterface
 {
     /// <summary>
     /// A screen is a single layer that has update and draw logic, and which
@@ -135,15 +134,11 @@ namespace Miner
 
         ScreenManager screenManager;
 
-        /// <summary>
-        /// Activates the screen. Called when the screen is added to the screen manager or if the game resumes
-        /// from being paused or tombstoned.
-        /// </summary>
-        /// <param name="instancePreserved">
-        /// True if the game was preserved during deactivation, false if the screen is just being added or if the game was tombstoned.
-        /// On Xbox and Windows this will always be false.
-        /// </param>
-        public virtual void Activate(bool instancePreserved) { }
+	    /// <summary>
+	    /// Activates the screen. Called when the screen is added to the screen manager or if the game resumes
+	    /// from being paused or tombstoned.
+	    /// </summary>
+	    public virtual void Activate() { }
 
         /// <summary>
         /// Deactivates the screen. Called when the game is being deactivated due to pausing or tombstoning.

@@ -3,9 +3,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Miner;
 
-namespace Miner
+namespace Miner.GameInterface
 {
     /// <summary>
     /// A popup message box screen, used to display "are you sure?"
@@ -23,8 +22,6 @@ namespace Miner
         public event EventHandler<EventArgs> Cancelled;
 
 	    /// <summary>
-	    /// Constructor automatically includes the standard "A=ok, B=cancel"
-	    /// usage text prompt.
 	    /// </summary>
 	    public MessageBoxScreen(string message)
 		    : this(message, true)
@@ -39,8 +36,8 @@ namespace Miner
         /// </summary>
         public MessageBoxScreen(string message, bool includeUsageText)
         {
-            const string usageText = "\nA button, Space, Enter = ok" +
-                                     "\nB button, Esc = cancel"; 
+            const string usageText = "\nSpace, Enter = ok" +
+                                     "\nEsc = cancel"; 
             
             if (includeUsageText)
                 this.message = message + usageText;
@@ -53,11 +50,9 @@ namespace Miner
             TransitionOffTime = TimeSpan.FromSeconds(0.2);
 
             menuSelect = new InputAction(
-                new Buttons[] { Buttons.A, Buttons.Start },
                 new Keys[] { Keys.Space, Keys.Enter },
                 true);
             menuCancel = new InputAction(
-                new Buttons[] { Buttons.B, Buttons.Back },
                 new Keys[] { Keys.Escape, Keys.Back },
                 true);
         }
@@ -69,13 +64,11 @@ namespace Miner
         /// Whenever a subsequent MessageBoxScreen tries to load this same content,
         /// it will just get back another reference to the already loaded data.
         /// </summary>
-        public override void Activate(bool instancePreserved)
+        public override void Activate()
         {
-            if (!instancePreserved)
-            {
-                ContentManager content = ScreenManager.Game.Content;
-                gradientTexture = content.Load<Texture2D>("gradient");
-            }
+            ContentManager content = ScreenManager.Game.Content;
+            gradientTexture = content.Load<Texture2D>("gradient");
+            
         }
 
         /// <summary>
@@ -88,7 +81,7 @@ namespace Miner
             // controlling player, the InputState helper returns to us which player
             // actually provided the input. We pass that through to our Accepted and
             // Cancelled events, so they can tell which player triggered them.
-            if (menuSelect.Evaluate(input))
+            if (menuSelect.IsCalled(input))
             {
                 // Raise the accepted event, then exit the message box.
                 if (Accepted != null)
@@ -96,7 +89,7 @@ namespace Miner
 
                 ExitScreen();
             }
-            else if (menuCancel.Evaluate(input))
+            else if (menuCancel.IsCalled(input))
             {
                 // Raise the cancelled event, then exit the message box.
                 if (Cancelled != null)

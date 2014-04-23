@@ -1,7 +1,6 @@
-using Microsoft.Xna.Framework;
 using System;
 
-namespace Miner
+namespace Miner.GameInterface
 {
     /// <summary>
     /// The main menu screen is the first thing displayed when the game starts up.
@@ -15,7 +14,7 @@ namespace Miner
             : base("Main Menu")
         {
             // Create our menu entries.
-            MenuEntry playGameMenuEntry = new MenuEntry("Play Game");
+            MenuEntry playGameMenuEntry = new MenuEntry("New Game");
             MenuEntry optionsMenuEntry = new MenuEntry("Options");
             MenuEntry exitMenuEntry = new MenuEntry("Exit");
 
@@ -35,7 +34,8 @@ namespace Miner
         /// </summary>
         void PlayGameMenuEntrySelected(object sender, EventArgs e)
         {
-            LoadingScreen.Load(ScreenManager, true,new GameplayScreen());
+			ScreenManager.AddScreen(new GameplayScreen());
+            //LoadingScreen.Load(ScreenManager, true,new GameplayScreen());
         }
 
 
@@ -49,11 +49,11 @@ namespace Miner
 
 
         /// <summary>
-        /// When the user cancels the main menu, ask if they want to exit the sample.
+        /// When the user cancels the main menu, ask if they want to exit
         /// </summary>
         protected override void OnCancel()
         {
-            const string message = "Are you sure you want to exit this sample?";
+            const string message = "Are you sure you want to exit?";
 
             MessageBoxScreen confirmExitMessageBox = new MessageBoxScreen(message);
 
@@ -71,8 +71,5 @@ namespace Miner
         {
             ScreenManager.Game.Exit();
         }
-
-
-        
     }
 }

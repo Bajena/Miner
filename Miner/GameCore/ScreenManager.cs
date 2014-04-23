@@ -1,21 +1,16 @@
-using System;
-using System.Diagnostics;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input.Touch;
-using System.IO;
-using System.IO.IsolatedStorage;
-using System.Xml.Linq;
 using Miner.Enums;
+using Miner.GameInterface;
 
-namespace Miner
+namespace Miner.GameCore
 {
     /// <summary>
     /// The screen manager is a component which manages one or more GameScreen
     /// instances. It maintains a stack of screens, calls their Update and Draw
-    /// methods at the appropriate times, and automatically routes input to the
+    /// methods at the appropriate times, and automatically routes input to thes
     /// topmost active screen.
     /// </summary>
     public class ScreenManager : DrawableGameComponent
@@ -25,40 +20,26 @@ namespace Miner
 
         InputState input = new InputState();
 
-        SpriteBatch spriteBatch;
-        SpriteFont font;
-        Texture2D blankTexture;
+	    bool isInitialized;
 
-        bool isInitialized;
+	    /// <summary>
+	    /// A default SpriteBatch shared by all the screens. This saves
+	    /// each screen having to bother creating their own local instance.
+	    /// </summary>
+	    public SpriteBatch SpriteBatch { get; private set; }
 
-        /// <summary>
-        /// A default SpriteBatch shared by all the screens. This saves
-        /// each screen having to bother creating their own local instance.
-        /// </summary>
-        public SpriteBatch SpriteBatch
-        {
-            get { return spriteBatch; }
-        }
+	    /// <summary>
+	    /// A default font shared by all the screens. This saves
+	    /// each screen having to bother loading their own local copy.
+	    /// </summary>
+	    public SpriteFont Font { get; private set; }
 
+	    /// <summary>
+	    /// Gets a blank texture that can be used by the screens.
+	    /// </summary>
+	    public Texture2D BlankTexture { get; private set; }
 
-        /// <summary>
-        /// A default font shared by all the screens. This saves
-        /// each screen having to bother loading their own local copy.
-        /// </summary>
-        public SpriteFont Font
-        {
-            get { return font; }
-        }
-
-        /// <summary>
-        /// Gets a blank texture that can be used by the screens.
-        /// </summary>
-        public Texture2D BlankTexture
-        {
-            get { return blankTexture; }
-        }
-
-        /// <summary>
+	    /// <summary>
         /// Constructs a new screen manager component.
         /// </summary>
         public ScreenManager(Game game)
@@ -84,14 +65,14 @@ namespace Miner
             // Load content belonging to the screen manager.
             ContentManager content = Game.Content;
 
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            font = content.Load<SpriteFont>("menufont");
-            blankTexture = content.Load<Texture2D>("blank");
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
+            Font = content.Load<SpriteFont>("menufont");
+            BlankTexture = content.Load<Texture2D>("blank");
 
             // Tell each of the screens to load their content.
             foreach (GameScreen screen in screens)
             {
-                screen.Activate(false);
+                screen.Activate();
             }
         }
 
@@ -180,13 +161,12 @@ namespace Miner
             // If we have a graphics device, tell the screen to load content.
             if (isInitialized)
             {
-                screen.Activate(false);
+                screen.Activate();
             }
 
             screens.Add(screen);
         }
-
-
+		
         /// <summary>
         /// Removes a screen from the screen manager. You should normally
         /// use GameScreen.ExitScreen instead of calling this directly, so
@@ -222,9 +202,9 @@ namespace Miner
         /// </summary>
         public void FadeBackBufferToBlack(float alpha)
         {
-            spriteBatch.Begin();
-            spriteBatch.Draw(blankTexture, GraphicsDevice.Viewport.Bounds, Color.Black * alpha);
-            spriteBatch.End();
+            SpriteBatch.Begin();
+            SpriteBatch.Draw(BlankTexture, GraphicsDevice.Viewport.Bounds, Color.Black * alpha);
+            SpriteBatch.End();
         }
         
     }

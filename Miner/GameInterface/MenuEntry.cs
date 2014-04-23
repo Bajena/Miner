@@ -1,9 +1,9 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Miner;
+using Miner.GameCore;
 
-namespace Miner
+namespace Miner.GameInterface
 {
     /// <summary>
     /// Helper class represents a single entry in a MenuScreen. By default this
@@ -11,7 +11,7 @@ namespace Miner
     /// entries in different ways. This also provides an event that will be raised
     /// when the menu entry is selected.
     /// </summary>
-    class MenuEntry
+    public class MenuEntry
     {
         /// <summary>
         /// The text rendered for this entry.
@@ -55,7 +55,6 @@ namespace Miner
         /// Event raised when the menu entry is selected.
         /// </summary>
         public event EventHandler Selected;
-
 
         /// <summary>
         /// Method for raising the Selected event.
