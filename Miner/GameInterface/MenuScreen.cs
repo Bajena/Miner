@@ -140,15 +140,12 @@ namespace Miner.GameInterface
                 menuEntry.Draw(this, isSelected, gameTime);
             }
 
-            // Make the menu slide into place during transitions, using a
-            // power curve to make things look more interesting (this makes
-            // the movement slow down as it nears the end).
             float transitionOffset = (float)Math.Pow(TransitionPosition, 2);
 
             // Draw the menu title centered on the screen
             Vector2 titlePosition = new Vector2(graphics.Viewport.Width / 2, 80);
 			Vector2 titleOrigin = font.MeasureString(MenuTitle) / 2;
-            Color titleColor = new Color(192, 192, 192) * TransitionAlpha;
+            Color titleColor = new Color(255, 255, 255) * TransitionAlpha;
             float titleScale = 1.25f;
 
             titlePosition.Y -= transitionOffset * 100;

@@ -10,7 +10,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
     <OutputPath>bin\$(Platform)\$(Configuration)</OutputPath>
-	<PlatformTarget Condition=" '$(PlatformTarget)' == '' ">x86</PlatformTarget>
+    <PlatformTarget Condition=" '$(PlatformTarget)' == '' ">x86</PlatformTarget>
     <ContentRootDirectory>Content</ContentRootDirectory>
   </PropertyGroup>
   <PropertyGroup>
@@ -63,6 +63,13 @@
   <ItemGroup>
     <Compile Include="menu_background.png">
       <Name>menu_background</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="message_box_background.png">
+      <Name>message_box_background</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

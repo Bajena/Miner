@@ -46,7 +46,7 @@ namespace Miner.GameInterface
         public override void Activate()
         {
             ContentManager content = ScreenManager.Game.Content;
-            _gradientTexture = content.Load<Texture2D>("gradient");
+            _gradientTexture = content.Load<Texture2D>("message_box_background");
         }
 
         public override void HandleInput(GameTime gameTime, InputState input)
@@ -79,7 +79,6 @@ namespace Miner.GameInterface
             Vector2 textSize = font.MeasureString(Message);
             Vector2 textPosition = (viewportSize - textSize) / 2;
 
-            // The background includes a border larger than the text.
             const int hPad = 32;
             const int vPad = 16;
 
