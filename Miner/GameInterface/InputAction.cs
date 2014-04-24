@@ -52,7 +52,7 @@ namespace Miner.GameInterface
             KeyPress keyTest;
             if (newPressOnly)
             {
-                keyTest = state.IsKeyReleased;
+                keyTest = state.IsNewKey;
             }
             else
             {

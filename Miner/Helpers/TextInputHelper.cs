@@ -32,6 +32,8 @@ namespace Miner.Helpers
 
 			foreach (Keys key in pressedKeys)
 			{
+				if (!input.IsNewKey(key))
+					continue;
 				if (key == Keys.Back)
 					InputText = InputText.Length > 1 ? InputText.Remove(InputText.Length - 1, 1) : string.Empty;
 				else if (key == Keys.Space)

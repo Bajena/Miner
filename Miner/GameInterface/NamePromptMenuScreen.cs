@@ -22,17 +22,14 @@ namespace Miner.GameInterface
 			_playerNameInputHelper = new TextInputHelper();
 			// Create our menu entries.
             MenuEntry acceptMenuEntry = new MenuEntry("OK");
-            MenuEntry exitMenuEntry = new MenuEntry("Exit");
 
             // Hook up menu event handlers.
 			nameMenuEntry.Selected += NameMenuEntrySelected;
             acceptMenuEntry.Selected += AcceptMenuEntrySelected;
-            exitMenuEntry.Selected += OnCancel;
 
             // Add entries to the menu.
 			MenuEntries.Add(nameMenuEntry);
             MenuEntries.Add(acceptMenuEntry);
-            MenuEntries.Add(exitMenuEntry);
         }
 
 		void NameMenuEntrySelected(object sender, EventArgs e)
@@ -71,20 +68,6 @@ namespace Miner.GameInterface
 				_playerNameInputHelper.HandleInput(input);
 			}
 		}
-
-        /// <summary>
-        /// When the user cancels the main menu, ask if they want to exit
-        /// </summary>
-        protected override void OnCancel()
-        {
-            const string message = "Are you sure you want to exit?";
-
-            MessageBoxScreen confirmExitMessageBox = new MessageBoxScreen(message);
-
-            confirmExitMessageBox.Accepted += ConfirmExitMessageBoxAccepted;
-
-            ScreenManager.AddScreen(confirmExitMessageBox);
-        }
 
 		public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
 		{

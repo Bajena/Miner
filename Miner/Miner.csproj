@@ -76,7 +76,7 @@
     <Compile Include="GameInterface\GameScreen.cs" />
     <Compile Include="GameInterface\InputAction.cs" />
     <Compile Include="GameInterface\InputState.cs" />
-    <Compile Include="GameInterface\IScreenFactory.cs" />
+    <Compile Include="GameCore\IScreenFactory.cs" />
     <Compile Include="GameCore\ScreenManager.cs" />
     <Compile Include="GameInterface\NamePromptMenuScreen.cs" />
     <Compile Include="Program.cs" />

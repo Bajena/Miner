@@ -25,10 +25,8 @@ namespace Miner.GameCore
             graphics.PreferredBackBufferHeight = (int)SettingsManager.Instance.Resolution.Y;
             graphics.ApplyChanges();
 
-            TargetElapsedTime = TimeSpan.FromTicks(333333);
-
             screenFactory = new ScreenFactory();
-            Services.AddService(typeof(IScreenFactory), screenFactory);
+            //Services.AddService(typeof(IScreenFactory), screenFactory);
 
             screenManager = new ScreenManager(this);
             Components.Add(screenManager);

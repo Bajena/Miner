@@ -41,7 +41,6 @@ namespace Miner.GameInterface
         public bool IsKeyDown(Keys key)
         {
                 return CurrentKeyboardState.IsKeyDown(key);
-          
         }
 
         /// <summary>
@@ -50,7 +49,7 @@ namespace Miner.GameInterface
         /// If this is null, it will accept input from any player. When a keypress
         /// is detected, the output playerIndex reports which player pressed it.
         /// </summary>
-        public bool IsKeyReleased(Keys key)
+        public bool IsNewKey(Keys key)
         {
             return (CurrentKeyboardState.IsKeyDown(key) && LastKeyboardState.IsKeyUp(key));
         }
@@ -58,8 +57,7 @@ namespace Miner.GameInterface
 	    public Keys[] GetReleasedKeys()
 	    {
 		    var previousPressedKeys = LastKeyboardState.GetPressedKeys();
-
-		    return previousPressedKeys.Where(IsKeyReleased).ToArray();
+		    return previousPressedKeys.Where(CurrentKeyboardState.IsKeyUp).ToArray();
 	    }
     }
 }
