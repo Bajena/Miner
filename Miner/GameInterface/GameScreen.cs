@@ -6,7 +6,9 @@ using Miner.GameCore;
 namespace Miner.GameInterface
 {
     public abstract class GameScreen
-    {
+	{
+		bool _otherScreenHasFocus;
+
 	    public bool IsPopup { get; protected set; }
 
 	    public TimeSpan TransitionOnTime { get; protected set; }
@@ -31,8 +33,6 @@ namespace Miner.GameInterface
                 return !_otherScreenHasFocus && (ScreenState == EScreenState.TransitionOn || ScreenState == EScreenState.Active);
             }
         }
-
-        bool _otherScreenHasFocus;
 
 	    public ScreenManager ScreenManager { get; internal set; }
 

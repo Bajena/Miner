@@ -1,75 +1,70 @@
 using System;
+using System.Configuration;
 using Miner.Enums;
 using Miner.Extensions;
+using Miner.GameCore;
 
 namespace Miner.GameInterface
 {
-    /// <summary>
-    /// The options screen is brought up over the top of the main menu
-    /// screen, and gives the user a chance to configure the game
-    /// in various hopefully useful ways.
-    /// </summary>
     class OptionsMenuScreen : MenuScreen
     {
-        MenuEntry soundMenuEntry;
-        MenuEntry difficultyMenuEntry;
+	    readonly MenuEntry _soundMenuEntry;
+	    readonly MenuEntry _difficultyMenuEntry;
 
-        static EDifficulty Difficulty = EDifficulty.Medium;
-        static bool Sound = true;
+	    private EDifficulty _difficulty;
+	    private bool _sound;
         
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         public OptionsMenuScreen()
             : base("Options")
         {
-            // Create our menu entries.
-            soundMenuEntry = new MenuEntry(string.Empty);
-            difficultyMenuEntry = new MenuEntry(string.Empty);
+	        _sound = SettingsManager.Instance.Sound;
+	        _difficulty = SettingsManager.Instance.Difficulty;
+
+            _soundMenuEntry = new MenuEntry(string.Empty);
+            _difficultyMenuEntry = new MenuEntry(string.Empty);
 
             SetMenuEntryText();
 
             MenuEntry back = new MenuEntry("Back");
 
-            // Hook up menu event handlers.
-            soundMenuEntry.Selected += SoundMenuEntrySelected;
-            difficultyMenuEntry.Selected += DifficultyMenuEntrySelected;
+            _soundMenuEntry.Selected += SoundMenuEntrySelected;
+            _difficultyMenuEntry.Selected += DifficultyMenuEntrySelected;
             back.Selected += OnCancel;
             
-            // Add entries to the menu.
-            MenuEntries.Add(soundMenuEntry);
-            MenuEntries.Add(difficultyMenuEntry);
+            MenuEntries.Add(_soundMenuEntry);
+            MenuEntries.Add(_difficultyMenuEntry);
             MenuEntries.Add(back);
         }
 
-
-        /// <summary>
-        /// Fills in the latest values for the options screen menu text.
-        /// </summary>
         void SetMenuEntryText()
         {
-            soundMenuEntry.Text = "Sound: " + (Sound ? "on" : "off");
-            difficultyMenuEntry.Text = "Difficulty: " + Difficulty;
+            _soundMenuEntry.Text = "Sound: " + (_sound ? "on" : "off");
+            _difficultyMenuEntry.Text = "Difficulty: " + _difficulty;
         }
 
-        /// <summary>
-        /// Event handler for when the Ungulate menu entry is selected.
-        /// </summary>
         void SoundMenuEntrySelected(object sender, EventArgs e)
         {
-            Sound = !Sound;
+            _sound = !_sound;
 
             SetMenuEntryText();
         }
 
-        /// <summary>
-        /// Event handler for when the Language menu entry is selected.
-        /// </summary>
         void DifficultyMenuEntrySelected(object sender, EventArgs e)
         {
-            Difficulty = EnumExtensions.GetNextValue(Difficulty);
+            _difficulty = EnumExtensions.GetNextValue(_difficulty);
             SetMenuEntryText();
         }
-        
+
+	    protected override void OnCancel()
+	    {
+			SaveNewOptions();
+		    base.OnCancel();
+	    }
+
+	    void SaveNewOptions()
+	    {
+			SettingsManager.Instance.Sound = _sound;
+		    SettingsManager.Instance.Difficulty = _difficulty;
+	    }
     }
 }

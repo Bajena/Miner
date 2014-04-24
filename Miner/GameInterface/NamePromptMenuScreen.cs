@@ -49,15 +49,14 @@ namespace Miner.GameInterface
 	        }
 	        else
 	        {
-				const string message = "Are you sure you want to exit?";
+				const string message = "Please enter your name!";
 
-				MessageBoxScreen confirmExitMessageBox = new MessageBoxScreen(message);
+				MessageBoxScreen confirmExitMessageBox = new MessageBoxScreen(message,true,MessageBoxType.Info);
 
 				confirmExitMessageBox.Accepted += ConfirmExitMessageBoxAccepted;
 
 				ScreenManager.AddScreen(confirmExitMessageBox);
 	        }
-	        //LoadingScreen.Load(ScreenManager, true,new GameplayScreen());
         }
 
 		public override void HandleInput(GameTime gameTime, InputState input)
@@ -74,6 +73,7 @@ namespace Miner.GameInterface
 			base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 			nameMenuEntry.Text = _playerNameInputHelper.Enabled ? "Name: " + _playerNameInputHelper + "_" : "Name: " + _playerNameInputHelper;
 		}
+
         /// <summary>
         /// Event handler for when the user selects ok on the "are you sure
         /// you want to exit" message box.

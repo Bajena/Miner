@@ -7,70 +7,38 @@ using Miner.GameInterface;
 
 namespace Miner.GameCore
 {
-    /// <summary>
-    /// The screen manager is a component which manages one or more GameScreen
-    /// instances. It maintains a stack of screens, calls their Update and Draw
-    /// methods at the appropriate times, and automatically routes input to thes
-    /// topmost active screen.
-    /// </summary>
     public class ScreenManager : DrawableGameComponent
     {
-        List<GameScreen> screens = new List<GameScreen>();
-        List<GameScreen> tempScreensList = new List<GameScreen>();
+	    readonly List<GameScreen> _screens = new List<GameScreen>();
+	    readonly List<GameScreen> _tempScreensList = new List<GameScreen>();
+	    readonly InputState _input = new InputState();
+	    bool _isInitialized;
 
-        InputState input = new InputState();
-
-	    bool isInitialized;
-
-	    /// <summary>
-	    /// A default SpriteBatch shared by all the screens. This saves
-	    /// each screen having to bother creating their own local instance.
-	    /// </summary>
 	    public SpriteBatch SpriteBatch { get; private set; }
-
-	    /// <summary>
-	    /// A default font shared by all the screens. This saves
-	    /// each screen having to bother loading their own local copy.
-	    /// </summary>
 	    public SpriteFont Font { get; private set; }
-
-	    /// <summary>
-	    /// Gets a blank texture that can be used by the screens.
-	    /// </summary>
 	    public Texture2D BlankTexture { get; private set; }
 
-	    /// <summary>
-        /// Constructs a new screen manager component.
-        /// </summary>
         public ScreenManager(Game game)
             : base(game)
         {
         }
 
-        /// <summary>
-        /// Initializes the screen manager component.
-        /// </summary>
         public override void Initialize()
         {
             base.Initialize();
 
-            isInitialized = true;
+            _isInitialized = true;
         }
 
-        /// <summary>
-        /// Load your graphics content.
-        /// </summary>
         protected override void LoadContent()
         {
-            // Load content belonging to the screen manager.
             ContentManager content = Game.Content;
 
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             Font = content.Load<SpriteFont>("menufont");
             BlankTexture = content.Load<Texture2D>("blank");
 
-            // Tell each of the screens to load their content.
-            foreach (GameScreen screen in screens)
+            foreach (GameScreen screen in _screens)
             {
                 screen.Activate();
             }
@@ -82,38 +50,28 @@ namespace Miner.GameCore
         /// </summary>
         protected override void UnloadContent()
         {
-            // Tell each of the screens to unload their content.
-            foreach (GameScreen screen in screens)
+            foreach (GameScreen screen in _screens)
             {
                 screen.Unload();
             }
         }
 
-        /// <summary>
-        /// Allows each screen to run logic.
-        /// </summary>
         public override void Update(GameTime gameTime)
         {
-            // Read the keyboard and gamepad.
-            input.Update();
+            _input.Update();
 
-            // Make a copy of the master screen list, to avoid confusion if
-            // the process of updating one screen adds or removes others.
-            tempScreensList.Clear();
-			tempScreensList.AddRange(screens);
+            _tempScreensList.Clear();
+			_tempScreensList.AddRange(_screens);
 
             bool otherScreenHasFocus = !Game.IsActive;
             bool coveredByOtherScreen = false;
 
-            // Loop as long as there are screens waiting to be updated.
-            while (tempScreensList.Count > 0)
+            while (_tempScreensList.Count > 0)
             {
-                // Pop the topmost screen off the waiting list.
-                GameScreen screen = tempScreensList[tempScreensList.Count - 1];
+                GameScreen screen = _tempScreensList[_tempScreensList.Count - 1];
 
-                tempScreensList.RemoveAt(tempScreensList.Count - 1);
+                _tempScreensList.RemoveAt(_tempScreensList.Count - 1);
 
-                // Update the screen.
                 screen.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 
                 if (screen.ScreenState == EScreenState.TransitionOn ||
@@ -123,7 +81,7 @@ namespace Miner.GameCore
                     // give it a chance to handle input.
                     if (!otherScreenHasFocus)
                     {
-                        screen.HandleInput(gameTime, input);
+                        screen.HandleInput(gameTime, _input);
 
                         otherScreenHasFocus = true;
                     }
@@ -136,12 +94,9 @@ namespace Miner.GameCore
             }
         }
 
-        /// <summary>
-        /// Tells each screen to draw itself.
-        /// </summary>
         public override void Draw(GameTime gameTime)
         {
-            foreach (GameScreen screen in screens)
+            foreach (GameScreen screen in _screens)
             {
                 if (screen.ScreenState == EScreenState.Hidden)
                     continue;
@@ -150,56 +105,36 @@ namespace Miner.GameCore
             }
         }
 
-        /// <summary>
-        /// Adds a new screen to the screen manager.
-        /// </summary>
         public void AddScreen(GameScreen screen)
         {
             screen.ScreenManager = this;
             screen.IsExiting = false;
 
-            // If we have a graphics device, tell the screen to load content.
-            if (isInitialized)
+            if (_isInitialized)
             {
                 screen.Activate();
             }
 
-            screens.Add(screen);
+            _screens.Add(screen);
         }
 		
-        /// <summary>
-        /// Removes a screen from the screen manager. You should normally
-        /// use GameScreen.ExitScreen instead of calling this directly, so
-        /// the screen can gradually transition off rather than just being
-        /// instantly removed.
-        /// </summary>
         public void RemoveScreen(GameScreen screen)
         {
             // If we have a graphics device, tell the screen to unload content.
-            if (isInitialized)
+            if (_isInitialized)
             {
                 screen.Unload();
             }
 
-            screens.Remove(screen);
-            tempScreensList.Remove(screen);
+            _screens.Remove(screen);
+            _tempScreensList.Remove(screen);
         }
 
-
-        /// <summary>
-        /// Expose an array holding all the screens. We return a copy rather
-        /// than the real master list, because screens should only ever be added
-        /// or removed using the AddScreen and RemoveScreen methods.
-        /// </summary>
         public GameScreen[] GetScreens()
         {
-            return screens.ToArray();
+            return _screens.ToArray();
         }
 
-        /// <summary>
-        /// Helper draws a translucent black fullscreen sprite, used for fading
-        /// screens in and out, and for darkening the background behind popups.
-        /// </summary>
         public void FadeBackBufferToBlack(float alpha)
         {
             SpriteBatch.Begin();
