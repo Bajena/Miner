@@ -5,11 +5,10 @@ using System.Text;
 
 namespace Miner.Enums
 {
-	public enum ETileType
+	public enum ETileCollisionType
 	{
-		Normal,
-		Exit,
-		Tunnel,
-		OxygenRefill
+		Passable,
+		Impassable,
+		Platform
 	}
 }

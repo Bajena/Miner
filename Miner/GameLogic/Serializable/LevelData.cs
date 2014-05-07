@@ -14,6 +14,8 @@ namespace Miner.GameLogic.Serializable
 	{
 		public string Name { get; set; }
 		public Vector2 PlayerStartPosition { get; set; }
+		public string Tileset { get; set; }
+		public Vector2 Dimensions { get; set; }
 		public List<TileData> Tiles { get; set; } 
 
 		public void Serialize(string filePath)
@@ -21,6 +23,7 @@ namespace Miner.GameLogic.Serializable
 			var xmlSerializer = new XmlSerializer(typeof(LevelData));
 			var fileWriter = new FileStream(filePath, FileMode.Create);
 			xmlSerializer.Serialize(fileWriter, this);
+			fileWriter.Close();
 		}
 
 		public static LevelData Deserialize(string filePath)
@@ -28,6 +31,7 @@ namespace Miner.GameLogic.Serializable
 			var xmlSerializer = new XmlSerializer(typeof(LevelData));
 			var fileReader = new StreamReader(filePath);
 			var data = xmlSerializer.Deserialize(fileReader);
+			fileReader.Close();
 			return data as LevelData;
 		}
 	}

@@ -26,6 +26,7 @@ namespace Miner.GameLogic.Components
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
+			
 			for (int i = 0;i<ParentObject.Properties.GetProperty<int>("Lives");i++)
 				spriteBatch.Draw(LifeTexture,new Rectangle((int) Position.X + i*(LifeTexture.Width+5),(int) Position.Y,LifeTexture.Width,LifeTexture.Height),Color.White);
 		}

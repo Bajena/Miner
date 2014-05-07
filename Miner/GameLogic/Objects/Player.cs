@@ -15,7 +15,6 @@ namespace Miner.GameLogic.Objects
 	public class Player : GameObject
 	{
 		public AnimationComponent AnimationComponent { get { return (AnimationComponent)DrawableComponents["Animation"]; } }
-		public LivesComponent LivesComponent { get { return (LivesComponent)DrawableComponents["Lives"]; } }
 		public PhysicsComponent PhysicsComponent { get { return (PhysicsComponent) Components["Physics"]; } }
 
 		public Vector2 Position
@@ -32,8 +31,20 @@ namespace Miner.GameLogic.Objects
 		public int Lives { get { return Properties.GetProperty<int>("Lives"); } set { Properties.UpdateProperty("Lives", value); } }
 		public int Points { get { return Properties.GetProperty<int>("Points"); } set { Properties.UpdateProperty("Points", value); } }
 		public int Dynamite { get { return Properties.GetProperty<int>("Dynamite"); } set { Properties.UpdateProperty("Dynamite", value); } }
-		public bool IsJumping {get { return Properties.GetProperty<bool>("IsJumping"); } set {Properties.UpdateProperty("IsJumping",value);}}
-		
+
+		public bool IsJumping
+		{
+			get { return Velocity.Y != 0f; }
+		}
+
+		public Vector2 Size
+		{
+			get
+			{
+				var currentAnimationFrame = AnimationComponent.Animations[AnimationComponent.CurrentAnimation].CurrentFrame;
+				return new Vector2(currentAnimationFrame.Width,currentAnimationFrame.Height);
+			}
+		}
 
 		public Player(Game game) : base(game)
 		{
@@ -51,11 +62,6 @@ namespace Miner.GameLogic.Objects
 			DrawableComponents.Add("Animation", new AnimationComponent(this));
 
 			SetupAnimations();
-
-			var lifeTexture = Game.Content.Load<Texture2D>("UI/heart");
-			DrawableComponents.Add("Lives", new LivesComponent(this,new Vector2(20,20),lifeTexture));
-			Position = new Vector2(100,100);
-			
 		}
 
 		private void SetupAnimations()
@@ -109,7 +115,7 @@ namespace Miner.GameLogic.Objects
 
 			Velocity = new Vector2(0, Velocity.Y);
 
-			if (SettingsManager.Instance.Controls[EAction.Jump].IsCalled(input))
+			if (SettingsManager.Instance.Controls[EAction.Jump].IsCalled(input) && !IsJumping)
 			{
 				Jump();
 			}
@@ -151,8 +157,8 @@ namespace Miner.GameLogic.Objects
 		{
 			PhysicsComponent.HasGravity = true;
 			AnimationComponent.SetActiveAnimation("Jump");
-			Properties.UpdateProperty("Velocity",new Vector2(0,-250));
-			IsJumping = true;
+			Properties.UpdateProperty("Velocity", new Vector2(0, -250));
+			
 		}
 
 		public override void Update(GameTime gameTime)
