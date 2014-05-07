@@ -15,9 +15,12 @@ namespace Miner.GameInterface
 		protected InputAction MenuDown;
 		protected InputAction MenuSelect;
 		protected InputAction MenuCancel;
+		protected float TitlePositionY { get; set; }
+		protected float MenuEntriesPositionY { get; set; }
 
 	    public string MenuTitle { get; set; }
-	    protected List<MenuEntry> MenuEntries { get; private set; }
+	    
+		protected List<MenuEntry> MenuEntries { get; private set; }
 
         public MenuScreen(string menuTitle)
         {
@@ -39,6 +42,9 @@ namespace Miner.GameInterface
             MenuCancel = new InputAction(
                 new Keys[] { Keys.Escape },
                 true);
+
+			TitlePositionY = 325;
+	        MenuEntriesPositionY = 400;
         }
 
         public override void HandleInput(GameTime gameTime, InputState input)
@@ -88,7 +94,7 @@ namespace Miner.GameInterface
         {
             var transitionOffset = (float)Math.Pow(TransitionPosition, 2);
 
-            var position = new Vector2(0f, 175f);
+            var position = new Vector2(0,MenuEntriesPositionY);
 
             foreach (var menuEntry in MenuEntries)
             {
@@ -143,12 +149,11 @@ namespace Miner.GameInterface
             float transitionOffset = (float)Math.Pow(TransitionPosition, 2);
 
             // Draw the menu title centered on the screen
-            Vector2 titlePosition = new Vector2(graphics.Viewport.Width / 2, 80);
 			Vector2 titleOrigin = font.MeasureString(MenuTitle) / 2;
             Color titleColor = new Color(255, 255, 255) * TransitionAlpha;
             float titleScale = 1.25f;
 
-            titlePosition.Y -= transitionOffset * 100;
+			var titlePosition = new Vector2(ScreenManager.GraphicsDevice.Viewport.Width/2,TitlePositionY - transitionOffset*100);
 
 			spriteBatch.DrawString(font, MenuTitle, titlePosition, titleColor, 0,
                                    titleOrigin, titleScale, SpriteEffects.None, 0);

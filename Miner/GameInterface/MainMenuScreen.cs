@@ -22,7 +22,10 @@ namespace Miner.GameInterface
 
         void PlayGameMenuEntrySelected(object sender, EventArgs e)
         {
-			ScreenManager.AddScreen(new GameplayScreen());
+			ScreenManager.AddScreen(new GameplayScreen()
+			{
+				ScreenManager = ScreenManager
+			});
             //LoadingScreen.Load(ScreenManager, true,new GameplayScreen());
         }
 

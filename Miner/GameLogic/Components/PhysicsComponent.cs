@@ -24,7 +24,7 @@ namespace Miner.GameLogic.Components
 			HasGravity = false;
 			HasDrag = true;
 			_gravity = new Vector2(0, 400);
-
+			MaxVelocity = 5000;
 			ParentObject.Properties.UpdateProperty("Position", Vector2.Zero);
 			ParentObject.Properties.UpdateProperty("Velocity", Vector2.Zero);
 			ParentObject.Properties.UpdateProperty("Acceleration", Vector2.Zero);

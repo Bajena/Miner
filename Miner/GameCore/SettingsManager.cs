@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Miner.Enums;
 using Microsoft.Xna.Framework.Input;
+using Miner.GameInterface;
 
 namespace Miner.GameCore
 {
@@ -15,7 +16,7 @@ namespace Miner.GameCore
 			get { return _instance ?? (_instance = new SettingsManager()); }
 		}
 
-        public Dictionary<EAction, Keys> Controls { get; set; }
+        public Dictionary<EAction, InputAction> Controls { get; set; }
         public string PlayerName { get; set; }
         public bool Sound { get; set; }
 		public EDifficulty Difficulty { get; set; }
@@ -23,7 +24,11 @@ namespace Miner.GameCore
 
         public void Initialize()
         {
-            Controls = new Dictionary<EAction, Keys>();
+	        Controls = new Dictionary<EAction, InputAction>();
+			Controls.Add(EAction.Jump, new InputAction(new Keys[] { Keys.Up }, true));
+			Controls.Add(EAction.MoveLeft, new InputAction(new Keys[] { Keys.Left }, false));
+			Controls.Add(EAction.MoveRight, new InputAction(new Keys[] { Keys.Right }, false));
+			Controls.Add(EAction.SetDynamite, new InputAction(new Keys[] { Keys.Space }, true));
             PlayerName = "Player";
             Sound = true;
             Resolution = new Vector2(800, 600);

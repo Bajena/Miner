@@ -67,10 +67,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Enums\EScreenState.cs" />
+    <Compile Include="Enums\ETileType.cs" />
     <Compile Include="Extensions\ContentManagerExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\KeysExtensions.cs" />
-    <Compile Include="GameCore\Game.cs" />
+    <Compile Include="GameCore\MinerGame.cs" />
     <Compile Include="Enums\EAction.cs" />
     <Compile Include="Enums\EDifficulty.cs" />
     <Compile Include="GameCore\SettingsManager.cs" />
@@ -83,9 +84,16 @@
     <Compile Include="GameLogic\Components\AnimationComponent.cs" />
     <Compile Include="GameLogic\Components\DrawableGameObjectComponent.cs" />
     <Compile Include="GameLogic\Components\GameObjectComponent.cs" />
+    <Compile Include="GameLogic\Components\LivesComponent.cs" />
     <Compile Include="GameLogic\Components\PhysicsComponent.cs" />
+    <Compile Include="GameLogic\Level.cs" />
     <Compile Include="GameLogic\Objects\GameObject.cs" />
+    <Compile Include="GameLogic\Objects\Machine.cs" />
+    <Compile Include="GameLogic\Objects\Player.cs" />
+    <Compile Include="GameLogic\Objects\Tile.cs" />
     <Compile Include="GameLogic\PropertyContainer.cs" />
+    <Compile Include="GameLogic\Serializable\LevelData.cs" />
+    <Compile Include="GameLogic\Serializable\TileData.cs" />
     <Compile Include="GameLogic\SpriteAnimation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -144,6 +152,7 @@
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
       <Private>False</Private>
     </Reference>
@@ -166,6 +175,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Levels\Level1.lvl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

@@ -6,6 +6,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Miner;
 using Miner.GameInterface;
+using Miner.GameLogic;
+using Miner.GameLogic.Components;
+using Miner.GameLogic.Objects;
 
 namespace Miner
 {
@@ -18,6 +21,8 @@ namespace Miner
 
 	    InputAction _pauseAction;
 
+	    private Player player;
+	    private Level currentLevel;
         public GameplayScreen()
         {
             TransitionOnTime = TimeSpan.FromSeconds(1.5);
@@ -26,6 +31,7 @@ namespace Miner
             _pauseAction = new InputAction(
                 new Keys[] { Keys.Escape },
                 true);
+
         }
 
 
@@ -39,7 +45,8 @@ namespace Miner
                 _content = new ContentManager(ScreenManager.Game.Services, "Content");
 
             _gameFont = _content.Load<SpriteFont>("menufont");
-
+			player = new Player(ScreenManager.Game);
+	        currentLevel = new Level(ScreenManager.Game,"Level1");
         }
 
         public override void Deactivate()
@@ -66,6 +73,7 @@ namespace Miner
             if (IsActive)
             {
                 //Game
+				currentLevel.Update(gameTime);
             }
         }
 
@@ -82,23 +90,7 @@ namespace Miner
             }
             else
             {
-                // Otherwise move the player position.
-                Vector2 movement = Vector2.Zero;
-
-                if (keyboardState.IsKeyDown(Keys.Left))
-                    movement.X--;
-
-                if (keyboardState.IsKeyDown(Keys.Right))
-                    movement.X++;
-
-                if (keyboardState.IsKeyDown(Keys.Up))
-                    movement.Y--;
-
-                if (keyboardState.IsKeyDown(Keys.Down))
-                    movement.Y++;
-
-                if (movement.Length() > 1)
-                    movement.Normalize();
+               currentLevel.Player.HandleInput(gameTime,input);
             }
         }
 
@@ -111,8 +103,7 @@ namespace Miner
 
             spriteBatch.Begin();
 
-            spriteBatch.DrawString(_gameFont, "demo", new Vector2(100,100), Color.Black);
-
+			currentLevel.Draw(spriteBatch);
             spriteBatch.End();
 
             // If the game is transitioning on or off, fade it out to black.

@@ -14,6 +14,7 @@ namespace Miner.GameLogic.Components
 	{
 		public Dictionary<String, Texture2D> SpriteSheets { get; set; }
 		public Dictionary<String, SpriteAnimation> Animations { get; set; }
+		public string CurrentAnimation { get { return _currentAnimation.Name; } }
 		public Direction Facing { get; set; }
 		public Rectangle BoundingBox;
 		public float Scale { get; set; }
@@ -33,7 +34,7 @@ namespace Miner.GameLogic.Components
 			Name = "Animation";
 			Scale = 1.0f;
 			_rotation = 0.0f;
-			Facing = Direction.Right;
+			Facing = Direction.Left;
 			_spriteEffect = SpriteEffects.None;
 			RotatesByVelocity = false;
 
@@ -46,6 +47,7 @@ namespace Miner.GameLogic.Components
 		public virtual void SetActiveAnimation(String animationName)
 		{
 			if (Animations.ContainsKey(animationName))
+			{
 				if (_currentAnimation == null)
 					_currentAnimation = Animations[animationName];
 				else if (_currentAnimation.Name != animationName && (!_currentAnimation.HasToFinish || _currentAnimation.HasFinished))
@@ -54,6 +56,7 @@ namespace Miner.GameLogic.Components
 					_currentAnimation.HasStarted = false;
 					_currentAnimation.HasFinished = false;
 				}
+			}
 		}
 
 		public override void Update(GameTime gameTime)
@@ -74,12 +77,12 @@ namespace Miner.GameLogic.Components
 			if (_velocity.X > 0.1)
 			{
 				Facing = Direction.Right;
-				_spriteEffect = SpriteEffects.None;
+				_spriteEffect = SpriteEffects.FlipHorizontally;
 			}
 			else if (_velocity.X < -0.1)
 			{
 				Facing = Direction.Left;
-				_spriteEffect = SpriteEffects.FlipHorizontally;
+				_spriteEffect = SpriteEffects.None;
 			}
 
 			ParentObject.Properties.UpdateProperty("BoundingBox", BoundingBox);
