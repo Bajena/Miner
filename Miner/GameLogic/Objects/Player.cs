@@ -6,9 +6,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Miner.Enums;
+using Miner.Extensions;
 using Miner.GameCore;
 using Miner.GameInterface;
 using Miner.GameLogic.Components;
+using Miner.Helpers;
 
 namespace Miner.GameLogic.Objects
 {
@@ -17,22 +19,23 @@ namespace Miner.GameLogic.Objects
 		public AnimationComponent AnimationComponent { get { return (AnimationComponent)DrawableComponents["Animation"]; } }
 		public PhysicsComponent PhysicsComponent { get { return (PhysicsComponent) Components["Physics"]; } }
 
-		public Vector2 Position
-		{
-			get { return (Vector2) Properties.GetProperty<Vector2>("Position"); }
-			set {Properties.UpdateProperty("Position",value);}
-		}
 		public Vector2 Velocity
 		{
 			get { return (Vector2)Properties.GetProperty<Vector2>("Velocity"); }
 			set { Properties.UpdateProperty("Velocity", value); }
 		}
+		public Vector2 Acceleration
+		{
+			get { return (Vector2)Properties.GetProperty<Vector2>("Acceleration"); }
+			set { Properties.UpdateProperty("Acceleration", value); }
+		}
+
 		public double Oxygen { get { return Properties.GetProperty<double>("Oxygen"); } set { Properties.UpdateProperty("Oxygen", value); } }
 		public int Lives { get { return Properties.GetProperty<int>("Lives"); } set { Properties.UpdateProperty("Lives", value); } }
 		public int Points { get { return Properties.GetProperty<int>("Points"); } set { Properties.UpdateProperty("Points", value); } }
 		public int Dynamite { get { return Properties.GetProperty<int>("Dynamite"); } set { Properties.UpdateProperty("Dynamite", value); } }
 
-		public bool IsJumping
+		public bool IsInAir
 		{
 			get { return Velocity.Y != 0f; }
 		}
@@ -45,6 +48,8 @@ namespace Miner.GameLogic.Objects
 				return new Vector2(currentAnimationFrame.Width,currentAnimationFrame.Height);
 			}
 		}
+
+		private float _sideMoveSpeed;
 
 		public Player(Game game) : base(game)
 		{
@@ -59,6 +64,8 @@ namespace Miner.GameLogic.Objects
 			Lives = 3;
 			Points = 0;
 			Dynamite = 3;
+			_sideMoveSpeed = 200.0f;
+
 			DrawableComponents.Add("Animation", new AnimationComponent(this));
 
 			SetupAnimations();
@@ -115,55 +122,63 @@ namespace Miner.GameLogic.Objects
 
 			Velocity = new Vector2(0, Velocity.Y);
 
-			if (SettingsManager.Instance.Controls[EAction.Jump].IsCalled(input) && !IsJumping)
+			if (SettingsManager.Instance.Controls[EAction.Jump].IsCalled(input) /*&& !IsInAir*/)
 			{
 				Jump();
 			}
 			if (SettingsManager.Instance.Controls[EAction.MoveRight].IsCalled(input))
 			{
-				Velocity = new Vector2(100,Velocity.Y);
-				if (!IsJumping && AnimationComponent.CurrentAnimation!="Run") AnimationComponent.SetActiveAnimation("Run");
-				//Position = new Vector2(Position.X+1,Position.Y);
+				Velocity = new Vector2(_sideMoveSpeed,Velocity.Y);
+				if (!IsInAir && AnimationComponent.CurrentAnimation!="Run") AnimationComponent.SetActiveAnimation("Run");
+				//Position = new Vector2(Position.Left+1,Position.Y);
 			}
 			if (SettingsManager.Instance.Controls[EAction.MoveLeft].IsCalled(input))
 			{
-				Velocity = new Vector2(-100, Velocity.Y);
-				if (!IsJumping && AnimationComponent.CurrentAnimation != "Run" ) AnimationComponent.SetActiveAnimation("Run");
-				//Position = new Vector2(Position.X+1,Position.Y);
+				Velocity = new Vector2(-_sideMoveSpeed, Velocity.Y);
+				if (!IsInAir && AnimationComponent.CurrentAnimation != "Run" ) AnimationComponent.SetActiveAnimation("Run");
+				//Position = new Vector2(Position.Left+1,Position.Y);
 			}
 
-
-			if (!IsJumping && Velocity.X==0.0) AnimationComponent.SetActiveAnimation("Idle");
-			//// Otherwise move the player position.
-			//Vector2 movement = Vector2.Zero;
-
-			//if (keyboardState.IsKeyDown(Keys.Left))
-			//    movement.X--;
-
-			//if (keyboardState.IsKeyDown(Keys.Right))
-			//    movement.X++;
-
-			//if (keyboardState.IsKeyDown(Keys.Up))
-			//    movement.Y--;
-
-			//if (keyboardState.IsKeyDown(Keys.Down))
-			//    movement.Y++;
-
-			//if (movement.Length() > 1)
-			//    movement.Normalize();
+			if (!IsInAir && Velocity.X==0.0) 
+				AnimationComponent.SetActiveAnimation("Idle");
 		}
 
 		private void Jump()
 		{
 			PhysicsComponent.HasGravity = true;
 			AnimationComponent.SetActiveAnimation("Jump");
-			Properties.UpdateProperty("Velocity", new Vector2(0, -250));
+			Velocity = new Vector2(Velocity.X,-250.0f);
 			
+		}
+
+		private void EndJump()
+		{
+
 		}
 
 		public override void Update(GameTime gameTime)
 		{
 			base.Update(gameTime);
+		}
+
+		public override void HandleCollision(Tile tile)
+		{
+			if (tile.CollisionType == ETileCollisionType.Impassable)
+			{
+				var collisionDepth = BoundingBox.GetIntersectionDepth(tile.BoundingBox);
+				var collisionSide = CollisionHelper.GetCollisionOrigin(collisionDepth);
+
+				if (collisionSide.IsVertical())
+				{
+					Position = new Vector2(Position.X, Position.Y + collisionDepth.Y);
+					Velocity = new Vector2(Velocity.X, 0);
+				}
+				else if (collisionSide.IsHorizontal())
+				{
+					Position = new Vector2(Position.X + collisionDepth.X,Position.Y);
+					Velocity = new Vector2(0, Velocity.Y);
+				}
+			}
 		}
 	}
 }

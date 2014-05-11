@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Miner.Enums;
 using Miner.GameLogic.Serializable;
+using Miner.Helpers;
 
 namespace Miner.GameLogic.Objects
 {
@@ -22,7 +23,16 @@ namespace Miner.GameLogic.Objects
 		public ETileType TileType { get; set; }
 		public ETileCollisionType CollisionType { get; set; }
 		public Vector2 Position { get; set; }
-		public Vector2 Dimensions { get; set; }
+		public Vector2	Dimensions { get; set; }
+
+		public BoundingRect BoundingBox
+		{
+			get
+			{
+				return new BoundingRect(Position.X, Position.Y, Dimensions.X, Dimensions.Y);
+			}
+		}
+
 		public int Code { get; set; }
 
 		private readonly Texture2D _tileset;
@@ -43,11 +53,6 @@ namespace Miner.GameLogic.Objects
 			}
 		}
 		
-		public void Update(GameTime gameTime, Camera camera)
-		{
-			//ScreenPosition = Position-camera.Position;
-		}
-
 		/// <summary>
 		/// Ustawia właśiwości kafelka
 		/// </summary>
@@ -57,6 +62,8 @@ namespace Miner.GameLogic.Objects
 			Code = data.Code;
 			Dimensions = TileDimensionsDictionary[_tileset.Name];
 			Position = new Vector2(data.Position.X * Dimensions.X, data.Position.Y * Dimensions.Y);
+			TileType = data.TileType;
+			CollisionType = data.TileCollisionType;
 			_tilesetOffset = CalculateTilesetOffset(data.Code);
 		}
 

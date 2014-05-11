@@ -114,15 +114,22 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="menu_bg.jpg">
-      <Name>menu_bg</Name>
+    <Compile Include="Tilesets\rock_tileset.png">
+      <Name>rock_tileset</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Tilesets\rock_tileset.png">
-      <Name>rock_tileset</Name>
+    <Compile Include="Backgrounds\level_background_1.jpg">
+      <Name>level_background_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Backgrounds\obraz.jpg">
+      <Name>obraz</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

@@ -7,8 +7,9 @@ namespace Miner.GameInterface
         public MainMenuScreen()
             : base("Main Menu")
         {
-            MenuEntry playGameMenuEntry = new MenuEntry("New Game");
-            MenuEntry optionsMenuEntry = new MenuEntry("Options");
+			MenuEntry playGameMenuEntry = new MenuEntry("New Game");
+			MenuEntry optionsMenuEntry = new MenuEntry("Options");
+			MenuEntry highScoresMenuEntry = new MenuEntry("High Scores");
             MenuEntry exitMenuEntry = new MenuEntry("Exit");
 
             playGameMenuEntry.Selected += PlayGameMenuEntrySelected;
@@ -17,6 +18,7 @@ namespace Miner.GameInterface
 
             MenuEntries.Add(playGameMenuEntry);
             MenuEntries.Add(optionsMenuEntry);
+			MenuEntries.Add(highScoresMenuEntry);
             MenuEntries.Add(exitMenuEntry);
         }
 

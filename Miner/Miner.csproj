@@ -67,11 +67,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Enums\EScreenState.cs" />
+    <Compile Include="Enums\ESide.cs" />
     <Compile Include="Enums\ETileCollisionType.cs" />
     <Compile Include="Enums\ETileType.cs" />
     <Compile Include="Extensions\ContentManagerExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\KeysExtensions.cs" />
+    <Compile Include="Extensions\RectangleExtensions.cs" />
+    <Compile Include="Extensions\SpriteBatchExtensions.cs" />
     <Compile Include="GameCore\MinerGame.cs" />
     <Compile Include="Enums\EAction.cs" />
     <Compile Include="Enums\EDifficulty.cs" />
@@ -84,6 +87,7 @@
     <Compile Include="GameInterface\NamePromptMenuScreen.cs" />
     <Compile Include="GameLogic\Camera.cs" />
     <Compile Include="GameLogic\Components\AnimationComponent.cs" />
+    <Compile Include="GameLogic\Components\CollisionComponent.cs" />
     <Compile Include="GameLogic\Components\DrawableGameObjectComponent.cs" />
     <Compile Include="GameLogic\Components\GameObjectComponent.cs" />
     <Compile Include="GameLogic\Components\LivesComponent.cs" />
@@ -92,12 +96,14 @@
     <Compile Include="GameLogic\Objects\GameObject.cs" />
     <Compile Include="GameLogic\Objects\Machine.cs" />
     <Compile Include="GameLogic\Objects\Player.cs" />
-    <Compile Include="GameLogic\Objects\Tile.cs" />
+    <Compile Include="GameLogic\Tile.cs" />
     <Compile Include="GameLogic\PropertyContainer.cs" />
     <Compile Include="GameLogic\Serializable\LevelData.cs" />
     <Compile Include="GameLogic\Serializable\TileData.cs" />
     <Compile Include="GameLogic\SpriteAnimation.cs" />
     <Compile Include="GameLogic\TileFactory.cs" />
+    <Compile Include="Helpers\BoundingRect.cs" />
+    <Compile Include="Helpers\CollisionHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GameCore\ScreenFactory.cs" />

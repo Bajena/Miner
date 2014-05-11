@@ -5,14 +5,24 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Miner.GameLogic.Objects;
+using Miner.Helpers;
 
 namespace Miner.GameLogic
 {
 	public class Camera
 	{
-		private Vector2 ViewMargin = new Vector2(0.35f,0.15f);
 		public Vector2 Position { get; set; }
+		public Vector2 Size { get{return new Vector2(_viewport.Width,_viewport.Height);} }
 
+		public BoundingRect BoundingRectangle
+		{
+			get
+			{
+				return new BoundingRect(Position.X, Position.Y, Size.X, Size.Y);
+			}
+		}
+
+		private Vector2 ViewMargin = new Vector2(0.35f, 0.15f);
 		private readonly Viewport _viewport;
 		private readonly Level _level;
 		private readonly Player _playerToFollow;
@@ -62,6 +72,9 @@ namespace Miner.GameLogic
 
 		}
 
-
+		public bool IsRectangleVisible(Rectangle boundingRectangle)
+		{
+			return boundingRectangle.Intersects(new Rectangle((int) Position.X, (int) Position.Y, (int) Size.X, (int) Size.Y));
+		}
 	}
 }

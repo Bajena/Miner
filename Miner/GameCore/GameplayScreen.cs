@@ -63,18 +63,19 @@ namespace Miner
 			{
 				Name = "Level1",
 				PlayerStartPosition = new Vector2(500, 100),
-				Dimensions = new Vector2(34, 13),
+				Dimensions = new Vector2(34, 15),
 				Tiles = new List<TileData>(),
-				Tileset = "rock_tileset"
+				Tileset = "rock_tileset",
+				Background = "level_background_1"
 			};
 			for (int y = 0; y < testLevel.Dimensions.Y; y++)
 				for (int x = 0; x < testLevel.Dimensions.X; x++)
 				{
 					testLevel.Tiles.Add(new TileData()
 					{
-						Code = -1,//x % 5,
+						Code = y == testLevel.Dimensions.Y -1 || x==5 ? 0 : -1,
 						Position = new Vector2(x, y),
-						TileCollisionType = ETileCollisionType.Passable,
+						TileCollisionType = y == testLevel.Dimensions.Y - 1 || x == 5 ? ETileCollisionType.Impassable : ETileCollisionType.Passable,
 						TileType = ETileType.Normal
 					});
 				}

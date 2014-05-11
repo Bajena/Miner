@@ -15,7 +15,7 @@ namespace Miner.GameLogic.Components
 		public bool HasDrag { get; set; }
 		public bool HasGravity { get; set; }
 
-		private Vector2 _position, _velocity, _acceleration;
+		private Vector2 _previousPosition, _position, _velocity, _acceleration;
 
 		public PhysicsComponent(GameObject gameObject)
 			: base(gameObject)
@@ -37,7 +37,7 @@ namespace Miner.GameLogic.Components
 
 			if (Active)
 			{
-				_position = ParentObject.Properties.GetProperty<Vector2>("Position");
+				_position = ParentObject.Position;
 				_velocity = ParentObject.Properties.GetProperty<Vector2>("Velocity");
 				_acceleration = ParentObject.Properties.GetProperty<Vector2>("Acceleration");
 
@@ -66,9 +66,10 @@ namespace Miner.GameLogic.Components
 					_velocity = Vector2.Multiply(_velocity, MaxVelocity);
 				}
 
+				_previousPosition = _position;
 				_position += Vector2.Multiply(_velocity, (float)gameTime.ElapsedGameTime.TotalSeconds);
 
-				ParentObject.Properties.UpdateProperty("Position", _position);
+				ParentObject.Position = _position;
 				ParentObject.Properties.UpdateProperty("Velocity", _velocity);
 				ParentObject.Properties.UpdateProperty("Acceleration", _acceleration);
 			}

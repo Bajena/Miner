@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Miner.GameLogic.Objects;
+using Miner.Helpers;
 
 namespace Miner.GameLogic.Components
 {
@@ -16,7 +17,6 @@ namespace Miner.GameLogic.Components
 		public Dictionary<String, SpriteAnimation> Animations { get; set; }
 		public string CurrentAnimation { get { return _currentAnimation.Name; } }
 		public Direction Facing { get; set; }
-		public Rectangle BoundingBox;
 		public float Scale { get; set; }
 		public bool RotatesByVelocity { get; set; }
 
@@ -40,7 +40,7 @@ namespace Miner.GameLogic.Components
 
 			ParentObject.Properties.UpdateProperty("Position", Vector2.Zero);
 			ParentObject.Properties.UpdateProperty("Velocity", Vector2.Zero);
-			ParentObject.Properties.UpdateProperty("BoundingBox", Rectangle.Empty);
+			ParentObject.Properties.UpdateProperty("BoundingBox", BoundingRect.Empty);
 			ParentObject.Properties.UpdateProperty("IsPhysicsActive", true);
 		}
 
@@ -61,19 +61,17 @@ namespace Miner.GameLogic.Components
 
 		public override void Update(GameTime gameTime)
 		{
-			_position = ParentObject.Properties.GetProperty<Vector2>("Position");
+			_position = ParentObject.Position;
 			_velocity = ParentObject.Properties.GetProperty<Vector2>("Velocity");
+			var boundingBox = ParentObject.BoundingBox;
 
 			if (!_currentAnimation.HasStarted)
 				_currentAnimation.StartAnimation(gameTime);
 
 			_currentAnimation.Update(gameTime);
 
-			BoundingBox.X = (int)_position.X;
-			BoundingBox.Y = (int)_position.Y;
-			BoundingBox.Width = (int)(_currentAnimation.CurrentFrame.Width * Scale);
-			BoundingBox.Height = (int)(_currentAnimation.CurrentFrame.Height * Scale);
-
+			boundingBox = new BoundingRect(_position.X, _position.Y, _currentAnimation.CurrentFrame.Width * Scale, _currentAnimation.CurrentFrame.Height * Scale);
+			
 			if (_velocity.X > 0.1)
 			{
 				Facing = Direction.Right;
@@ -85,22 +83,22 @@ namespace Miner.GameLogic.Components
 				_spriteEffect = SpriteEffects.None;
 			}
 
-			ParentObject.Properties.UpdateProperty("BoundingBox", BoundingBox);
+			ParentObject.Properties.UpdateProperty("BoundingBox", boundingBox);
 
 			ParentObject.Properties.UpdateProperty("IsPhysicsActive", !_currentAnimation.StopsMovement);
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			BoundingBox = ParentObject.Properties.GetProperty<Rectangle>("BoundingBox");
-			_position = ParentObject.Properties.GetProperty<Vector2>("Position");
+			var boundingBox = ParentObject.BoundingBox;
+			_position = ParentObject.Position;
 			_velocity = ParentObject.Properties.GetProperty<Vector2>("Velocity");
 
 			if (RotatesByVelocity)
 				_rotation = (float)Math.Atan2(_velocity.Y, _velocity.X);
 
-			spriteBatch.Draw(_currentAnimation.SpriteSheet, new Vector2(_position.X + BoundingBox.Width / 2, _position.Y + BoundingBox.Height / 2),
-					_currentAnimation.CurrentFrame, Color.White, _rotation, new Vector2(BoundingBox.Width / 2, BoundingBox.Height / 2), Scale, _spriteEffect, 0);
+			spriteBatch.Draw(_currentAnimation.SpriteSheet, new Vector2(_position.X + boundingBox.Width / 2, _position.Y + boundingBox.Height / 2),
+					_currentAnimation.CurrentFrame, Color.White, _rotation, new Vector2(boundingBox.Width / 2, boundingBox.Height / 2), Scale, _spriteEffect, 0);
 		}
 	}
 }
