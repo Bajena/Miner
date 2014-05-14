@@ -75,6 +75,7 @@
     <Compile Include="Extensions\KeysExtensions.cs" />
     <Compile Include="Extensions\RectangleExtensions.cs" />
     <Compile Include="Extensions\SpriteBatchExtensions.cs" />
+    <Compile Include="GameCore\TileMapFactory.cs" />
     <Compile Include="GameCore\MinerGame.cs" />
     <Compile Include="Enums\EAction.cs" />
     <Compile Include="Enums\EDifficulty.cs" />

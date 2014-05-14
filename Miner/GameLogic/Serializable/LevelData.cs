@@ -17,7 +17,9 @@ namespace Miner.GameLogic.Serializable
 		public string Background { get; set; }
 		public string Tileset { get; set; }
 		public Vector2 Dimensions { get; set; }
-		public List<TileData> Tiles { get; set; } 
+		public Vector2 TileDimensions { get; set; }
+		public string Tiles { get; set; }
+		//public List<TileData> Tiles { get; set; } 
 
 		public void Serialize(string filePath)
 		{

@@ -7,8 +7,8 @@ namespace Miner.Enums
 {
 	public enum ETileCollisionType
 	{
-		Passable,
 		Impassable,
+		Passable,
 		Platform
 	}
 }

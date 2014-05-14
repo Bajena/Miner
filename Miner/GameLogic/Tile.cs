@@ -33,48 +33,25 @@ namespace Miner.GameLogic.Objects
 			}
 		}
 
-		public int Code { get; set; }
+		public string Code { get; set; }
 
 		private readonly Texture2D _tileset;
 		private Vector2 _tilesetOffset;
 
-		public Tile(Texture2D tileset,TileData data)
+		public Tile(Texture2D tileset, Vector2 tilesetOffset)
 		{
 			_tileset = tileset;
-			Initialize(data);
+			_tilesetOffset = tilesetOffset;
 		}
-
+		
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			if (Code != -1)
+			if (Code != "-1")
 			{
 				spriteBatch.Draw(_tileset, new Rectangle((int)Position.X, (int)Position.Y, (int)Dimensions.X, (int)Dimensions.Y),
 					new Rectangle((int) _tilesetOffset.X, (int) _tilesetOffset.Y, (int) Dimensions.X, (int) Dimensions.Y), Color.White);
 			}
 		}
 		
-		/// <summary>
-		/// Ustawia właśiwości kafelka
-		/// </summary>
-		/// <param name="data"></param>
-		public void Initialize(TileData data)
-		{
-			Code = data.Code;
-			Dimensions = TileDimensionsDictionary[_tileset.Name];
-			Position = new Vector2(data.Position.X * Dimensions.X, data.Position.Y * Dimensions.Y);
-			TileType = data.TileType;
-			CollisionType = data.TileCollisionType;
-			_tilesetOffset = CalculateTilesetOffset(data.Code);
-		}
-
-		private Vector2 CalculateTilesetOffset(int tileCode)
-		{
-			if (Code == -1) return new Vector2(-1,-1);
-
-			int tilesetWidth = (int) (_tileset.Width/Dimensions.X);
-			int tilesetHeight = (int) (_tileset.Height/Dimensions.Y);
-			return new Vector2(Dimensions.X * (tileCode%tilesetWidth), Dimensions.Y * (tileCode/tilesetHeight));
-		}
-
 	}
 }
