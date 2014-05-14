@@ -16,10 +16,6 @@ namespace Miner.GameLogic.Objects
 {
 	public class Player : GameObject
 	{
-		public static float MaxOxygen = 100;
-		public static int DefaultLives = 3;
-		public static int DefaultDynamite = 3;
-
 		public AnimationComponent AnimationComponent { get { return (AnimationComponent)DrawableComponents["Animation"]; } }
 		public PhysicsComponent PhysicsComponent { get { return (PhysicsComponent)Components["Physics"]; } }
 
@@ -65,10 +61,10 @@ namespace Miner.GameLogic.Objects
 				HasGravity = true
 			});
 
-			Oxygen = 50.0f;
-			Lives = DefaultLives;
+			Oxygen = SettingsManager.Instance.MaxOxygen;
+			Lives = SettingsManager.Instance.DefaultLives;
 			Points = 0;
-			Dynamite = DefaultDynamite;
+			Dynamite = SettingsManager.Instance.DefaultDynamite;
 			_sideMoveSpeed = 200.0f;
 
 			DrawableComponents.Add("Animation", new AnimationComponent(this));
@@ -128,7 +124,7 @@ namespace Miner.GameLogic.Objects
 			Velocity = new Vector2(0, Velocity.Y);
 
 			if (input.IsKeyDown(Keys.Z)) Oxygen = Oxygen - 1 >= 0 ? Oxygen - 1 : Oxygen;
-			if (input.IsKeyDown(Keys.X)) Oxygen = Oxygen + 1 <= MaxOxygen ? Oxygen + 1 : Oxygen;
+			if (input.IsKeyDown(Keys.X)) Oxygen = Oxygen + 1 <= SettingsManager.Instance.MaxOxygen ? Oxygen + 1 : Oxygen;
 
 			if (SettingsManager.Instance.Controls[EAction.Jump].IsCalled(input) /*&& !IsInAir*/)
 			{
@@ -189,7 +185,7 @@ namespace Miner.GameLogic.Objects
 			}
 			if (tile.TileType == ETileType.OxygenRefill)
 			{
-				Oxygen = MaxOxygen;
+				Oxygen = SettingsManager.Instance.MaxOxygen;
 			}
 		}
 	}

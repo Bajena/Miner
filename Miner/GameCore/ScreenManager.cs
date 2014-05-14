@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Miner.Enums;
 using Miner.GameInterface;
+using Miner.GameInterface.GameScreens;
 
 namespace Miner.GameCore
 {

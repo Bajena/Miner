@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Miner.Enums;
 using Miner.GameCore;
 
-namespace Miner.GameInterface
+namespace Miner.GameInterface.GameScreens
 {
     public abstract class GameScreen
 	{

@@ -9,6 +9,7 @@ using Miner;
 using Miner.Enums;
 using Miner.GameCore;
 using Miner.GameInterface;
+using Miner.GameInterface.GameScreens;
 using Miner.GameLogic;
 using Miner.GameLogic.Components;
 using Miner.GameLogic.Objects;
@@ -37,7 +38,7 @@ namespace Miner
 
 		InputAction _pauseAction;
 
-		private Dictionary<string,DrawableGameObjectComponent> _hudItems { get; set; }
+		private Dictionary<string,HudComponent> _hudItems { get; set; }
 		public GameplayScreen()
 		{
 			TransitionOnTime = TimeSpan.FromSeconds(1.5);
@@ -60,17 +61,20 @@ namespace Miner
 				_content = new ContentManager(ScreenManager.Game.Services, "Content");
 
 			_gameFont = _content.Load<SpriteFont>("menufont");
-			_hudItems = new Dictionary<string, DrawableGameObjectComponent>();
-
-			var lifeTexture = _content.Load<Texture2D>("UI/heart");
-			var oxygenEmptyTexture = _content.Load<Texture2D>("UI/oxygen_bar_empty");
-			var oxygenFullTexture = _content.Load<Texture2D>("UI/oxygen_bar_full");
+			_hudItems = new Dictionary<string, HudComponent>();
 
 			SaveTestLevel();
 
 			Game.NewGame();
-			_hudItems.Add("Lives", new LivesComponent(CurrentLevel.Player, new Vector2(20, 20), lifeTexture));
-			_hudItems.Add("Oxygen", new BarComponent(CurrentLevel.Player,new Vector2(ScreenManager.GraphicsDevice.Viewport.Width-oxygenFullTexture.Width-20,20),"Oxygen",Player.MaxOxygen,oxygenEmptyTexture,oxygenFullTexture));
+			var livesComponent = new LivesComponent(CurrentLevel.Player, new Vector2(20, 20));
+			_hudItems.Add("Lives", livesComponent);
+			var oxygenComponent = new BarComponent(CurrentLevel.Player, new Vector2(ScreenManager.GraphicsDevice.Viewport.Width - 50.0f, 20.0f), "Oxygen", SettingsManager.Instance.MaxOxygen);
+			_hudItems.Add("Oxygen", oxygenComponent );
+
+			foreach (var hudComponent in _hudItems)
+			{
+				hudComponent.Value.Initialize(_content);
+			}
 		}
 
 		private void SaveTestLevel()

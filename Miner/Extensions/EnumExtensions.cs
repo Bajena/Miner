@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
+using Miner.Enums;
 
 namespace Miner.Extensions
 {
@@ -24,5 +26,10 @@ namespace Miner.Extensions
                 i = -1;
             return all[i + 1];
         }
+
+	    public static string GetDescription(this EAction action)
+	    {
+			return Regex.Replace(action.ToString(), "([a-z])([A-Z])", "$1 $2");
+	    }
     }
 }

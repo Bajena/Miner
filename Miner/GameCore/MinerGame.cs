@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Miner.GameInterface;
+using Miner.GameInterface.GameScreens;
 using Miner.GameLogic;
 
 namespace Miner.GameCore

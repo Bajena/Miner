@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Miner.GameCore;
-using Miner.Helpers;
+using Miner.GameInterface.MenuEntries;
 
-namespace Miner.GameInterface
+namespace Miner.GameInterface.GameScreens
 {
 	public class NamePromptMenuScreen : MenuScreen
 	{
@@ -65,8 +61,7 @@ namespace Miner.GameInterface
 			if (nameMenuEntry.IsSelected) 
 				nameMenuEntry.HandleInput(gameTime,input);
 			
-			//if (!nameMenuEntry.Enabled)
-				base.HandleInput(gameTime,input);
+			base.HandleInput(gameTime,input);
 		}
 
 		public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)

@@ -4,8 +4,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Miner.Enums;
+using Miner.GameInterface.MenuEntries;
 
-namespace Miner.GameInterface
+namespace Miner.GameInterface.GameScreens
 {
     public abstract class MenuScreen : GameScreen
     {

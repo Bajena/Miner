@@ -17,4 +17,6 @@ namespace Miner.Enums
         Jump,
         SetDynamite
     }
+
+
 }

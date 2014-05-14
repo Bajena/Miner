@@ -1,6 +1,7 @@
 using System;
+using Miner.GameInterface.MenuEntries;
 
-namespace Miner.GameInterface
+namespace Miner.GameInterface.GameScreens
 {
     class MainMenuScreen : MenuScreen
     {

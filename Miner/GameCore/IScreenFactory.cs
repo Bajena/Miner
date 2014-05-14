@@ -1,5 +1,6 @@
 using System;
 using Miner.GameInterface;
+using Miner.GameInterface.GameScreens;
 
 namespace Miner.GameCore
 {

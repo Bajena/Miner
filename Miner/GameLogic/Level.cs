@@ -183,7 +183,7 @@ namespace Miner.GameLogic
 						}
 						else if (tile.TileType == ETileType.OxygenRefill)
 						{
-							Player.Oxygen = Player.MaxOxygen;
+							Player.Oxygen = SettingsManager.Instance.MaxOxygen;
 						}
 					}
 				}

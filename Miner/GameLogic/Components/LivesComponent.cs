@@ -9,15 +9,14 @@ using Miner.GameLogic.Objects;
 
 namespace Miner.GameLogic.Components
 {
-	public class LivesComponent : DrawableGameObjectComponent
+	public class LivesComponent : HudComponent
 	{
 		public Vector2 Position { get; set; }
-		public Texture2D LifeTexture { get; set; }
+		private Texture2D _lifeTexture { get; set; }
 
-		public LivesComponent(GameObject parentObject, Vector2 position, Texture2D lifeTexture) : base(parentObject)
+		public LivesComponent(GameObject parentObject, Vector2 position) : base(parentObject)
 		{
 			Position = position;
-			LifeTexture = lifeTexture;
 		}
 
 		public override void Update(GameTime gameTime)
@@ -28,7 +27,13 @@ namespace Miner.GameLogic.Components
 		{
 			
 			for (int i = 0;i<ParentObject.Properties.GetProperty<int>("Lives");i++)
-				spriteBatch.Draw(LifeTexture,new Rectangle((int) Position.X + i*(LifeTexture.Width+5),(int) Position.Y,LifeTexture.Width,LifeTexture.Height),Color.White);
+				spriteBatch.Draw(_lifeTexture,new Rectangle((int) Position.X + i*(_lifeTexture.Width+5),(int) Position.Y,_lifeTexture.Width,_lifeTexture.Height),Color.White);
+		}
+
+		public override void Initialize(ContentManager content)
+		{
+			_lifeTexture = content.Load<Texture2D>("UI/heart");
+
 		}
 	}
 }

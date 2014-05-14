@@ -8,21 +8,19 @@ using Miner.GameLogic.Objects;
 
 namespace Miner.GameLogic.Components
 {
-	class BarComponent : DrawableGameObjectComponent
+	class BarComponent : HudComponent
 	{
 		private readonly float _maxValue;
-		private readonly Texture2D _emptyTexture;
-		private readonly Texture2D _fullTexture;
+		private Texture2D _emptyTexture;
+		private Texture2D _fullTexture;
 
 		public Vector2 Position { get; set; }
 		public string PropertyToTrack { get; set; }
 
-		public BarComponent(GameObject parentObject, Vector2 position, string propertyToTrack, float maxValue, Texture2D emptyTexture, Texture2D fullTexture)
+		public BarComponent(GameObject parentObject, Vector2 position, string propertyToTrack, float maxValue)
 			: base(parentObject)
 		{
 			_maxValue = maxValue;
-			_emptyTexture = emptyTexture;
-			_fullTexture = fullTexture;
 			Position = position;
 			PropertyToTrack = propertyToTrack;
 		}
@@ -39,6 +37,12 @@ namespace Miner.GameLogic.Components
 		public override void Update(GameTime gameTime)
 		{
 			
+		}
+
+		public override void Initialize(Microsoft.Xna.Framework.Content.ContentManager content)
+		{
+			_emptyTexture = content.Load<Texture2D>("UI/oxygen_bar_empty");
+			 _fullTexture = content.Load<Texture2D>("UI/oxygen_bar_full");
 		}
 	}
 }

@@ -2,8 +2,9 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Miner.GameCore;
+using Miner.GameInterface.GameScreens;
 
-namespace Miner.GameInterface
+namespace Miner.GameInterface.MenuEntries
 {
     public class MenuEntry
     {

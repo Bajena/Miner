@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Miner.Extensions;
-using Miner.Helpers;
+using Miner.GameInterface.GameScreens;
 
-namespace Miner.GameInterface
+namespace Miner.GameInterface.MenuEntries
 {
 	public enum CaseKeeping
 	{
@@ -15,7 +12,7 @@ namespace Miner.GameInterface
 		Upper,
 		Lower
 	}
-	public class TextInputMenuEntry : MenuEntry
+	public class TextInputMenuEntry : UserInputMenuEntry
 	{
 		public string PromptText { get; set; }
 		public string InputText { get; set; }
@@ -38,10 +35,11 @@ namespace Miner.GameInterface
 
 		public TextInputMenuEntry(string text) : base(text)
 		{
+			InputText = string.Empty;
 			PromptText = text;
 		}
 
-		public void HandleInput(GameTime gameTime, InputState input)
+		public override void HandleInput(GameTime gameTime, InputState input)
 		{
 			var pressedKeys = input.CurrentKeyboardState.GetPressedKeys();
 			var shiftPressed = (input.CurrentKeyboardState.GetPressedKeys().Contains(Keys.LeftShift));

@@ -5,14 +5,14 @@ namespace Miner.GameInterface
 {
     public class InputAction
     {
-        private readonly Keys[] _keys;
+        public Keys[] Keys { get; set; }
         private readonly bool _newPressOnly;
 
         private delegate bool KeyPress(Keys key);
 
         public InputAction(Keys[] keys, bool newPressOnly)
         {
-            _keys = keys != null ? keys.Clone() as Keys[] : new Keys[0];
+            Keys = keys != null ? keys.Clone() as Keys[] : new Keys[0];
 
             _newPressOnly = newPressOnly;
         }
@@ -34,7 +34,7 @@ namespace Miner.GameInterface
                 keyTest = state.IsKeyDown;
             }
 
-			return _keys.Any(key => keyTest(key));
+			return Keys.Any(key => keyTest(key));
         }
     }
 }

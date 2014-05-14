@@ -1,15 +1,16 @@
 using System;
-using System.Configuration;
 using Miner.Enums;
 using Miner.Extensions;
 using Miner.GameCore;
+using Miner.GameInterface.MenuEntries;
 
-namespace Miner.GameInterface
+namespace Miner.GameInterface.GameScreens
 {
     class OptionsMenuScreen : MenuScreen
     {
 	    readonly MenuEntry _soundMenuEntry;
-	    readonly MenuEntry _difficultyMenuEntry;
+		readonly MenuEntry _difficultyMenuEntry;
+		readonly MenuEntry _controlsMenuEntry;
 
 	    private EDifficulty _difficulty;
 	    private bool _sound;
@@ -21,20 +22,29 @@ namespace Miner.GameInterface
 	        _difficulty = SettingsManager.Instance.Difficulty;
 
             _soundMenuEntry = new MenuEntry(string.Empty);
-            _difficultyMenuEntry = new MenuEntry(string.Empty);
+			_difficultyMenuEntry = new MenuEntry(string.Empty);
+			_controlsMenuEntry = new MenuEntry("Control Settings");
 
             SetMenuEntryText();
 
-            MenuEntry back = new MenuEntry("Back");
+            var backMenuEntry = new MenuEntry("Back");
 
             _soundMenuEntry.Entered += SoundMenuEntryEntered;
             _difficultyMenuEntry.Entered += DifficultyMenuEntryEntered;
-            back.Entered += OnCancel;
+			_controlsMenuEntry.Entered += new EventHandler(ControlsMenuEntryEntryEntered);
+			
+			backMenuEntry.Entered += OnCancel;
             
             MenuEntries.Add(_soundMenuEntry);
             MenuEntries.Add(_difficultyMenuEntry);
-            MenuEntries.Add(back);
+			MenuEntries.Add(_controlsMenuEntry);
+            MenuEntries.Add(backMenuEntry);
         }
+
+		void ControlsMenuEntryEntryEntered(object sender, EventArgs e)
+		{
+			ScreenManager.AddScreen(new ControlsOptionsMenuScreen());
+		}
 
         void SetMenuEntryText()
         {

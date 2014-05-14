@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Miner.Enums;
 using Miner.GameCore;
 
-namespace Miner.GameInterface
+namespace Miner.GameInterface.GameScreens
 {
     class LoadingScreen : GameScreen
     {

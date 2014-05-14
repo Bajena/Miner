@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Miner.GameInterface
+namespace Miner.GameInterface.GameScreens
 {
 	public enum MessageBoxType
 	{
