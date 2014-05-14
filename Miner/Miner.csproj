@@ -14,7 +14,7 @@
     </TargetFrameworkProfile>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
     <XnaPlatform>Windows</XnaPlatform>
-    <XnaProfile>Reach</XnaProfile>
+    <XnaProfile>HiDef</XnaProfile>
     <XnaCrossPlatformGroupID>7c3b1948-a64a-4afc-8fba-04cf3810f6a7</XnaCrossPlatformGroupID>
     <XnaOutputType>Game</XnaOutputType>
     <XapFilename>$(AssemblyName).xap</XapFilename>
@@ -85,12 +85,14 @@
     <Compile Include="GameCore\IScreenFactory.cs" />
     <Compile Include="GameCore\ScreenManager.cs" />
     <Compile Include="GameInterface\NamePromptMenuScreen.cs" />
+    <Compile Include="GameInterface\TextInputMenuEntry.cs" />
     <Compile Include="GameLogic\Camera.cs" />
     <Compile Include="GameLogic\Components\AnimationComponent.cs" />
     <Compile Include="GameLogic\Components\CollisionComponent.cs" />
     <Compile Include="GameLogic\Components\DrawableGameObjectComponent.cs" />
     <Compile Include="GameLogic\Components\GameObjectComponent.cs" />
     <Compile Include="GameLogic\Components\LivesComponent.cs" />
+    <Compile Include="GameLogic\Components\BarComponent.cs" />
     <Compile Include="GameLogic\Components\PhysicsComponent.cs" />
     <Compile Include="GameLogic\Level.cs" />
     <Compile Include="GameLogic\Objects\GameObject.cs" />

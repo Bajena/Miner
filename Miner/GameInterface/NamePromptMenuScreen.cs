@@ -11,40 +11,41 @@ namespace Miner.GameInterface
 {
 	public class NamePromptMenuScreen : MenuScreen
 	{
-		private TextInputHelper _playerNameInputHelper;
-		private MenuEntry nameMenuEntry = new MenuEntry("Name: ");
+		private TextInputMenuEntry nameMenuEntry = new TextInputMenuEntry("Name: ");
 		 /// <summary>
         /// Constructor fills in the menu contents.
         /// </summary>
 		public NamePromptMenuScreen()
             : base("Hello, type your name")
         {
-			_playerNameInputHelper = new TextInputHelper();
 			// Create our menu entries.
             MenuEntry acceptMenuEntry = new MenuEntry("OK");
 
             // Hook up menu event handlers.
-			nameMenuEntry.Selected += NameMenuEntrySelected;
-            acceptMenuEntry.Selected += AcceptMenuEntrySelected;
+			nameMenuEntry.Entered += NameMenuEntryEntered;
+            acceptMenuEntry.Entered += AcceptMenuEntryEntered;
 
             // Add entries to the menu.
 			MenuEntries.Add(nameMenuEntry);
             MenuEntries.Add(acceptMenuEntry);
+
+			nameMenuEntry.OnEnter();
+
         }
 
-		void NameMenuEntrySelected(object sender, EventArgs e)
+		void NameMenuEntryEntered(object sender, EventArgs e)
 		{
-			_playerNameInputHelper.Enabled = true;
+
 		}
 
         /// <summary>
         /// Event handler for when the Play Game menu entry is selected.
         /// </summary>
-        void AcceptMenuEntrySelected(object sender, EventArgs e)
+        void AcceptMenuEntryEntered(object sender, EventArgs e)
         {
-	        if (_playerNameInputHelper.InputText.Length > 0)
+	        if (nameMenuEntry.InputText.Length > 0)
 	        {
-		        SettingsManager.Instance.PlayerName = _playerNameInputHelper.InputText;
+				SettingsManager.Instance.PlayerName = nameMenuEntry.InputText;
 		        ScreenManager.AddScreen(new MainMenuScreen());
 	        }
 	        else
@@ -61,17 +62,16 @@ namespace Miner.GameInterface
 
 		public override void HandleInput(GameTime gameTime, InputState input)
 		{
-			if (!_playerNameInputHelper.Enabled) base.HandleInput(gameTime, input);
-			else
-			{
-				_playerNameInputHelper.HandleInput(input);
-			}
+			if (nameMenuEntry.IsSelected) 
+				nameMenuEntry.HandleInput(gameTime,input);
+			
+			//if (!nameMenuEntry.Enabled)
+				base.HandleInput(gameTime,input);
 		}
 
 		public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
 		{
 			base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
-			nameMenuEntry.Text = _playerNameInputHelper.Enabled ? "Name: " + _playerNameInputHelper + "_" : "Name: " + _playerNameInputHelper;
 		}
 
         /// <summary>

@@ -10,14 +10,14 @@ namespace Miner.GameInterface
             MenuEntry resumeGameMenuEntry = new MenuEntry("Resume Game");
             MenuEntry quitGameMenuEntry = new MenuEntry("Quit Game");
             
-            resumeGameMenuEntry.Selected += OnCancel;
-            quitGameMenuEntry.Selected += QuitGameMenuEntrySelected;
+            resumeGameMenuEntry.Entered += OnCancel;
+            quitGameMenuEntry.Entered += QuitGameMenuEntryEntered;
 
             MenuEntries.Add(resumeGameMenuEntry);
             MenuEntries.Add(quitGameMenuEntry);
         }
 
-        void QuitGameMenuEntrySelected(object sender, EventArgs e)
+        void QuitGameMenuEntryEntered(object sender, EventArgs e)
         {
             const string message = "Are you sure you want to quit this game?";
 

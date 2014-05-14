@@ -27,9 +27,9 @@ namespace Miner.GameInterface
 
             MenuEntry back = new MenuEntry("Back");
 
-            _soundMenuEntry.Selected += SoundMenuEntrySelected;
-            _difficultyMenuEntry.Selected += DifficultyMenuEntrySelected;
-            back.Selected += OnCancel;
+            _soundMenuEntry.Entered += SoundMenuEntryEntered;
+            _difficultyMenuEntry.Entered += DifficultyMenuEntryEntered;
+            back.Entered += OnCancel;
             
             MenuEntries.Add(_soundMenuEntry);
             MenuEntries.Add(_difficultyMenuEntry);
@@ -42,14 +42,14 @@ namespace Miner.GameInterface
             _difficultyMenuEntry.Text = "Difficulty: " + _difficulty;
         }
 
-        void SoundMenuEntrySelected(object sender, EventArgs e)
+        void SoundMenuEntryEntered(object sender, EventArgs e)
         {
             _sound = !_sound;
 
             SetMenuEntryText();
         }
 
-        void DifficultyMenuEntrySelected(object sender, EventArgs e)
+        void DifficultyMenuEntryEntered(object sender, EventArgs e)
         {
             _difficulty = EnumExtensions.GetNextValue(_difficulty);
             SetMenuEntryText();

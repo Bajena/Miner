@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Miner;
 using Miner.Enums;
+using Miner.GameCore;
 using Miner.GameInterface;
 using Miner.GameLogic;
 using Miner.GameLogic.Components;
@@ -17,6 +18,18 @@ namespace Miner
 {
 	class GameplayScreen : GameScreen
 	{
+		protected MinerGame Game
+		{
+			get { return (MinerGame) ScreenManager.Game; }
+		}
+
+		//protected Level _currentLevel {get{}}
+
+		private Level CurrentLevel
+		{
+			get { return Game.CurrentLevel; }
+		}
+
 		ContentManager _content;
 		SpriteFont _gameFont;
 
@@ -24,7 +37,6 @@ namespace Miner
 
 		InputAction _pauseAction;
 
-		private Level _currentLevel;
 		private Dictionary<string,DrawableGameObjectComponent> _hudItems { get; set; }
 		public GameplayScreen()
 		{
@@ -51,36 +63,40 @@ namespace Miner
 			_hudItems = new Dictionary<string, DrawableGameObjectComponent>();
 
 			var lifeTexture = _content.Load<Texture2D>("UI/heart");
+			var oxygenEmptyTexture = _content.Load<Texture2D>("UI/oxygen_bar_empty");
+			var oxygenFullTexture = _content.Load<Texture2D>("UI/oxygen_bar_full");
 
 			SaveTestLevel();
-			_currentLevel = new Level(ScreenManager.Game, "Level1");
-			_hudItems.Add("Lives", new LivesComponent(_currentLevel.Player, new Vector2(20, 20), lifeTexture));
+
+			Game.NewGame();
+			_hudItems.Add("Lives", new LivesComponent(CurrentLevel.Player, new Vector2(20, 20), lifeTexture));
+			_hudItems.Add("Oxygen", new BarComponent(CurrentLevel.Player,new Vector2(ScreenManager.GraphicsDevice.Viewport.Width-oxygenFullTexture.Width-20,20),"Oxygen",Player.MaxOxygen,oxygenEmptyTexture,oxygenFullTexture));
 		}
 
 		private void SaveTestLevel()
 		{
-			var testLevel = new LevelData()
-			{
-				Name = "Level1",
-				PlayerStartPosition = new Vector2(500, 100),
-				Dimensions = new Vector2(34, 15),
-				Tiles = new List<TileData>(),
-				Tileset = "rock_tileset",
-				Background = "level_background_1"
-			};
-			for (int y = 0; y < testLevel.Dimensions.Y; y++)
-				for (int x = 0; x < testLevel.Dimensions.X; x++)
-				{
-					testLevel.Tiles.Add(new TileData()
-					{
-						Code = y == testLevel.Dimensions.Y -1 || x==5 ? 0 : -1,
-						Position = new Vector2(x, y),
-						TileCollisionType = y == testLevel.Dimensions.Y - 1 || x == 5 ? ETileCollisionType.Impassable : ETileCollisionType.Passable,
-						TileType = ETileType.Normal
-					});
-				}
+			//var testLevel = new LevelData()
+			//{
+			//    Name = "Level1",
+			//    PlayerStartPosition = new Vector2(500, 100),
+			//    Dimensions = new Vector2(34, 15),
+			//    Tiles = new List<TileData>(),
+			//    Tileset = "rock_tileset",
+			//    Background = "level_background_1"
+			//};
+			//for (int y = 0; y < testLevel.Dimensions.Y; y++)
+			//    for (int x = 0; x < testLevel.Dimensions.X; x++)
+			//    {
+			//        testLevel.Tiles.Add(new TileData()
+			//        {
+			//            Code = y == testLevel.Dimensions.Y -1 || x==5 ? 0 : -1,
+			//            Position = new Vector2(x, y),
+			//            TileCollisionType = y == testLevel.Dimensions.Y - 1 || x == 5 ? ETileCollisionType.Impassable : ETileCollisionType.Passable,
+			//            TileType = x < 20 ? ETileType.Normal : ETileType.Exit,
+			//        });
+			//    }
 
-			testLevel.Serialize(Level.GetLevelPath("Level1"));
+			//testLevel.Serialize(Level.GetLevelPath("Level1"));
 		}
 
 		public override void Deactivate()
@@ -107,7 +123,7 @@ namespace Miner
 			if (IsActive)
 			{
 				//Game
-				_currentLevel.Update(gameTime);
+				CurrentLevel.Update(gameTime);
 			}
 		}
 
@@ -124,7 +140,7 @@ namespace Miner
 			}
 			else
 			{
-				_currentLevel.Player.HandleInput(gameTime, input);
+				CurrentLevel.Player.HandleInput(gameTime, input);
 			}
 		}
 
@@ -135,13 +151,15 @@ namespace Miner
 
 			SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
 
-			_currentLevel.Draw(spriteBatch);
+			CurrentLevel.Draw(spriteBatch);
 
 			spriteBatch.Begin();
 
-			spriteBatch.DrawString(_gameFont, "Gracz:" + _currentLevel.Player.Position.ToString(), new Vector2(0, 0), Color.Red);
-			spriteBatch.DrawString(_gameFont, "Kamera:" + _currentLevel.Camera.Position.ToString(), new Vector2(0, 30), Color.Red);
-			spriteBatch.DrawString(_gameFont, "Tile[0,0]:" + _currentLevel._tiles[0, 0].Position.ToString(), new Vector2(0, 60), Color.Red);
+			spriteBatch.DrawString(_gameFont,CurrentLevel.Name,new Vector2(ScreenManager.GraphicsDevice.Viewport.Width/2,0), Color.White,0,Vector2.Zero,new Vector2(0.75f),SpriteEffects.None,0 );
+
+			//spriteBatch.DrawString(_gameFont, "Gracz:" + CurrentLevel.Player.Position.ToString(), new Vector2(0, 0), Color.Red);
+			//spriteBatch.DrawString(_gameFont, "Kamera:" + CurrentLevel.Camera.Position.ToString(), new Vector2(0, 30), Color.Red);
+			//spriteBatch.DrawString(_gameFont, "Tile[0,0]:" + CurrentLevel._tiles[0, 0].Position.ToString(), new Vector2(0, 60), Color.Red);
 			foreach (var hudItem in _hudItems)
 			{
 				hudItem.Value.Draw(spriteBatch);

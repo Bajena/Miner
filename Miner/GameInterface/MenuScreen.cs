@@ -77,7 +77,7 @@ namespace Miner.GameInterface
 
         protected virtual void OnSelectEntry(int entryIndex)
         {
-            MenuEntries[entryIndex].OnSelectEntry();
+            MenuEntries[entryIndex].OnEnter();
         }
 
         protected virtual void OnCancel()
@@ -120,7 +120,6 @@ namespace Miner.GameInterface
             for (int i = 0; i < MenuEntries.Count; i++)
             {
                 bool isSelected = IsActive && (i == _selectedEntry);
-
                 MenuEntries[i].Update(this, isSelected, gameTime);
             }
         }
@@ -141,9 +140,7 @@ namespace Miner.GameInterface
             {
                 MenuEntry menuEntry = MenuEntries[i];
 
-                bool isSelected = IsActive && (i == _selectedEntry);
-
-                menuEntry.Draw(this, isSelected, gameTime);
+                menuEntry.Draw(this, gameTime);
             }
 
             float transitionOffset = (float)Math.Pow(TransitionPosition, 2);

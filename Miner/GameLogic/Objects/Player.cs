@@ -16,8 +16,12 @@ namespace Miner.GameLogic.Objects
 {
 	public class Player : GameObject
 	{
+		public static float MaxOxygen = 100;
+		public static int DefaultLives = 3;
+		public static int DefaultDynamite = 3;
+
 		public AnimationComponent AnimationComponent { get { return (AnimationComponent)DrawableComponents["Animation"]; } }
-		public PhysicsComponent PhysicsComponent { get { return (PhysicsComponent) Components["Physics"]; } }
+		public PhysicsComponent PhysicsComponent { get { return (PhysicsComponent)Components["Physics"]; } }
 
 		public Vector2 Velocity
 		{
@@ -30,7 +34,7 @@ namespace Miner.GameLogic.Objects
 			set { Properties.UpdateProperty("Acceleration", value); }
 		}
 
-		public double Oxygen { get { return Properties.GetProperty<double>("Oxygen"); } set { Properties.UpdateProperty("Oxygen", value); } }
+		public float Oxygen { get { return Properties.GetProperty<float>("Oxygen"); } set { Properties.UpdateProperty("Oxygen", value); } }
 		public int Lives { get { return Properties.GetProperty<int>("Lives"); } set { Properties.UpdateProperty("Lives", value); } }
 		public int Points { get { return Properties.GetProperty<int>("Points"); } set { Properties.UpdateProperty("Points", value); } }
 		public int Dynamite { get { return Properties.GetProperty<int>("Dynamite"); } set { Properties.UpdateProperty("Dynamite", value); } }
@@ -45,25 +49,26 @@ namespace Miner.GameLogic.Objects
 			get
 			{
 				var currentAnimationFrame = AnimationComponent.Animations[AnimationComponent.CurrentAnimation].CurrentFrame;
-				return new Vector2(currentAnimationFrame.Width,currentAnimationFrame.Height);
+				return new Vector2(currentAnimationFrame.Width, currentAnimationFrame.Height);
 			}
 		}
 
 		private float _sideMoveSpeed;
 
-		public Player(Game game) : base(game)
+		public Player(Game game)
+			: base(game)
 		{
 			Type = "Player";
 
-			Components.Add("Physics",new PhysicsComponent(this)
+			Components.Add("Physics", new PhysicsComponent(this)
 			{
-				HasGravity = false
+				HasGravity = true
 			});
 
-			Oxygen = 100.0;
-			Lives = 3;
+			Oxygen = 50.0f;
+			Lives = DefaultLives;
 			Points = 0;
-			Dynamite = 3;
+			Dynamite = DefaultDynamite;
 			_sideMoveSpeed = 200.0f;
 
 			DrawableComponents.Add("Animation", new AnimationComponent(this));
@@ -122,24 +127,27 @@ namespace Miner.GameLogic.Objects
 
 			Velocity = new Vector2(0, Velocity.Y);
 
+			if (input.IsKeyDown(Keys.Z)) Oxygen = Oxygen - 1 >= 0 ? Oxygen - 1 : Oxygen;
+			if (input.IsKeyDown(Keys.X)) Oxygen = Oxygen + 1 <= MaxOxygen ? Oxygen + 1 : Oxygen;
+
 			if (SettingsManager.Instance.Controls[EAction.Jump].IsCalled(input) /*&& !IsInAir*/)
 			{
 				Jump();
 			}
 			if (SettingsManager.Instance.Controls[EAction.MoveRight].IsCalled(input))
 			{
-				Velocity = new Vector2(_sideMoveSpeed,Velocity.Y);
-				if (!IsInAir && AnimationComponent.CurrentAnimation!="Run") AnimationComponent.SetActiveAnimation("Run");
+				Velocity = new Vector2(_sideMoveSpeed, Velocity.Y);
+				if (!IsInAir && AnimationComponent.CurrentAnimation != "Run") AnimationComponent.SetActiveAnimation("Run");
 				//Position = new Vector2(Position.Left+1,Position.Y);
 			}
 			if (SettingsManager.Instance.Controls[EAction.MoveLeft].IsCalled(input))
 			{
 				Velocity = new Vector2(-_sideMoveSpeed, Velocity.Y);
-				if (!IsInAir && AnimationComponent.CurrentAnimation != "Run" ) AnimationComponent.SetActiveAnimation("Run");
+				if (!IsInAir && AnimationComponent.CurrentAnimation != "Run") AnimationComponent.SetActiveAnimation("Run");
 				//Position = new Vector2(Position.Left+1,Position.Y);
 			}
 
-			if (!IsInAir && Velocity.X==0.0) 
+			if (!IsInAir && Velocity.X == 0.0)
 				AnimationComponent.SetActiveAnimation("Idle");
 		}
 
@@ -147,8 +155,8 @@ namespace Miner.GameLogic.Objects
 		{
 			PhysicsComponent.HasGravity = true;
 			AnimationComponent.SetActiveAnimation("Jump");
-			Velocity = new Vector2(Velocity.X,-250.0f);
-			
+			Velocity = new Vector2(Velocity.X, -250.0f);
+
 		}
 
 		private void EndJump()
@@ -175,9 +183,13 @@ namespace Miner.GameLogic.Objects
 				}
 				else if (collisionSide.IsHorizontal())
 				{
-					Position = new Vector2(Position.X + collisionDepth.X,Position.Y);
+					Position = new Vector2(Position.X + collisionDepth.X, Position.Y);
 					Velocity = new Vector2(0, Velocity.Y);
 				}
+			}
+			if (tile.TileType == ETileType.OxygenRefill)
+			{
+				Oxygen = MaxOxygen;
 			}
 		}
 	}

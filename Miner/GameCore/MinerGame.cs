@@ -1,15 +1,25 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Miner.GameInterface;
+using Miner.GameLogic;
 
 namespace Miner.GameCore
 {
     public class MinerGame : Microsoft.Xna.Framework.Game
-    {
+	{
+		private static List<string> _levelList = new List<string>()
+		{
+			"Level1",
+			"Level2"
+		};
+
         GraphicsDeviceManager graphics;
         ScreenManager screenManager;
-        ScreenFactory screenFactory;
+		ScreenFactory screenFactory;
 
+		public Level CurrentLevel { get; set; }
+	    private int _currentLevelNumber = 0;
         /// <summary>
         /// The main game constructor.
         /// </summary>
@@ -34,6 +44,28 @@ namespace Miner.GameCore
             AddInitialScreens();
         }
 
+	    public void LoadLevel(string name)
+	    {
+			CurrentLevel = new Level(this, name);
+			CurrentLevel.Initialize();
+	    }
+
+	    public void NewGame()
+	    {
+		    _currentLevelNumber = 0;
+			CurrentLevel = new Level(this, _levelList[0]);
+			CurrentLevel.Initialize();
+	    }
+
+	    public void LoadNextLevel()
+	    {
+		    var player = CurrentLevel.Player;
+			player.Velocity = Vector2.Zero;
+			CurrentLevel = new Level(this, _levelList[++_currentLevelNumber]);
+			CurrentLevel.Player = player;
+			CurrentLevel.Initialize();
+	    }
+
         /// <summary>
         /// Creates starting screens
         /// </summary>
@@ -41,8 +73,8 @@ namespace Miner.GameCore
         {
             screenManager.AddScreen(new BackgroundScreen());
 
-            //screenManager.AddScreen(new NamePromptMenuScreen());
-			screenManager.AddScreen(new GameplayScreen());	
+            screenManager.AddScreen(new NamePromptMenuScreen());
+			//screenManager.AddScreen(new GameplayScreen());	
         }
 
         /// <summary>

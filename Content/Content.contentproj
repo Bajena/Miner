@@ -128,8 +128,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Backgrounds\obraz.jpg">
-      <Name>obraz</Name>
+    <Compile Include="UI\oxygen_bar_empty.png">
+      <Name>oxygen_bar_empty</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="UI\oxygen_bar_full.png">
+      <Name>oxygen_bar_full</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

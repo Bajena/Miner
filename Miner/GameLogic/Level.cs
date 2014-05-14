@@ -10,6 +10,7 @@ using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Miner.Enums;
+using Miner.GameCore;
 using Miner.GameLogic.Objects;
 using Miner.GameLogic.Serializable;
 using Miner.Helpers;
@@ -38,18 +39,17 @@ namespace Miner.GameLogic
 		private List<Machine> _machines;
 		public Tile[,] _tiles;
 		private Texture2D backgroundTexture;
-		private Game _game;
+		private bool _keyCollected;
+		private MinerGame _game;
 
 
-		public Level(Game game, string name)
+		public Level(MinerGame game, string name)
 		{
 			_game = game;
 			Name = name;
-
-			Initialize();
 		}
 
-		private void Initialize()
+		public void Initialize()
 		{
 			var path = GetLevelPath(Name);
 			var levelData = LevelData.Deserialize(path);
@@ -174,10 +174,21 @@ namespace Miner.GameLogic
 				if (objectBounds.Intersects(tile.BoundingBox))
 				{
 					gameObject.HandleCollision(tile);
+					if (gameObject is Player)
+					{
+						if (tile.TileType == ETileType.Exit/* && _keyCollected*/)
+						{
+							_game.LoadNextLevel();
+							return;
+						}
+						else if (tile.TileType == ETileType.OxygenRefill)
+						{
+							Player.Oxygen = Player.MaxOxygen;
+						}
+					}
 				}
 			}
 		}
-
 
 
 		public List<Tile> GetSurroundingTiles(BoundingRect rectangle)

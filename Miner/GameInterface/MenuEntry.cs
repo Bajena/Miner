@@ -8,6 +8,21 @@ namespace Miner.GameInterface
     public class MenuEntry
     {
 	    float _selectionFade;
+	    private bool _isSelected;
+
+	    public bool IsSelected
+	    {
+		    get { return _isSelected; }
+		    private set
+		    {
+			    var temp = _isSelected;
+			    _isSelected = value;
+
+				if (temp && !value)
+					OnDeselectEntry();
+		    } 
+	    }
+
 
 	    public string Text { get; set; }
 
@@ -16,16 +31,30 @@ namespace Miner.GameInterface
 	    /// <summary>
         /// Event raised when the menu entry is selected.
         /// </summary>
-        public event EventHandler Selected;
+        public event EventHandler Entered;
 
         /// <summary>
         /// Method for raising the Selected event.
         /// </summary>
-        protected internal virtual void OnSelectEntry()
+        protected internal virtual void OnEnter()
         {
-            if (Selected != null)
-                Selected(this, null);
+            if (Entered != null)
+                Entered(this, null);
         }
+		
+		/// <summary>
+		/// Event raised when the menu entry is selected.
+		/// </summary>
+		public event EventHandler Deselected;
+
+		/// <summary>
+		/// Method for raising the Selected event.
+		/// </summary>
+		protected internal virtual void OnDeselectEntry()
+		{
+			if (Deselected != null)
+				Deselected(this, null);
+		}
 
         public MenuEntry(string text)
         {
@@ -33,15 +62,16 @@ namespace Miner.GameInterface
         }
 
         public virtual void Update(MenuScreen screen, bool isSelected, GameTime gameTime)
-        {
+		{
+			IsSelected = isSelected;
             float fadeSpeed = (float)gameTime.ElapsedGameTime.TotalSeconds * 4;
 
-	        _selectionFade = isSelected ? Math.Min(_selectionFade + fadeSpeed, 1) : Math.Max(_selectionFade - fadeSpeed, 0);
+	        _selectionFade = IsSelected ? Math.Min(_selectionFade + fadeSpeed, 1) : Math.Max(_selectionFade - fadeSpeed, 0);
         }
 
-        public virtual void Draw(MenuScreen screen, bool isSelected, GameTime gameTime)
+        public virtual void Draw(MenuScreen screen,GameTime gameTime)
         {
-            Color color = isSelected ? Color.Yellow : Color.White;
+			Color color = IsSelected ? Color.Yellow : Color.White;
 
             ScreenManager screenManager = screen.ScreenManager;
             SpriteBatch spriteBatch = screenManager.SpriteBatch;
