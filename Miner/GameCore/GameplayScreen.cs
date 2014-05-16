@@ -164,7 +164,7 @@ namespace Miner
 
 			//spriteBatch.DrawString(_gameFont, "Gracz:" + CurrentLevel.Player.Position.ToString(), new Vector2(0, 0), Color.Red);
 			//spriteBatch.DrawString(_gameFont, "Kamera:" + CurrentLevel.Camera.Position.ToString(), new Vector2(0, 30), Color.Red);
-			//spriteBatch.DrawString(_gameFont, "Tile[0,0]:" + CurrentLevel._tiles[0, 0].Position.ToString(), new Vector2(0, 60), Color.Red);
+			//spriteBatch.DrawString(_gameFont, "Tile[0,0]:" + CurrentLevel.Tiles[0, 0].Position.ToString(), new Vector2(0, 60), Color.Red);
 			foreach (var hudItem in _hudItems)
 			{
 				hudItem.Value.Draw(spriteBatch);

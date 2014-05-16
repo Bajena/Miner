@@ -60,10 +60,7 @@ namespace Miner.GameCore
 
 	    public void LoadNextLevel()
 	    {
-		    var player = CurrentLevel.Player;
-			player.Velocity = Vector2.Zero;
-			CurrentLevel = new Level(this, _levelList[++_currentLevelNumber]);
-			CurrentLevel.Player = player;
+			CurrentLevel = new Level(this, _levelList[++_currentLevelNumber],CurrentLevel.Player);
 			CurrentLevel.Initialize();
 	    }
 
@@ -74,8 +71,8 @@ namespace Miner.GameCore
         {
             screenManager.AddScreen(new BackgroundScreen());
 
-            screenManager.AddScreen(new NamePromptMenuScreen());
-			//screenManager.AddScreen(new GameplayScreen());	
+            //screenManager.AddScreen(new NamePromptMenuScreen());
+			screenManager.AddScreen(new GameplayScreen());	
         }
 
         /// <summary>

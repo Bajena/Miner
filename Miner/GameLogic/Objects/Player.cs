@@ -14,21 +14,9 @@ using Miner.Helpers;
 
 namespace Miner.GameLogic.Objects
 {
-	public class Player : GameObject
+	public class Player : WorldCollidingGameObject
 	{
 		public AnimationComponent AnimationComponent { get { return (AnimationComponent)DrawableComponents["Animation"]; } }
-		public PhysicsComponent PhysicsComponent { get { return (PhysicsComponent)Components["Physics"]; } }
-
-		public Vector2 Velocity
-		{
-			get { return (Vector2)Properties.GetProperty<Vector2>("Velocity"); }
-			set { Properties.UpdateProperty("Velocity", value); }
-		}
-		public Vector2 Acceleration
-		{
-			get { return (Vector2)Properties.GetProperty<Vector2>("Acceleration"); }
-			set { Properties.UpdateProperty("Acceleration", value); }
-		}
 
 		public float Oxygen { get { return Properties.GetProperty<float>("Oxygen"); } set { Properties.UpdateProperty("Oxygen", value); } }
 		public int Lives { get { return Properties.GetProperty<int>("Lives"); } set { Properties.UpdateProperty("Lives", value); } }
@@ -51,15 +39,11 @@ namespace Miner.GameLogic.Objects
 
 		private float _sideMoveSpeed;
 
-		public Player(Game game)
+		public Player(MinerGame game)
 			: base(game)
 		{
 			Type = "Player";
 
-			Components.Add("Physics", new PhysicsComponent(this)
-			{
-				HasGravity = true
-			});
 
 			Oxygen = SettingsManager.Instance.MaxOxygen;
 			Lives = SettingsManager.Instance.DefaultLives;
@@ -163,30 +147,6 @@ namespace Miner.GameLogic.Objects
 		public override void Update(GameTime gameTime)
 		{
 			base.Update(gameTime);
-		}
-
-		public override void HandleCollision(Tile tile)
-		{
-			if (tile.CollisionType == ETileCollisionType.Impassable)
-			{
-				var collisionDepth = BoundingBox.GetIntersectionDepth(tile.BoundingBox);
-				var collisionSide = CollisionHelper.GetCollisionOrigin(collisionDepth);
-
-				if (collisionSide.IsVertical())
-				{
-					Position = new Vector2(Position.X, Position.Y + collisionDepth.Y);
-					Velocity = new Vector2(Velocity.X, 0);
-				}
-				else if (collisionSide.IsHorizontal())
-				{
-					Position = new Vector2(Position.X + collisionDepth.X, Position.Y);
-					Velocity = new Vector2(0, Velocity.Y);
-				}
-			}
-			if (tile.TileType == ETileType.OxygenRefill)
-			{
-				Oxygen = SettingsManager.Instance.MaxOxygen;
-			}
 		}
 	}
 }

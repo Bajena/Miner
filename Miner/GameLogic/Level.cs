@@ -10,6 +10,7 @@ using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Miner.Enums;
+using Miner.Extensions;
 using Miner.GameCore;
 using Miner.GameLogic.Objects;
 using Miner.GameLogic.Serializable;
@@ -30,11 +31,11 @@ namespace Miner.GameLogic
 		public Camera Camera { get; set; }
 		public Vector2 PlayerStartPosition { get; set; }
 		public Vector2 Size { get; set; }
+		public Tile[,] Tiles { get; set; }
 
-		private Vector2 _tileDimensions;
 		private List<Machine> _machines;
-		public Tile[,] _tiles;
 		private Texture2D _backgroundTexture;
+		private Vector2 _tileDimensions { get; set; }
 		private bool _keyCollected;
 		private MinerGame _game;
 
@@ -42,6 +43,14 @@ namespace Miner.GameLogic
 		{
 			_game = game;
 			Name = name;
+		}
+
+		public Level(MinerGame game, string name, Player player)
+		{
+			_game = game;
+			Name = name;
+			Player = player;
+			player.Velocity = Vector2.Zero;
 		}
 
 		public void Initialize()
@@ -59,20 +68,20 @@ namespace Miner.GameLogic
 			tileset.Name = levelData.Tileset;
 
 			var tileMapFactory = new TileMapFactory();
-			_tiles = tileMapFactory.BuildTileMap(levelData, tileset);
+			Tiles = tileMapFactory.BuildTileMap(levelData, tileset);
 
 			Player.Position = PlayerStartPosition;
 			Camera = new Camera(_game.GraphicsDevice.Viewport, this, Player);
 
-			Size = new Vector2(_tiles.GetLength(0) * _tileDimensions.X, _tiles.GetLength(1) * _tileDimensions.Y);
+			Size = new Vector2(Tiles.GetLength(0) * _tileDimensions.X, Tiles.GetLength(1) * _tileDimensions.Y);
 		}
 
 		public void Update(GameTime gameTime)
 		{
 			Player.Update(gameTime);
+			HandleCollisions();
 			Camera.Update(gameTime);
 
-			HandleCollisions();
 		}
 
 		public void Draw(SpriteBatch spriteBatch)
@@ -126,60 +135,31 @@ namespace Miner.GameLogic
 					spriteBatch.Draw(_backgroundTexture, new Vector2(x, y), new Rectangle(0, 0, width, height), Color.White);
 				}
 			}
-			//int segmentWidth = _backgroundTexture.Width;
-			//float x = Camera.Position.X;
-			//int leftSegment = (int) Math.Floor(x / segmentWidth);
-			//int rightSegment = leftSegment + 1;
-			//x = (x / segmentWidth - leftSegment) * -segmentWidth;
-
-			//int segmentHeight = _backgroundTexture.Height;
-			//float y = Camera.Position.Y;
-			//int topSegment = (int)Math.Floor(y / segmentHeight);
-			//int bottomSegment = topSegment + 1;
-			//y = (y / segmentHeight - topSegment) * -segmentHeight;
-
-			//spriteBatch.Draw(_backgroundTexture, new Vector2(x,y), Color.White);
-			//spriteBatch.Draw(_backgroundTexture, new Vector2(x + segmentWidth,y), Color.White);
-			//spriteBatch.Draw(_backgroundTexture, new Vector2(x, y + segmentHeight), Color.White);
-			//spriteBatch.Draw(_backgroundTexture, new Vector2(x + segmentWidth , y + segmentHeight), Color.White);
-			//spriteBatch.Draw(_backgroundTexture, new Rectangle(0,0,(int) (_backgroundTexture.Width-Camera.Position.X),_backgroundTexture.Height), new Rectangle(),Color.White);
 		}
 
 		public void HandleCollisions()
 		{
-			HandleWorldCollision(Player);
+			ReactToPlayerTileCollisions();
 			//Kolizje gracz -> kafelki
 			//Kolizje pozostałe obiekty -> kafelki
 			//Kolizje gracz -> pozostałe obiekty
 		}
 
-		public void HandleWorldCollision(GameObject gameObject)
+		private void ReactToPlayerTileCollisions()
 		{
-			var beforeCollisionBounds = gameObject.BoundingBox;
-			var tilesToCheck = GetSurroundingTiles(beforeCollisionBounds);
-
-			foreach (var tile in tilesToCheck)
+			foreach (var tile in Player.GetCollidedTiles())
 			{
-				var objectBounds = gameObject.BoundingBox;
-				if (objectBounds.Intersects(tile.BoundingBox))
+				if (tile.TileType == ETileType.Exit/* && _keyCollected*/)
 				{
-					gameObject.HandleCollision(tile);
-					if (gameObject is Player)
-					{
-						if (tile.TileType == ETileType.Exit/* && _keyCollected*/)
-						{
-							_game.LoadNextLevel();
-							return;
-						}
-						else if (tile.TileType == ETileType.OxygenRefill)
-						{
-							Player.Oxygen = SettingsManager.Instance.MaxOxygen;
-						}
-					}
+					_game.LoadNextLevel();
+					return;
+				}
+				else if (tile.TileType == ETileType.OxygenRefill)
+				{
+					Player.Oxygen = SettingsManager.Instance.MaxOxygen;
 				}
 			}
 		}
-
 
 		public List<Tile> GetSurroundingTiles(BoundingRect rectangle)
 		{
@@ -189,9 +169,9 @@ namespace Miner.GameLogic
 			int bottomTile = (int)Math.Ceiling((rectangle.Bottom / _tileDimensions.Y)) - 1;
 
 			leftTile = leftTile >= 0 ? leftTile : 0;
-			rightTile = rightTile < _tiles.GetLength(0) ? rightTile : _tiles.GetLength(0) - 1;
+			rightTile = rightTile < Tiles.GetLength(0) ? rightTile : Tiles.GetLength(0) - 1;
 			topTile = topTile >= 0 ? topTile : 0;
-			bottomTile = bottomTile < _tiles.GetLength(1) ? bottomTile : _tiles.GetLength(1) - 1;
+			bottomTile = bottomTile < Tiles.GetLength(1) ? bottomTile : Tiles.GetLength(1) - 1;
 
 			var tileList = new List<Tile>();
 
@@ -199,12 +179,11 @@ namespace Miner.GameLogic
 			{
 				for (int x = leftTile; x <= rightTile; ++x)
 				{
-					tileList.Add(_tiles[x, y]);
+					tileList.Add(Tiles[x, y]);
 				}
 			}
 
 			return tileList;
 		}
-
 	}
 }

@@ -66,6 +66,7 @@
     <XnaCompressContent>true</XnaCompressContent>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Enums\EDirection.cs" />
     <Compile Include="Enums\EScreenState.cs" />
     <Compile Include="Enums\ESide.cs" />
     <Compile Include="Enums\ETileCollisionType.cs" />
@@ -92,7 +93,7 @@
     <Compile Include="GameInterface\MenuEntries\TextInputMenuEntry.cs" />
     <Compile Include="GameLogic\Camera.cs" />
     <Compile Include="GameLogic\Components\AnimationComponent.cs" />
-    <Compile Include="GameLogic\Components\CollisionComponent.cs" />
+    <Compile Include="GameLogic\Components\WorldCollisionComponent.cs" />
     <Compile Include="GameLogic\Components\DrawableGameObjectComponent.cs" />
     <Compile Include="GameLogic\Components\GameObjectComponent.cs" />
     <Compile Include="GameLogic\Components\HudComponent.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="GameLogic\Objects\GameObject.cs" />
     <Compile Include="GameLogic\Objects\Machine.cs" />
     <Compile Include="GameLogic\Objects\Player.cs" />
+    <Compile Include="GameLogic\Objects\WorldCollidingGameObject.cs" />
     <Compile Include="GameLogic\Tile.cs" />
     <Compile Include="GameLogic\PropertyContainer.cs" />
     <Compile Include="GameLogic\Serializable\LevelData.cs" />

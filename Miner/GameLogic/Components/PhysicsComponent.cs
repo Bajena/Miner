@@ -3,19 +3,66 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Miner.Enums;
 using Miner.GameLogic.Objects;
 
 namespace Miner.GameLogic.Components
 {
 	public class PhysicsComponent : GameObjectComponent
 	{
+
+		public Vector2 Position
+		{
+			get
+			{
+				return ParentObject.Properties.GetProperty<Vector2>("Position");
+			}
+			set
+			{
+				ParentObject.Properties.UpdateProperty("Position", value);
+			}
+		}
+
+		public Vector2 LastMove
+		{
+			get
+			{
+				return ParentObject.Properties.GetProperty<Vector2>("Position") - _previousPosition;
+			}
+		}
+
+		public Vector2 Velocity
+		{
+			get
+			{
+				return ParentObject.Properties.GetProperty<Vector2>("Velocity");
+			}
+			set
+			{
+				ParentObject.Properties.UpdateProperty("Velocity", value);
+			}
+		}
+
+		public Vector2 Acceleration
+		{
+			get
+			{
+				return (Vector2)ParentObject.Properties.GetProperty<Vector2>("Acceleration");
+			}
+
+			set
+			{
+				ParentObject.Properties.UpdateProperty("Acceleration", value);
+			}
+		}
+
 		public float MaxVelocity { get; set; }
 		public float Drag { get; set; }
 		private readonly Vector2 _gravity;
 		public bool HasDrag { get; set; }
 		public bool HasGravity { get; set; }
-
-		private Vector2 _previousPosition, _position, _velocity, _acceleration;
+		
+		private Vector2 _previousPosition, position, velocity, acceleration;
 
 		public PhysicsComponent(GameObject gameObject)
 			: base(gameObject)
@@ -25,9 +72,9 @@ namespace Miner.GameLogic.Components
 			HasDrag = true;
 			_gravity = new Vector2(0, 400);
 			MaxVelocity = 5000;
-			ParentObject.Properties.UpdateProperty("Position", Vector2.Zero);
-			ParentObject.Properties.UpdateProperty("Velocity", Vector2.Zero);
-			ParentObject.Properties.UpdateProperty("Acceleration", Vector2.Zero);
+			
+			Velocity = Vector2.Zero;
+			Acceleration = Vector2.Zero;
 			ParentObject.Properties.UpdateProperty("IsPhysicsActive", true);
 		}
 
@@ -37,42 +84,72 @@ namespace Miner.GameLogic.Components
 
 			if (Active)
 			{
-				_position = ParentObject.Position;
-				_velocity = ParentObject.Properties.GetProperty<Vector2>("Velocity");
-				_acceleration = ParentObject.Properties.GetProperty<Vector2>("Acceleration");
+				position = ParentObject.Position;
+				velocity = ParentObject.Velocity;
+				acceleration = ParentObject.Acceleration;
 
-				Vector2 totalAcceleration = _acceleration;
+				Vector2 totalAcceleration = acceleration;
 				if (HasGravity)
 					totalAcceleration += _gravity;
 
-				_velocity += Vector2.Multiply(totalAcceleration, (float)gameTime.ElapsedGameTime.TotalSeconds);
+				velocity += Vector2.Multiply(totalAcceleration, (float)gameTime.ElapsedGameTime.TotalSeconds);
 
 				if (HasDrag)
-					if (0 < Drag && _acceleration.Length() < 0.1)
+					if (0 < Drag && acceleration.Length() < 0.1)
 					{
-						float newLength = _velocity.Length() - Drag;
+						float newLength = velocity.Length() - Drag;
 						if (newLength > 0)
 						{
-							_velocity.Normalize();
-							_velocity = Vector2.Multiply(_velocity, newLength);
+							velocity.Normalize();
+							velocity = Vector2.Multiply(velocity, newLength);
 						}
 						else
-							_velocity = Vector2.Zero;
+							velocity = Vector2.Zero;
 					}
 
-				if (_velocity.Length() > MaxVelocity)
+				if (velocity.Length() > MaxVelocity)
 				{
-					_velocity.Normalize();
-					_velocity = Vector2.Multiply(_velocity, MaxVelocity);
+					velocity.Normalize();
+					velocity = Vector2.Multiply(velocity, MaxVelocity);
 				}
 
-				_previousPosition = _position;
-				_position += Vector2.Multiply(_velocity, (float)gameTime.ElapsedGameTime.TotalSeconds);
+				_previousPosition = position;
+				
+				var moveVector = Vector2.Multiply(velocity, (float)gameTime.ElapsedGameTime.TotalSeconds);
 
-				ParentObject.Position = _position;
-				ParentObject.Properties.UpdateProperty("Velocity", _velocity);
-				ParentObject.Properties.UpdateProperty("Acceleration", _acceleration);
+				ParentObject.Velocity = velocity;
+				ParentObject.Acceleration = acceleration;
+
+				PerformMove(moveVector);
 			}
+		}
+
+		/// <summary>
+		/// Przesuwa obiekt i reaguje na kolizje z kafelkami mapy
+		/// </summary>
+		/// <param name="moveVector"></param>
+		private void PerformMove(Vector2 moveVector)
+		{
+			var worldCollisionComponent = (WorldCollisionComponent)ParentObject.Components["WorldCollision"];
+			
+			if (worldCollisionComponent != null)
+			{
+				worldCollisionComponent.CollidingTiles.Clear();
+
+				if (moveVector.X != 0)
+				{
+					ParentObject.Position += Vector2.UnitX * moveVector;
+					ParentObject.Position = new Vector2((float)Math.Round(ParentObject.Position.X), ParentObject.Position.Y);
+					worldCollisionComponent.HandleWorldCollision(EDirection.Horizontal);
+				}
+				if (moveVector.Y != 0)
+				{
+					ParentObject.Position += Vector2.UnitY * moveVector;
+					ParentObject.Position = new Vector2(ParentObject.Position.X, (float)Math.Round(ParentObject.Position.Y));
+					worldCollisionComponent.HandleWorldCollision(EDirection.Vertical);
+				}
+			}
+			else ParentObject.Position += moveVector;
 		}
 	}
 }

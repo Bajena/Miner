@@ -9,14 +9,14 @@ using Miner.Helpers;
 
 namespace Miner.GameLogic.Components
 {
-	public enum Direction { Right, Left }
+	public enum EFacingDirection { Right, Left }
 
 	public class AnimationComponent : DrawableGameObjectComponent
 	{
 		public Dictionary<String, Texture2D> SpriteSheets { get; set; }
 		public Dictionary<String, SpriteAnimation> Animations { get; set; }
 		public string CurrentAnimation { get { return _currentAnimation.Name; } }
-		public Direction Facing { get; set; }
+		public EFacingDirection Facing { get; set; }
 		public float Scale { get; set; }
 		public bool RotatesByVelocity { get; set; }
 
@@ -34,12 +34,10 @@ namespace Miner.GameLogic.Components
 			Name = "Animation";
 			Scale = 1.0f;
 			_rotation = 0.0f;
-			Facing = Direction.Left;
+			Facing = EFacingDirection.Left;
 			_spriteEffect = SpriteEffects.None;
 			RotatesByVelocity = false;
 
-			ParentObject.Properties.UpdateProperty("Position", Vector2.Zero);
-			ParentObject.Properties.UpdateProperty("Velocity", Vector2.Zero);
 			ParentObject.Properties.UpdateProperty("BoundingBox", BoundingRect.Empty);
 			ParentObject.Properties.UpdateProperty("IsPhysicsActive", true);
 		}
@@ -62,7 +60,7 @@ namespace Miner.GameLogic.Components
 		public override void Update(GameTime gameTime)
 		{
 			_position = ParentObject.Position;
-			_velocity = ParentObject.Properties.GetProperty<Vector2>("Velocity");
+			_velocity = ParentObject.Velocity;
 			var boundingBox = ParentObject.BoundingBox;
 
 			if (!_currentAnimation.HasStarted)
@@ -74,12 +72,12 @@ namespace Miner.GameLogic.Components
 			
 			if (_velocity.X > 0.1)
 			{
-				Facing = Direction.Right;
+				Facing = EFacingDirection.Right;
 				_spriteEffect = SpriteEffects.FlipHorizontally;
 			}
 			else if (_velocity.X < -0.1)
 			{
-				Facing = Direction.Left;
+				Facing = EFacingDirection.Left;
 				_spriteEffect = SpriteEffects.None;
 			}
 
@@ -92,7 +90,7 @@ namespace Miner.GameLogic.Components
 		{
 			var boundingBox = ParentObject.BoundingBox;
 			_position = ParentObject.Position;
-			_velocity = ParentObject.Properties.GetProperty<Vector2>("Velocity");
+			_velocity = ParentObject.Velocity;
 
 			if (RotatesByVelocity)
 				_rotation = (float)Math.Atan2(_velocity.Y, _velocity.X);
