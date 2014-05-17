@@ -53,18 +53,21 @@ namespace Miner.GameLogic
 			player.Velocity = Vector2.Zero;
 		}
 
+		#region INIT
 		public void Initialize()
 		{
 			if (Player == null)
 			{
 				Player = new Player(_game);
 			}
+			Player.Died += PlayerDied;
 
 			var levelData = LevelData.Deserialize(GetLevelPath(Name));
 			_backgroundTexture = !String.IsNullOrEmpty(levelData.Background) ? _game.Content.Load<Texture2D>("Backgrounds/" + levelData.Background) : null;
 
 			_tileDimensions = levelData.TileDimensions;
 			var tileset = _game.Content.Load<Texture2D>("Tilesets/" + levelData.Tileset);
+
 			tileset.Name = levelData.Tileset;
 
 			var tileMapFactory = new TileMapFactory();
@@ -76,6 +79,19 @@ namespace Miner.GameLogic
 			Size = new Vector2(Tiles.GetLength(0) * _tileDimensions.X, Tiles.GetLength(1) * _tileDimensions.Y);
 		}
 
+		#endregion
+
+		#region UPDATE
+		void PlayerDied(object sender, EventArgs e)
+		{
+
+		}
+
+		void RespawnPlayer()
+		{
+			Player.Position = PlayerStartPosition;
+		}
+
 		public void Update(GameTime gameTime)
 		{
 			Player.Update(gameTime);
@@ -83,7 +99,58 @@ namespace Miner.GameLogic
 			Camera.Update(gameTime);
 
 		}
+		public void HandleCollisions()
+		{
+			ReactToPlayerTileCollisions();
+			//Kolizje gracz -> kafelki
+			//Kolizje pozostałe obiekty -> kafelki
+			//Kolizje gracz -> pozostałe obiekty
+		}
 
+		private void ReactToPlayerTileCollisions()
+		{
+			foreach (var tile in Player.GetCollidedTiles())
+			{
+				if (tile.TileType == ETileType.Exit/* && _keyCollected*/)
+				{
+					_game.LoadNextLevel();
+					return;
+				}
+				else if (tile.TileType == ETileType.OxygenRefill)
+				{
+					Player.Oxygen = SettingsManager.Instance.MaxOxygen;
+				}
+			}
+		}
+
+		public List<Tile> GetSurroundingTiles(BoundingRect rectangle)
+		{
+			int leftTile = (int)Math.Floor(rectangle.Left / _tileDimensions.X);
+			int rightTile = (int)Math.Ceiling((rectangle.Right / _tileDimensions.X)) - 1;
+			int topTile = (int)Math.Floor(rectangle.Top / _tileDimensions.Y);
+			int bottomTile = (int)Math.Ceiling((rectangle.Bottom / _tileDimensions.Y)) - 1;
+
+			leftTile = leftTile >= 0 ? leftTile : 0;
+			rightTile = rightTile < Tiles.GetLength(0) ? rightTile : Tiles.GetLength(0) - 1;
+			topTile = topTile >= 0 ? topTile : 0;
+			bottomTile = bottomTile < Tiles.GetLength(1) ? bottomTile : Tiles.GetLength(1) - 1;
+
+			var tileList = new List<Tile>();
+
+			for (int y = topTile; y <= bottomTile; ++y)
+			{
+				for (int x = leftTile; x <= rightTile; ++x)
+				{
+					tileList.Add(Tiles[x, y]);
+				}
+			}
+
+			return tileList;
+		}
+
+		#endregion
+
+		#region DRAW
 		public void Draw(SpriteBatch spriteBatch)
 		{
 			if (_backgroundTexture != null)
@@ -137,53 +204,6 @@ namespace Miner.GameLogic
 			}
 		}
 
-		public void HandleCollisions()
-		{
-			ReactToPlayerTileCollisions();
-			//Kolizje gracz -> kafelki
-			//Kolizje pozostałe obiekty -> kafelki
-			//Kolizje gracz -> pozostałe obiekty
-		}
-
-		private void ReactToPlayerTileCollisions()
-		{
-			foreach (var tile in Player.GetCollidedTiles())
-			{
-				if (tile.TileType == ETileType.Exit/* && _keyCollected*/)
-				{
-					_game.LoadNextLevel();
-					return;
-				}
-				else if (tile.TileType == ETileType.OxygenRefill)
-				{
-					Player.Oxygen = SettingsManager.Instance.MaxOxygen;
-				}
-			}
-		}
-
-		public List<Tile> GetSurroundingTiles(BoundingRect rectangle)
-		{
-			int leftTile = (int)Math.Floor(rectangle.Left / _tileDimensions.X);
-			int rightTile = (int)Math.Ceiling((rectangle.Right / _tileDimensions.X)) - 1;
-			int topTile = (int)Math.Floor(rectangle.Top / _tileDimensions.Y);
-			int bottomTile = (int)Math.Ceiling((rectangle.Bottom / _tileDimensions.Y)) - 1;
-
-			leftTile = leftTile >= 0 ? leftTile : 0;
-			rightTile = rightTile < Tiles.GetLength(0) ? rightTile : Tiles.GetLength(0) - 1;
-			topTile = topTile >= 0 ? topTile : 0;
-			bottomTile = bottomTile < Tiles.GetLength(1) ? bottomTile : Tiles.GetLength(1) - 1;
-
-			var tileList = new List<Tile>();
-
-			for (int y = topTile; y <= bottomTile; ++y)
-			{
-				for (int x = leftTile; x <= rightTile; ++x)
-				{
-					tileList.Add(Tiles[x, y]);
-				}
-			}
-
-			return tileList;
-		}
+		#endregion
 	}
 }

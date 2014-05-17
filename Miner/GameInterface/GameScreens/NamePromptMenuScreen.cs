@@ -19,19 +19,33 @@ namespace Miner.GameInterface.GameScreens
 
             // Hook up menu event handlers.
 			nameMenuEntry.Entered += NameMenuEntryEntered;
+			nameMenuEntry.Selected += NameMenuEntrySelected;
             acceptMenuEntry.Entered += AcceptMenuEntryEntered;
 
             // Add entries to the menu.
 			MenuEntries.Add(nameMenuEntry);
             MenuEntries.Add(acceptMenuEntry);
-
-			nameMenuEntry.OnEnter();
-
         }
+
+		private void NameMenuEntrySelected(object sender, EventArgs e)
+		{
+			(sender as TextInputMenuEntry).OnEnter();
+		}
+
+		protected override void OnCancel()
+		{
+			const string message = "Are you sure you want to exit?";
+
+			var confirmExitMessageBox = new MessageBoxScreen(message, true, MessageBoxType.YesNo);
+
+			confirmExitMessageBox.Accepted += ConfirmExitMessageBoxAccepted;
+
+			ScreenManager.AddScreen(confirmExitMessageBox);
+		}
 
 		void NameMenuEntryEntered(object sender, EventArgs e)
 		{
-
+			
 		}
 
         /// <summary>

@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Miner;
 using Miner.Enums;
+using Miner.Extensions;
 using Miner.GameCore;
 using Miner.GameInterface;
 using Miner.GameInterface.GameScreens;
@@ -66,10 +67,12 @@ namespace Miner
 			SaveTestLevel();
 
 			Game.NewGame();
-			var livesComponent = new LivesComponent(CurrentLevel.Player, new Vector2(20, 20));
+			var livesComponent = new ItemRepeatComponent(CurrentLevel.Player, new Vector2(20, 20),"Lives","UI/heart");
 			_hudItems.Add("Lives", livesComponent);
-			var oxygenComponent = new BarComponent(CurrentLevel.Player, new Vector2(ScreenManager.GraphicsDevice.Viewport.Width - 50.0f, 20.0f), "Oxygen", SettingsManager.Instance.MaxOxygen);
-			_hudItems.Add("Oxygen", oxygenComponent );
+			var oxygenComponent = new BarComponent(CurrentLevel.Player, new Vector2(ScreenManager.GraphicsDevice.Viewport.Width - 50.0f, 70), "Oxygen", SettingsManager.Instance.MaxOxygen, "UI/oxygen_bar_empty", "UI/oxygen_bar_full");
+			_hudItems.Add("Oxygen", oxygenComponent);
+			var pointsComponent = new TextComponent<int>(CurrentLevel.Player, _gameFont, new Vector2(ScreenManager.GraphicsDevice.Viewport.Width - 35, 15f), "Points",SpriteBatchExtensions.TextAlignment.Right, Color.Gold);
+			_hudItems.Add("Points", pointsComponent);
 
 			foreach (var hudComponent in _hudItems)
 			{
@@ -151,17 +154,15 @@ namespace Miner
 
 		public override void Draw(GameTime gameTime)
 		{
-			ScreenManager.GraphicsDevice.Clear(ClearOptions.Target,
-											   Color.White, 0, 0);
+			ScreenManager.GraphicsDevice.Clear(ClearOptions.Target,Color.Black, 0, 0);
 
 			SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
 
+			//Poziom jest rysowany z przesunieciem wzgledem kamery
 			CurrentLevel.Draw(spriteBatch);
 
 			spriteBatch.Begin();
-
 			spriteBatch.DrawString(_gameFont,CurrentLevel.Name,new Vector2(ScreenManager.GraphicsDevice.Viewport.Width/2,0), Color.White,0,Vector2.Zero,new Vector2(0.75f),SpriteEffects.None,0 );
-
 			//spriteBatch.DrawString(_gameFont, "Gracz:" + CurrentLevel.Player.Position.ToString(), new Vector2(0, 0), Color.Red);
 			//spriteBatch.DrawString(_gameFont, "Kamera:" + CurrentLevel.Camera.Position.ToString(), new Vector2(0, 30), Color.Red);
 			//spriteBatch.DrawString(_gameFont, "Tile[0,0]:" + CurrentLevel.Tiles[0, 0].Position.ToString(), new Vector2(0, 60), Color.Red);
@@ -170,6 +171,7 @@ namespace Miner
 				hudItem.Value.Draw(spriteBatch);
 			}
 			spriteBatch.End();
+
 			// If the game is transitioning on or off, fade it out to black.
 			if (TransitionPosition > 0 || _pauseAlpha > 0)
 			{

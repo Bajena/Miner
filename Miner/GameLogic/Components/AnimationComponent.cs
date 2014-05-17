@@ -81,7 +81,7 @@ namespace Miner.GameLogic.Components
 				_spriteEffect = SpriteEffects.None;
 			}
 
-			ParentObject.Properties.UpdateProperty("BoundingBox", boundingBox);
+			ParentObject.BoundingBox = boundingBox;
 
 			ParentObject.Properties.UpdateProperty("IsPhysicsActive", !_currentAnimation.StopsMovement);
 		}

@@ -20,7 +20,9 @@ namespace Miner.GameInterface.MenuEntries
 			    _isSelected = value;
 
 				if (temp && !value)
-					OnDeselectEntry();
+					OnDeselected();
+				else if (!temp && value)
+					OnSelected();
 		    } 
 	    }
 
@@ -42,7 +44,21 @@ namespace Miner.GameInterface.MenuEntries
             if (Entered != null)
                 Entered(this, null);
         }
-		
+
+		/// <summary>
+		/// Event raised when the menu entry is selected.
+		/// </summary>
+		public event EventHandler Selected;
+
+		/// <summary>
+		/// Method for raising the Selected event.
+		/// </summary>
+		protected internal virtual void OnSelected()
+		{
+			if (Selected != null)
+				Selected(this, null);
+		}
+
 		/// <summary>
 		/// Event raised when the menu entry is selected.
 		/// </summary>
@@ -51,7 +67,7 @@ namespace Miner.GameInterface.MenuEntries
 		/// <summary>
 		/// Method for raising the Selected event.
 		/// </summary>
-		protected internal virtual void OnDeselectEntry()
+		protected internal virtual void OnDeselected()
 		{
 			if (Deselected != null)
 				Deselected(this, null);

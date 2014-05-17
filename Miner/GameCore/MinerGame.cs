@@ -71,8 +71,8 @@ namespace Miner.GameCore
         {
             screenManager.AddScreen(new BackgroundScreen());
 
-            //screenManager.AddScreen(new NamePromptMenuScreen());
-			screenManager.AddScreen(new GameplayScreen());	
+            screenManager.AddScreen(new NamePromptMenuScreen());
+			//screenManager.AddScreen(new GameplayScreen());	
         }
 
         /// <summary>

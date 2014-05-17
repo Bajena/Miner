@@ -8,9 +8,14 @@ namespace Miner.GameInterface.GameScreens
         public MainMenuScreen()
             : base("Main Menu")
         {
+	        TitlePositionY = 275;
+	        MenuEntriesPositionY = 350;
+
 			MenuEntry playGameMenuEntry = new MenuEntry("New Game");
+			MenuEntry loadGameMenuEntry = new MenuEntry("LoadGame");
 			MenuEntry optionsMenuEntry = new MenuEntry("Options");
 			MenuEntry highScoresMenuEntry = new MenuEntry("High Scores");
+			MenuEntry helpMenuEntry = new MenuEntry("Help");
             MenuEntry exitMenuEntry = new MenuEntry("Exit");
 
             playGameMenuEntry.Entered += PlayGameMenuEntryEntered;
@@ -18,8 +23,10 @@ namespace Miner.GameInterface.GameScreens
             exitMenuEntry.Entered += OnCancel;
 
             MenuEntries.Add(playGameMenuEntry);
+			MenuEntries.Add(loadGameMenuEntry);
             MenuEntries.Add(optionsMenuEntry);
 			MenuEntries.Add(highScoresMenuEntry);
+			MenuEntries.Add(helpMenuEntry);
             MenuEntries.Add(exitMenuEntry);
         }
 

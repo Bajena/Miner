@@ -17,6 +17,7 @@ namespace Miner.GameLogic.Objects
 	public class Player : WorldCollidingGameObject
 	{
 		public AnimationComponent AnimationComponent { get { return (AnimationComponent)DrawableComponents["Animation"]; } }
+		public AnimationComponent OxygenComponent { get { return (AnimationComponent)DrawableComponents["Oxygen"]; } }
 
 		public float Oxygen { get { return Properties.GetProperty<float>("Oxygen"); } set { Properties.UpdateProperty("Oxygen", value); } }
 		public int Lives { get { return Properties.GetProperty<int>("Lives"); } set { Properties.UpdateProperty("Lives", value); } }
@@ -39,6 +40,16 @@ namespace Miner.GameLogic.Objects
 
 		private float _sideMoveSpeed;
 
+		public event EventHandler Died;
+
+		protected internal virtual void OnDied()
+		{
+			Lives--;
+			Respawn(Game.CurrentLevel.PlayerStartPosition);
+			if (Died!= null)
+				Died(this, null);
+		}
+
 		public Player(MinerGame game)
 			: base(game)
 		{
@@ -52,6 +63,7 @@ namespace Miner.GameLogic.Objects
 			_sideMoveSpeed = 200.0f;
 
 			DrawableComponents.Add("Animation", new AnimationComponent(this));
+			Components.Add("Oxygen", new OxygenComponent(this));
 
 			SetupAnimations();
 		}
@@ -73,7 +85,7 @@ namespace Miner.GameLogic.Objects
 				Name = "Idle",
 				SpriteSheet = AnimationComponent.SpriteSheets["Idle"],
 			});
-
+			
 			AnimationComponent.Animations.Add("Run", new SpriteAnimation()
 			{
 				AnimationDuration = 0.75,
@@ -87,7 +99,7 @@ namespace Miner.GameLogic.Objects
 			}
 			AnimationComponent.Animations.Add("Jump", new SpriteAnimation()
 			{
-				AnimationDuration = 1.5,
+				AnimationDuration = 1.0f,
 				Loop = true,
 				Name = "Jump",
 				SpriteSheet = AnimationComponent.SpriteSheets["Jump"],
@@ -110,7 +122,10 @@ namespace Miner.GameLogic.Objects
 			if (input.IsKeyDown(Keys.Z)) Oxygen = Oxygen - 1 >= 0 ? Oxygen - 1 : Oxygen;
 			if (input.IsKeyDown(Keys.X)) Oxygen = Oxygen + 1 <= SettingsManager.Instance.MaxOxygen ? Oxygen + 1 : Oxygen;
 
-			if (SettingsManager.Instance.Controls[EAction.Jump].IsCalled(input) /*&& !IsInAir*/)
+			if (input.IsKeyDown(Keys.Q)) Points--;
+			if (input.IsKeyDown(Keys.W)) Points++;
+
+			if (SettingsManager.Instance.Controls[EAction.Jump].IsCalled(input)/* && !IsInAir*/)
 			{
 				Jump();
 			}
@@ -135,18 +150,23 @@ namespace Miner.GameLogic.Objects
 		{
 			PhysicsComponent.HasGravity = true;
 			AnimationComponent.SetActiveAnimation("Jump");
-			Velocity = new Vector2(Velocity.X, -250.0f);
+			Velocity = new Vector2(Velocity.X, -400.0f);
 
 		}
 
-		private void EndJump()
+		public void Respawn(Vector2 position)
 		{
-
+			Position = position;
+			Acceleration = Vector2.Zero;
+			Velocity = Vector2.Zero;
+			Oxygen = SettingsManager.Instance.MaxOxygen;
 		}
 
 		public override void Update(GameTime gameTime)
 		{
 			base.Update(gameTime);
+			if (Oxygen<=0)
+				OnDied();
 		}
 	}
 }
