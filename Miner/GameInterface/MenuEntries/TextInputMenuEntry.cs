@@ -19,20 +19,19 @@ namespace Miner.GameInterface.MenuEntries
 		public bool Enabled { get; set; }
 		public CaseKeeping CaseKeeping { get; set; }
 
+		protected internal override void OnSelected()
+		{
+			Enabled = true;
+			base.OnSelected();
+		}
+
 		protected internal override void OnDeselected()
 		{
 			Enabled = false;
 			base.OnDeselected();
 
 		}
-
-		protected internal override void OnEnter()
-		{
-			Enabled = !Enabled;
-			base.OnEnter();
-		}
-
-
+		
 		public TextInputMenuEntry(string text) : base(text)
 		{
 			InputText = string.Empty;

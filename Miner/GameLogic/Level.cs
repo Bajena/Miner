@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Miner.Enums;
 using Miner.Extensions;
 using Miner.GameCore;
+using Miner.GameInterface.GameScreens;
 using Miner.GameLogic.Objects;
 using Miner.GameLogic.Serializable;
 using Miner.Helpers;
@@ -84,14 +85,19 @@ namespace Miner.GameLogic
 		#region UPDATE
 		void PlayerDied(object sender, EventArgs e)
 		{
+			bool gameOver = Player.Lives == 0;
+			var messageBox = new MessageBoxScreen(!gameOver ? "You died" : "Game Over", true, MessageBoxType.Info);
+			messageBox.Accepted += DeathMessageBoxCancelled;
+			messageBox.Cancelled += DeathMessageBoxCancelled;
+			_game.ScreenManager.AddScreen(messageBox);
 
 		}
 
-		void RespawnPlayer()
+		private void DeathMessageBoxCancelled(object sender, EventArgs e)
 		{
-			Player.Position = PlayerStartPosition;
+			Player.Respawn(PlayerStartPosition);
 		}
-
+		
 		public void Update(GameTime gameTime)
 		{
 			Player.Update(gameTime);

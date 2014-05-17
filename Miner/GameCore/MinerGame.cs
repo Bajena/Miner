@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Miner.GameInterface;
 using Miner.GameInterface.GameScreens;
@@ -15,8 +17,9 @@ namespace Miner.GameCore
 			"Level2"
 		};
 
+		public ScreenManager ScreenManager;
+
         GraphicsDeviceManager graphics;
-        ScreenManager screenManager;
 		ScreenFactory screenFactory;
 
 		public Level CurrentLevel { get; set; }
@@ -29,7 +32,7 @@ namespace Miner.GameCore
             Content.RootDirectory = "Content";
 
             graphics = new GraphicsDeviceManager(this);
-            SettingsManager.Instance.Initialize();
+            SettingsManager.Instance.InitializeDefault();
 
             //Set resolution
             graphics.PreferredBackBufferWidth = (int)SettingsManager.Instance.Resolution.X;
@@ -39,11 +42,28 @@ namespace Miner.GameCore
             screenFactory = new ScreenFactory();
             //Services.AddService(typeof(IScreenFactory), screenFactory);
 
-            screenManager = new ScreenManager(this);
-            Components.Add(screenManager);
+            ScreenManager = new ScreenManager(this);
+            Components.Add(ScreenManager);
 
             AddInitialScreens();
         }
+
+	    public void CreateGameDirectories()
+	    {
+			List<string> paths = new List<string>()
+			{
+				Path.Combine(AppDomain.CurrentDomain.BaseDirectory,ConfigurationManager.AppSettings["LevelsPath"]),
+				Path.Combine(AppDomain.CurrentDomain.BaseDirectory,ConfigurationManager.AppSettings["SettingsPath"])
+			};
+		    foreach (var path in paths)
+		    {
+			    if (!Directory.Exists(path))
+			    {
+					Directory.CreateDirectory(path);
+			    }
+		    }
+
+	    }
 
 	    public void LoadLevel(string name)
 	    {
@@ -69,10 +89,10 @@ namespace Miner.GameCore
         /// </summary>
         private void AddInitialScreens()
         {
-            screenManager.AddScreen(new BackgroundScreen());
+            ScreenManager.AddScreen(new BackgroundScreen());
 
-            screenManager.AddScreen(new NamePromptMenuScreen());
-			//screenManager.AddScreen(new GameplayScreen());	
+            ScreenManager.AddScreen(new NamePromptMenuScreen());
+			//ScreenManager.AddScreen(new GameplayScreen());	
         }
 
         /// <summary>

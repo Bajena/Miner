@@ -15,22 +15,13 @@ namespace Miner.GameInterface.GameScreens
             : base("Hello, type your name")
         {
 			// Create our menu entries.
-            MenuEntry acceptMenuEntry = new MenuEntry("OK");
 
             // Hook up menu event handlers.
 			nameMenuEntry.Entered += NameMenuEntryEntered;
-			nameMenuEntry.Selected += NameMenuEntrySelected;
-            acceptMenuEntry.Entered += AcceptMenuEntryEntered;
 
             // Add entries to the menu.
 			MenuEntries.Add(nameMenuEntry);
-            MenuEntries.Add(acceptMenuEntry);
         }
-
-		private void NameMenuEntrySelected(object sender, EventArgs e)
-		{
-			(sender as TextInputMenuEntry).OnEnter();
-		}
 
 		protected override void OnCancel()
 		{
@@ -45,42 +36,31 @@ namespace Miner.GameInterface.GameScreens
 
 		void NameMenuEntryEntered(object sender, EventArgs e)
 		{
-			
-		}
-
-        /// <summary>
-        /// Event handler for when the Play Game menu entry is selected.
-        /// </summary>
-        void AcceptMenuEntryEntered(object sender, EventArgs e)
-        {
-	        if (nameMenuEntry.InputText.Length > 0)
-	        {
+			if (nameMenuEntry.InputText.Length > 0)
+			{
 				SettingsManager.Instance.PlayerName = nameMenuEntry.InputText;
-		        ScreenManager.AddScreen(new MainMenuScreen());
-	        }
-	        else
-	        {
-				const string message = "Please enter your name!";
+				ScreenManager.AddScreen(new MainMenuScreen());
+				if (SettingsManager.PlayerSettingsExist(nameMenuEntry.InputText))
+				{
+					SettingsManager.LoadPlayerSettings(nameMenuEntry.InputText);
+					ScreenManager.AddScreen(new TimedPopupScreen("Settings for player " + nameMenuEntry.InputText + " loaded", false,TimeSpan.FromSeconds(1)));
 
-				MessageBoxScreen confirmExitMessageBox = new MessageBoxScreen(message,true,MessageBoxType.Info);
-
+				}
+			}
+			else
+			{
+				var confirmExitMessageBox = new MessageBoxScreen( "Please enter your name!", false, MessageBoxType.Info);
 				confirmExitMessageBox.Accepted += ConfirmExitMessageBoxAccepted;
-
 				ScreenManager.AddScreen(confirmExitMessageBox);
-	        }
-        }
-
+			}
+		}
+		
 		public override void HandleInput(GameTime gameTime, InputState input)
 		{
 			if (nameMenuEntry.IsSelected) 
 				nameMenuEntry.HandleInput(gameTime,input);
 			
 			base.HandleInput(gameTime,input);
-		}
-
-		public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
-		{
-			base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 		}
 
         /// <summary>

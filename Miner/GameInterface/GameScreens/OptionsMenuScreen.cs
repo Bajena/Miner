@@ -68,6 +68,7 @@ namespace Miner.GameInterface.GameScreens
 	    protected override void OnCancel()
 	    {
 			SaveNewOptions();
+			ScreenManager.AddScreen(new TimedPopupScreen("Settings saved",false,TimeSpan.FromSeconds(1)));
 		    base.OnCancel();
 	    }
 
@@ -75,6 +76,7 @@ namespace Miner.GameInterface.GameScreens
 	    {
 			SettingsManager.Instance.Sound = _sound;
 		    SettingsManager.Instance.Difficulty = _difficulty;
+			SettingsManager.Instance.SaveToDisk();
 	    }
     }
 }

@@ -1,14 +1,30 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework.Input;
 
 namespace Miner.GameInterface
 {
+	[Serializable]
     public class InputAction
     {
         public Keys[] Keys { get; set; }
-        private readonly bool _newPressOnly;
+
+		public bool NewPressOnly
+		{
+			get
+			{
+				return _newPressOnly;
+			}
+		}
+
+		private readonly bool _newPressOnly;
 
         private delegate bool KeyPress(Keys key);
+
+	    public InputAction()
+	    {
+		    
+	    }
 
         public InputAction(Keys[] keys, bool newPressOnly)
         {

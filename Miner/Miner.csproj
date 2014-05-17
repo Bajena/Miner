@@ -83,14 +83,15 @@
     <Compile Include="GameCore\SettingsManager.cs" />
     <Compile Include="GameInterface\GameScreens\ControlsOptionsMenuScreen.cs" />
     <Compile Include="GameInterface\GameScreens\GameScreen.cs" />
+    <Compile Include="GameInterface\GameScreens\TimedPopupScreen.cs" />
     <Compile Include="GameInterface\InputAction.cs" />
     <Compile Include="GameInterface\InputState.cs" />
     <Compile Include="GameCore\IScreenFactory.cs" />
     <Compile Include="GameCore\ScreenManager.cs" />
     <Compile Include="GameInterface\MenuEntries\KeySelectMenuEntry.cs" />
-    <Compile Include="GameInterface\MenuEntries\UserInputMenuEntry.cs" />
     <Compile Include="GameInterface\GameScreens\NamePromptMenuScreen.cs" />
     <Compile Include="GameInterface\MenuEntries\TextInputMenuEntry.cs" />
+    <Compile Include="GameInterface\MenuEntries\UserInputMenuEntry.cs" />
     <Compile Include="GameLogic\Camera.cs" />
     <Compile Include="GameLogic\Components\AnimationComponent.cs" />
     <Compile Include="GameLogic\Components\HUD\TextComponent.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="GameLogic\Objects\Machine.cs" />
     <Compile Include="GameLogic\Objects\Player.cs" />
     <Compile Include="GameLogic\Objects\WorldCollidingGameObject.cs" />
+    <Compile Include="GameLogic\Serializable\SerializableDictionary.cs" />
     <Compile Include="GameLogic\Tile.cs" />
     <Compile Include="GameLogic\PropertyContainer.cs" />
     <Compile Include="GameLogic\Serializable\LevelData.cs" />
@@ -192,12 +194,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GameLogic\Properties\" />
+    <Folder Include="Levels\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Levels\Level1.lvl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

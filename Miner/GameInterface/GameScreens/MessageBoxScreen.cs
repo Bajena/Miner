@@ -12,7 +12,7 @@ namespace Miner.GameInterface.GameScreens
 		YesNo
 	}
 
-    class MessageBoxScreen : GameScreen
+	public class MessageBoxScreen : GameScreen
     {
 	    public string Message { get; set; }
         Texture2D _gradientTexture;

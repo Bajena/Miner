@@ -45,7 +45,6 @@ namespace Miner.GameLogic.Objects
 		protected internal virtual void OnDied()
 		{
 			Lives--;
-			Respawn(Game.CurrentLevel.PlayerStartPosition);
 			if (Died!= null)
 				Died(this, null);
 		}
