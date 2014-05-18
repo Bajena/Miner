@@ -187,10 +187,14 @@ namespace Miner.GameLogic
 					if (_keyCollected)
 					{
 						var levelEndPopup = new MessageBoxScreen("Level complete!", true, MessageBoxType.Info);
-						levelEndPopup.Accepted+=NextLevelMessageAccepted;
+						levelEndPopup.Accepted += NextLevelMessageAccepted;
 						_game.ScreenManager.AddScreen(levelEndPopup);
 						NextLevel();
 						return;
+					}
+					else
+					{
+						_game.ScreenManager.ShowMessage("You have to collect the key!",TimeSpan.FromMilliseconds(500));
 					}
 				}
 				else if (tile.TileType == ETileType.OxygenRefill)

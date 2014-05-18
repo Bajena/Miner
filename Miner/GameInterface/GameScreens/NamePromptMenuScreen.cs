@@ -43,8 +43,7 @@ namespace Miner.GameInterface.GameScreens
 				if (SettingsManager.PlayerSettingsExist(nameMenuEntry.InputText))
 				{
 					SettingsManager.LoadPlayerSettings(nameMenuEntry.InputText);
-					ScreenManager.AddScreen(new TimedPopupScreen("Settings for player " + nameMenuEntry.InputText + " loaded", false,TimeSpan.FromSeconds(1)));
-
+					ScreenManager.ShowMessage("Settings for player " + nameMenuEntry.InputText + " loaded", TimeSpan.FromSeconds(1));
 				}
 			}
 			else

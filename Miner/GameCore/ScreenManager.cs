@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -15,6 +16,7 @@ namespace Miner.GameCore
 	    readonly List<GameScreen> _tempScreensList = new List<GameScreen>();
 	    readonly InputState _input = new InputState();
 	    bool _isInitialized;
+	    private Queue<TimedPopupScreen> _messageQueue; 
 
 	    public SpriteBatch SpriteBatch { get; private set; }
 	    public SpriteFont Font { get; private set; }
@@ -28,6 +30,7 @@ namespace Miner.GameCore
 	    public ScreenManager(Game game)
             : base(game)
         {
+			_messageQueue = new Queue<TimedPopupScreen>();
         }
 
         public override void Initialize()
@@ -36,6 +39,14 @@ namespace Miner.GameCore
 
             _isInitialized = true;
         }
+
+	    public void ShowMessage(string message, TimeSpan time)
+	    {
+			if (_messageQueue.Count == 0 || _messageQueue.Peek().Message != message)
+		    {
+			    _messageQueue.Enqueue(new TimedPopupScreen(message,false,time));
+		    }
+	    }
 
         protected override void LoadContent()
         {
@@ -86,7 +97,7 @@ namespace Miner.GameCore
                 {
                     // If this is the first active screen we came across,
                     // give it a chance to handle input.
-                    if (!otherScreenHasFocus)
+                    if (!otherScreenHasFocus && screen.HandleInputIfActive)
                     {
                         screen.HandleInput(gameTime, _input);
 
@@ -99,6 +110,11 @@ namespace Miner.GameCore
                         coveredByOtherScreen = true;
                 }
             }
+
+	        if (_messageQueue.Count > 0 && !(TopScreen is TimedPopupScreen))
+	        {
+		        AddScreen(_messageQueue.Dequeue());
+	        }
         }
 
         public override void Draw(GameTime gameTime)

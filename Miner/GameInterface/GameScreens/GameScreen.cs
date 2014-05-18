@@ -34,6 +34,8 @@ namespace Miner.GameInterface.GameScreens
             }
         }
 
+		public bool HandleInputIfActive { get; set; }
+
 	    public ScreenManager ScreenManager { get; internal set; }
 
 	    public GameScreen()
@@ -44,6 +46,7 @@ namespace Miner.GameInterface.GameScreens
 		    TransitionPosition = 1;
 		    ScreenState = EScreenState.TransitionOn;
 		    IsExiting = false;
+		    HandleInputIfActive = true;
 	    }
 
 	    public virtual void Activate() { }
