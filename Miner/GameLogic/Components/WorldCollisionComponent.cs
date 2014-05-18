@@ -77,6 +77,10 @@ namespace Miner.GameLogic.Components
 				{
 					velocity = new Vector2(velocity.X, 0);
 					ParentObject.Velocity = velocity;
+					if (CollisionHelper.GetCollisionOrigin(intersectionDepth,direction) == ESide.Top)
+					{
+						ParentObject.Properties.UpdateProperty("IsOnGround",true);
+					}
 				}
 				else if (direction == EDirection.Horizontal)
 				{

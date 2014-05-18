@@ -15,9 +15,10 @@ namespace Miner.GameInterface.GameScreens
 			TitlePositionY -= 50;
 			var highScores = HighScoresManager.LoadHighScores();
 
+			int i = 1;
 			foreach (var highScore in highScores.HighScores)
 			{
-				MenuEntries.Add(new MenuEntry(string.Format("{0} | {1} | {2}", highScore.Player, highScore.Points,highScore.Difficulty)));
+				MenuEntries.Add(new MenuEntry(string.Format("{0}. {1} | {2} | {3}", i++, highScore.Player, highScore.Points,highScore.Difficulty)));
 			}
 
 			var backMenuEntry = new MenuEntry("Back");

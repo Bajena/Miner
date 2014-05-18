@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
@@ -33,11 +34,7 @@ namespace Miner.GameLogic.Objects
 		public int Lives { get { return Properties.GetProperty<int>("Lives"); } set { Properties.UpdateProperty("Lives", value); } }
 		public int Points { get { return Properties.GetProperty<int>("Points"); } set { Properties.UpdateProperty("Points", value); } }
 		public int Dynamite { get { return Properties.GetProperty<int>("Dynamite"); } set { Properties.UpdateProperty("Dynamite", value); } }
-
-		public bool IsInAir
-		{
-			get { return Velocity.Y != 0f; }
-		}
+		public bool IsOnGround { get { return Properties.GetProperty<bool>("IsOnGround"); } set { Properties.UpdateProperty("IsOnGround", value); } }
 
 		public Vector2 Size
 		{
@@ -146,20 +143,20 @@ namespace Miner.GameLogic.Objects
 			if (input.IsKeyDown(Keys.Q)) Points--;
 			if (input.IsKeyDown(Keys.W)) Points++;
 
-			if (SettingsManager.Instance.Controls[EAction.Jump].IsCalled(input)/* && !IsInAir*/)
+			if (SettingsManager.Instance.Controls[EAction.Jump].IsCalled(input) && IsOnGround)
 			{
 				Jump();
 			}
 			if (SettingsManager.Instance.Controls[EAction.MoveRight].IsCalled(input))
 			{
 				Velocity = new Vector2(_sideMoveSpeed, Velocity.Y);
-				if (!IsInAir && AnimationComponent.CurrentAnimation != "Run") AnimationComponent.SetActiveAnimation("Run");
+				if (IsOnGround && AnimationComponent.CurrentAnimation != "Run") AnimationComponent.SetActiveAnimation("Run");
 				//Position = new Vector2(Position.Left+1,Position.Y);
 			}
 			if (SettingsManager.Instance.Controls[EAction.MoveLeft].IsCalled(input))
 			{
 				Velocity = new Vector2(-_sideMoveSpeed, Velocity.Y);
-				if (!IsInAir && AnimationComponent.CurrentAnimation != "Run") AnimationComponent.SetActiveAnimation("Run");
+				if (IsOnGround && AnimationComponent.CurrentAnimation != "Run") AnimationComponent.SetActiveAnimation("Run");
 				//Position = new Vector2(Position.Left+1,Position.Y);
 			}
 			if (SettingsManager.Instance.Controls[EAction.SetDynamite].IsCalled(input))
@@ -167,7 +164,7 @@ namespace Miner.GameLogic.Objects
 				SetDynamite();
 			}
 
-			if (!IsInAir && Velocity.X == 0.0)
+			if (IsOnGround && Velocity.X == 0.0)
 				AnimationComponent.SetActiveAnimation("Idle");
 		}
 
@@ -190,7 +187,7 @@ namespace Miner.GameLogic.Objects
 			PhysicsComponent.HasGravity = true;
 			AnimationComponent.SetActiveAnimation("Jump");
 			Velocity = new Vector2(Velocity.X, -400.0f);
-
+			IsOnGround = false;
 		}
 
 		public void Respawn(Vector2 position)

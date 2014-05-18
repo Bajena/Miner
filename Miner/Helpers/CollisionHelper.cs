@@ -9,15 +9,11 @@ namespace Miner.Helpers
 {
 	public static class CollisionHelper
 	{
-		public static ESide GetCollisionOrigin(Vector2 collisionDepth)
+		public static ESide GetCollisionOrigin(Vector2 collisionDepth, EDirection direction)
 		{
 			ESide side = ESide.NotAssigned;
 
-			float absDepthX = Math.Abs(collisionDepth.X);
-			float absDepthY = Math.Abs(collisionDepth.Y);
-
-            // Resolve the collision along the shallow axis.
-			if (absDepthY < absDepthX)
+			if (direction==EDirection.Vertical)
 			{
 				if (collisionDepth.Y < 0) side = side | ESide.Top;
 				else if (collisionDepth.Y > 0) side = side | ESide.Bottom;

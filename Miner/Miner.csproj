@@ -107,9 +107,11 @@
     <Compile Include="GameLogic\Components\HUD\BarComponent.cs" />
     <Compile Include="GameLogic\Components\PhysicsComponent.cs" />
     <Compile Include="GameLogic\Level.cs" />
+    <Compile Include="GameLogic\Objects\Collectible.cs" />
     <Compile Include="GameLogic\Objects\Dynamite.cs" />
     <Compile Include="GameLogic\Objects\Explosive.cs" />
     <Compile Include="GameLogic\Objects\GameObject.cs" />
+    <Compile Include="GameLogic\Objects\Key.cs" />
     <Compile Include="GameLogic\Objects\Machine.cs" />
     <Compile Include="GameLogic\Objects\Player.cs" />
     <Compile Include="GameLogic\Objects\WorldCollidingGameObject.cs" />

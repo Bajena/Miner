@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Miner.GameCore;
 
 namespace Miner.GameLogic.Objects
 {
-	class Key
+	public class Key : Collectible
 	{
+		public Key(MinerGame game) : base(game)
+		{
+
+		}
 	}
 }
