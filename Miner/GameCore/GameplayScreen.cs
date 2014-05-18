@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using Miner;
 using Miner.Enums;
 using Miner.Extensions;
@@ -15,6 +17,7 @@ using Miner.GameLogic;
 using Miner.GameLogic.Components;
 using Miner.GameLogic.Objects;
 using Miner.GameLogic.Serializable;
+using Miner.Helpers;
 
 namespace Miner
 {
@@ -36,10 +39,13 @@ namespace Miner
 		SpriteFont _gameFont;
 
 		float _pauseAlpha;
-
 		InputAction _pauseAction;
-
 		private Dictionary<string,HudComponent> _hudItems { get; set; }
+
+		private Song _gameMusic;
+		private bool _gamePaused;
+
+
 		public GameplayScreen()
 		{
 			TransitionOnTime = TimeSpan.FromSeconds(1.5);
@@ -48,7 +54,6 @@ namespace Miner
 			_pauseAction = new InputAction(
 				new Keys[] { Keys.Escape },
 				true);
-
 		}
 
 
@@ -64,7 +69,9 @@ namespace Miner
 			_gameFont = _content.Load<SpriteFont>("menufont");
 			_hudItems = new Dictionary<string, HudComponent>();
 
-			SaveTestLevel();
+			_gameMusic = _content.Load<Song>("Sounds/music");
+			SoundHelper.Play(_gameMusic);
+			//SaveTestLevel();
 
 			Game.NewGame();
 			var livesComponent = new ItemRepeatComponent(CurrentLevel.Player, new Vector2(20, 20),"Lives","UI/heart");
@@ -84,29 +91,38 @@ namespace Miner
 
 		private void SaveTestLevel()
 		{
-			//var testLevel = new LevelData()
-			//{
-			//    Name = "Level1",
-			//    PlayerStartPosition = new Vector2(500, 100),
-			//    Dimensions = new Vector2(34, 15),
-			//    Tileset = "rock_tileset",
-			//    Background = "level_background_1",
-			//    TileDimensions = new Vector2(48,48)
-			//};
-			//testLevel.Tiles = "";
-			//for (int y = 0; y < testLevel.Dimensions.Y; y++)
-			//    for (int x = 0; x < testLevel.Dimensions.X; x++)
-			//    {
-			//        testLevel.Tiles.Add(new TileData()
-			//        {
-			//            Code = y == testLevel.Dimensions.Y - 1 || x == 5 ? 0 : -1,
-			//            Position = new Vector2(x, y),
-			//            TileCollisionType = y == testLevel.Dimensions.Y - 1 || x == 5 ? ETileCollisionType.Impassable : ETileCollisionType.Passable,
-			//            TileType = x < 20 ? ETileType.Normal : ETileType.Exit,
-			//        });
-			//    }
-
-			//testLevel.Serialize(Level.GetLevelPath("Level1"));
+			var testLevel = new LevelData()
+			{
+				Name = "Level1",
+				Background = "level_background_1",
+				Tileset = "rock_tileset",
+				TileDimensions = new Vector2(48, 48),
+				PlayerStartPosition = new Vector2(100, 300),
+				Tiles = @"0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+	0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+	4  5  6  4  5  6  4  5  6  4  5  6  4  5  6  4  5  6  4  5  6  4  5  6  4  5  6  4  5  6  4  5  6  4
+	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 0  0  0  20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 21
+	0  0  0  0  0  20 20 20  0  0  0 20 20 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+	0  0  0  0  0  20 20 20  0  0  0 20 20 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+	0  0  0  0  0  20 20 20  0  0  0 20 20 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0",
+				Objects = new List<GameObjectData>()
+				{
+					new GameObjectData()
+					{
+						Position = new Vector2(300, 300),
+						Type = "Key"
+					}
+				}
+			};
+			testLevel.Serialize(Level.GetLevelPath(testLevel.Name));
 		}
 
 		public override void Deactivate()
@@ -132,6 +148,8 @@ namespace Miner
 
 			if (IsActive)
 			{
+				if (_gamePaused)
+					Resume();
 				//Game
 				CurrentLevel.Update(gameTime);
 			}
@@ -146,12 +164,26 @@ namespace Miner
 
 			if (_pauseAction.IsCalled(input))
 			{
-				ScreenManager.AddScreen(new PauseMenuScreen());
+				Pause();
 			}
 			else
 			{
 				CurrentLevel.Player.HandleInput(gameTime, input);
 			}
+		}
+
+		private void Pause()
+		{
+			SoundHelper.PauseMusic();
+			var pauseMenu = new PauseMenuScreen();
+			ScreenManager.AddScreen(pauseMenu);
+			_gamePaused = true;
+		}
+
+		private void Resume()
+		{
+			SoundHelper.ResumeMusic();
+			_gamePaused = false;
 		}
 
 		public override void Draw(GameTime gameTime)

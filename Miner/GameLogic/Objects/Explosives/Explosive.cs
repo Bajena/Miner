@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Miner.GameCore;
 using Miner.GameLogic.Components;
+using Miner.Helpers;
 
-namespace Miner.GameLogic.Objects
+namespace Miner.GameLogic.Objects.Explosives
 {
 	public abstract class Explosive : GameObject
 	{
@@ -22,10 +21,13 @@ namespace Miner.GameLogic.Objects
 		public event EventHandler<EventArgs> ExplosionStarted;
 		public event EventHandler<EventArgs> ExplosionFinished;
 
+		private SoundEffect _explodeSound;
+
 		protected Explosive(MinerGame game, TimeSpan explosionTime) : base(game)
 		{
 			_explosionTimeSpan = explosionTime;
 			DrawableComponents.Add("Animation", new AnimationComponent(this));
+			_explodeSound = game.Content.Load<SoundEffect>("Sounds/explode");
 		}
 
 		public override void Update(GameTime gameTime)
@@ -51,6 +53,7 @@ namespace Miner.GameLogic.Objects
 				IsExploding = true;
 				_explosionStart = gameTime.TotalGameTime;
 				AnimationComponent.SetActiveAnimation("Explode");
+				SoundHelper.Play(_explodeSound);
 				if (ExplosionStarted != null)
 					ExplosionStarted.Invoke(this, null);
 			}

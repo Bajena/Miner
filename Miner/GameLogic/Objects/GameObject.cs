@@ -91,6 +91,11 @@ namespace Miner.GameLogic.Objects
 			foreach (KeyValuePair<String, DrawableGameObjectComponent> component in DrawableComponents)
 				component.Value.Draw(spriteBatch);
 		}
+
+		public bool IsCollidingWith(GameObject gameObject)
+		{
+			return BoundingBox.Intersects(gameObject.BoundingBox);
+		}
 	}
 }
 

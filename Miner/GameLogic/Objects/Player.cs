@@ -11,6 +11,7 @@ using Miner.Extensions;
 using Miner.GameCore;
 using Miner.GameInterface;
 using Miner.GameLogic.Components;
+using Miner.GameLogic.Objects.Explosives;
 using Miner.Helpers;
 
 namespace Miner.GameLogic.Objects

@@ -14,6 +14,8 @@ using Miner.Extensions;
 using Miner.GameCore;
 using Miner.GameInterface.GameScreens;
 using Miner.GameLogic.Objects;
+using Miner.GameLogic.Objects.Collectibles;
+using Miner.GameLogic.Objects.Explosives;
 using Miner.GameLogic.Serializable;
 using Miner.Helpers;
 
@@ -21,7 +23,6 @@ namespace Miner.GameLogic
 {
 	public class Level
 	{
-
 		public static string GetLevelPath(string levelName)
 		{
 			return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["LevelsPath"], levelName + ".xml");
@@ -36,6 +37,7 @@ namespace Miner.GameLogic
 
 		private List<Machine> _machines;
 		private List<Explosive> _explosives;
+		private List<Collectible> _collectibles;
  
 		private Texture2D _backgroundTexture;
 		private Vector2 _tileDimensions { get; set; }
@@ -59,33 +61,41 @@ namespace Miner.GameLogic
 		#region INIT
 		public void Initialize()
 		{
+			var levelData = LevelData.Deserialize(GetLevelPath(Name));
+
 			_machines = new List<Machine>();
 			_explosives = new List<Explosive>();
+			_collectibles = new List<Collectible>();
 
 			if (Player == null)
 			{
 				Player = new Player(_game);
 			}
 			Player.Died += PlayerDied;
-			Player.DynamiteSet+=PlayerSetDynamite;
+			Player.DynamiteSet += PlayerSetDynamite;
+			Player.Respawn(PlayerStartPosition);
 
-			var levelData = LevelData.Deserialize(GetLevelPath(Name));
+			var gameObjectFactory = new GameObjectFactory(_game, levelData);
+			_collectibles.AddRange(gameObjectFactory.GetCollectibles());
+
 			_backgroundTexture = !String.IsNullOrEmpty(levelData.Background) ? _game.Content.Load<Texture2D>("Backgrounds/" + levelData.Background) : null;
 
 			_tileDimensions = levelData.TileDimensions;
 			var tileset = _game.Content.Load<Texture2D>("Tilesets/" + levelData.Tileset);
 
 			tileset.Name = levelData.Tileset;
-
 			var tileMapFactory = new TileMapFactory();
 			Tiles = tileMapFactory.BuildTileMap(levelData, tileset);
 
-			Player.Position = PlayerStartPosition;
 			Camera = new Camera(_game.GraphicsDevice.Viewport, this, Player);
 
 			Size = new Vector2(Tiles.GetLength(0) * _tileDimensions.X, Tiles.GetLength(1) * _tileDimensions.Y);
 		}
 
+		#endregion
+
+		#region UPDATE
+		
 		private void PlayerSetDynamite(object sender, DynamiteSetEventArgs e)
 		{
 			_explosives.Add(e.Dynamite);
@@ -97,10 +107,6 @@ namespace Miner.GameLogic
 			var explosive = sender as Explosive;
 			_explosives.Remove(explosive);
 		}
-
-		#endregion
-
-		#region UPDATE
 		void PlayerDied(object sender, EventArgs e)
 		{
 			bool gameOver = Player.Lives == 0;
@@ -138,6 +144,11 @@ namespace Miner.GameLogic
 			{
 				explosive.Update(gameTime);
 			}
+			foreach (var collectible in _collectibles)
+			{
+				collectible.Update(gameTime);
+			}
+
 			HandleCollisions();
 			Camera.Update(gameTime);
 
@@ -146,25 +157,59 @@ namespace Miner.GameLogic
 		public void HandleCollisions()
 		{
 			ReactToPlayerTileCollisions();
-			//Kolizje gracz -> kafelki
-			//Kolizje pozostałe obiekty -> kafelki
-			//Kolizje gracz -> pozostałe obiekty
+			HandleCollectiblesCollisions();
+		}
+
+		private void HandleCollectiblesCollisions()
+		{
+			var collectiblesToCheck = _collectibles.Where(c => Camera.IsRectangleVisible(c.BoundingBox)).ToArray();
+			foreach (var collectible in collectiblesToCheck)
+				{
+					if (Player.IsCollidingWith(collectible))
+					{
+						collectible.OnCollected(Player);
+						if (collectible is Key)
+						{
+							_keyCollected = true;
+						}
+
+						_collectibles.Remove(collectible);
+					}
+				}
 		}
 
 		private void ReactToPlayerTileCollisions()
 		{
 			foreach (var tile in Player.GetCollidedTiles())
 			{
-				if (tile.TileType == ETileType.Exit/* && _keyCollected*/)
+				if (tile.TileType == ETileType.Exit)
 				{
-					_game.LoadNextLevel();
-					return;
+					if (_keyCollected)
+					{
+						var levelEndPopup = new MessageBoxScreen("Level complete!", true, MessageBoxType.Info);
+						levelEndPopup.Accepted+=NextLevelMessageAccepted;
+						_game.ScreenManager.AddScreen(levelEndPopup);
+						NextLevel();
+						return;
+					}
 				}
 				else if (tile.TileType == ETileType.OxygenRefill)
 				{
 					Player.Oxygen = SettingsManager.Instance.MaxOxygen;
 				}
 			}
+		}
+
+		private void NextLevelMessageAccepted(object sender, EventArgs e)
+		{
+			NextLevel();	
+		}
+
+		private void NextLevel()
+		{
+			Player.DynamiteSet -= PlayerSetDynamite;
+			Player.Died -= PlayerDied;
+			_game.LoadNextLevel();
 		}
 
 		public List<Tile> GetSurroundingTiles(BoundingRect rectangle)
@@ -215,6 +260,16 @@ namespace Miner.GameLogic
 					explosive.Draw(spriteBatch);
 				}
 			}
+
+			foreach (var collectible in _collectibles)
+			{
+				if (Camera.IsRectangleVisible(collectible.BoundingBox))
+				{
+					collectible.Draw(spriteBatch);
+				}
+			}
+
+
 			spriteBatch.End();
 
 		}
