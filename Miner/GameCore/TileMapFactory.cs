@@ -19,7 +19,8 @@ namespace Miner.GameCore
 		{
 			var mapDimensions = levelData.Dimensions;
 			var tilesArray = new Tile[(int) mapDimensions.X, (int) mapDimensions.Y];
-			var tileCodes = levelData.Tiles.Trim().Replace("  "," ").Replace("\n\t"," ").Split(' ');
+			var trimmedAnd = levelData.Tiles.Trim().Replace("  ", " ").Replace("\n\t", " ").Replace("  ", " ");
+			var tileCodes = trimmedAnd.Split(' ');
 
 			int i = 0;
 			for (int y = 0; y < tilesArray.GetLength(1); y++)

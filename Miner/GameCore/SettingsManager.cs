@@ -48,10 +48,10 @@ namespace Miner.GameCore
 
 	    private EDifficulty _difficulty;
 
-		[XmlIgnore]
-        public Dictionary<EAction, InputAction> Controls { get; set; }
+		//[XmlIgnore]
+        //public Dictionary<EAction, InputAction> Controls { get; set; }
 
-		public SerializableDictionary<EAction, InputAction> SerializableControls { get; set; }
+		public SerializableDictionary<EAction, InputAction> Controls { get; set; }
 
         public string PlayerName { get; set; }
         public bool Sound { get; set; }
@@ -77,8 +77,7 @@ namespace Miner.GameCore
 
 		public SettingsManager()
 		{
-			Controls = new Dictionary<EAction, InputAction>();
-			SerializableControls = new SerializableDictionary<EAction, InputAction>();
+			Controls = new SerializableDictionary<EAction, InputAction>();
 		}
 
 	    public void InitializeDefault()
@@ -117,12 +116,6 @@ namespace Miner.GameCore
 
 		public void SaveToDisk()
 		{
-			SerializableControls = new SerializableDictionary<EAction, InputAction>();
-			foreach (var control in Controls)
-			{
-				SerializableControls.Add(control.Key,control.Value);
-			}
-
 			if (!PlayerSettingsExist(PlayerName))
 			{
 				Directory.CreateDirectory(GetPlayerDirectory(PlayerName));
@@ -145,14 +138,6 @@ namespace Miner.GameCore
 			var fileReader = new StreamReader(filePath);
 			var data = xmlSerializer.Deserialize(fileReader) as SettingsManager;
 			fileReader.Close();
-
-			if (data != null)
-			{
-				foreach (var serializedControl in data.SerializableControls)
-				{
-					data.Controls.Add(serializedControl.Key,serializedControl.Value);
-				}
-			}
 
 			return data;
 		}

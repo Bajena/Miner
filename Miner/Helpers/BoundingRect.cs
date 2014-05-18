@@ -52,6 +52,11 @@ namespace Miner.Helpers
 			BoundingRect.mMinMax = new BoundingRect(Vector2.One*float.MinValue, Vector2.One*float.MaxValue);
 		}
 
+		//public static explicit operator Rectangle(BoundingRect rect)
+		//{
+		//    return new Rectangle(rect.Left,rect.Top,rect.Width,rect.Height);
+		//}
+
 		public Vector2 Center
 		{
 			get { return (this.Min + this.Max)/2; }

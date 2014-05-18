@@ -14,10 +14,20 @@ using Miner.Helpers;
 
 namespace Miner.GameLogic.Objects
 {
+	public class DynamiteSetEventArgs : EventArgs
+	{
+		public Dynamite Dynamite { get; set; }
+
+		public DynamiteSetEventArgs(Dynamite dynamite)
+		{
+			Dynamite = dynamite;
+		}
+	}
+
 	public class Player : WorldCollidingGameObject
 	{
 		public AnimationComponent AnimationComponent { get { return (AnimationComponent)DrawableComponents["Animation"]; } }
-		public AnimationComponent OxygenComponent { get { return (AnimationComponent)DrawableComponents["Oxygen"]; } }
+		public TimerComponent OxygenTimer { get { return (TimerComponent)Components["OxygenTimer"]; } }
 
 		public float Oxygen { get { return Properties.GetProperty<float>("Oxygen"); } set { Properties.UpdateProperty("Oxygen", value); } }
 		public int Lives { get { return Properties.GetProperty<int>("Lives"); } set { Properties.UpdateProperty("Lives", value); } }
@@ -42,12 +52,14 @@ namespace Miner.GameLogic.Objects
 
 		public event EventHandler Died;
 
-		protected internal virtual void OnDied()
+		protected internal void OnDied()
 		{
 			Lives--;
 			if (Died!= null)
 				Died(this, null);
 		}
+
+		public event EventHandler<DynamiteSetEventArgs> DynamiteSet;
 
 		public Player(MinerGame game)
 			: base(game)
@@ -62,9 +74,19 @@ namespace Miner.GameLogic.Objects
 			_sideMoveSpeed = 200.0f;
 
 			DrawableComponents.Add("Animation", new AnimationComponent(this));
-			Components.Add("Oxygen", new OxygenComponent(this));
+
+			var oxygenTimer = new TimerComponent(this, TimeSpan.FromSeconds(1), true);
+			oxygenTimer.Tick += new EventHandler<GameTimeEventArgs>(DecreaseOxygen);
+			Components.Add("OxygenTimer", oxygenTimer);
 
 			SetupAnimations();
+		}
+
+		void DecreaseOxygen(object sender, GameTimeEventArgs e)
+		{
+			Oxygen--;
+			if (Oxygen <= 0)
+				OnDied();
 		}
 
 		private void SetupAnimations()
@@ -140,9 +162,27 @@ namespace Miner.GameLogic.Objects
 				if (!IsInAir && AnimationComponent.CurrentAnimation != "Run") AnimationComponent.SetActiveAnimation("Run");
 				//Position = new Vector2(Position.Left+1,Position.Y);
 			}
+			if (SettingsManager.Instance.Controls[EAction.SetDynamite].IsCalled(input))
+			{
+				SetDynamite();
+			}
 
 			if (!IsInAir && Velocity.X == 0.0)
 				AnimationComponent.SetActiveAnimation("Idle");
+		}
+
+		private void SetDynamite()
+		{
+			if (Dynamite > 0)
+			{
+				Dynamite--;
+				var dynamite = new Dynamite(Game,TimeSpan.FromSeconds(0.5), TimeSpan.FromSeconds(2))
+				{
+					Position = this.Position// + new Vector2(BoundingBox.Width/2,BoundingBox.Height/2)
+				};
+				if (DynamiteSet!=null)
+					DynamiteSet.Invoke(this,new DynamiteSetEventArgs(dynamite));
+			}
 		}
 
 		private void Jump()
@@ -164,8 +204,6 @@ namespace Miner.GameLogic.Objects
 		public override void Update(GameTime gameTime)
 		{
 			base.Update(gameTime);
-			if (Oxygen<=0)
-				OnDied();
 		}
 	}
 }

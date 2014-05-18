@@ -35,6 +35,8 @@ namespace Miner.GameLogic
 		public Tile[,] Tiles { get; set; }
 
 		private List<Machine> _machines;
+		private List<Explosive> _explosives;
+ 
 		private Texture2D _backgroundTexture;
 		private Vector2 _tileDimensions { get; set; }
 		private bool _keyCollected;
@@ -57,11 +59,15 @@ namespace Miner.GameLogic
 		#region INIT
 		public void Initialize()
 		{
+			_machines = new List<Machine>();
+			_explosives = new List<Explosive>();
+
 			if (Player == null)
 			{
 				Player = new Player(_game);
 			}
 			Player.Died += PlayerDied;
+			Player.DynamiteSet+=PlayerSetDynamite;
 
 			var levelData = LevelData.Deserialize(GetLevelPath(Name));
 			_backgroundTexture = !String.IsNullOrEmpty(levelData.Background) ? _game.Content.Load<Texture2D>("Backgrounds/" + levelData.Background) : null;
@@ -80,6 +86,18 @@ namespace Miner.GameLogic
 			Size = new Vector2(Tiles.GetLength(0) * _tileDimensions.X, Tiles.GetLength(1) * _tileDimensions.Y);
 		}
 
+		private void PlayerSetDynamite(object sender, DynamiteSetEventArgs e)
+		{
+			_explosives.Add(e.Dynamite);
+			e.Dynamite.ExplosionFinished += ExplosionFinished;
+		}
+
+		void ExplosionFinished(object sender, EventArgs e)
+		{
+			var explosive = sender as Explosive;
+			_explosives.Remove(explosive);
+		}
+
 		#endregion
 
 		#region UPDATE
@@ -95,16 +113,36 @@ namespace Miner.GameLogic
 
 		private void DeathMessageBoxCancelled(object sender, EventArgs e)
 		{
-			Player.Respawn(PlayerStartPosition);
+			bool gameOver = Player.Lives == 0;
+			if (!gameOver)
+			{
+				Player.Respawn(PlayerStartPosition);
+			}
+			else
+			{
+				GameOver();
+			}
 		}
-		
+
+		public void GameOver()
+		{
+			HighScoresManager.AddHighScore(SettingsManager.Instance.PlayerName,Player.Points, SettingsManager.Instance.Difficulty);
+			_game.ScreenManager.GetScreens().First(x => x is GameplayScreen).ExitScreen();
+		}
+
 		public void Update(GameTime gameTime)
 		{
 			Player.Update(gameTime);
+			var explosives = _explosives.ToArray();
+			foreach (var explosive in explosives)
+			{
+				explosive.Update(gameTime);
+			}
 			HandleCollisions();
 			Camera.Update(gameTime);
 
 		}
+
 		public void HandleCollisions()
 		{
 			ReactToPlayerTileCollisions();
@@ -170,7 +208,15 @@ namespace Miner.GameLogic
 			DrawTiles(spriteBatch);
 
 			Player.Draw(spriteBatch);
+			foreach (var explosive in _explosives)
+			{
+				if (Camera.IsRectangleVisible(explosive.BoundingBox))
+				{
+					explosive.Draw(spriteBatch);
+				}
+			}
 			spriteBatch.End();
+
 		}
 
 		private void DrawTiles(SpriteBatch spriteBatch)

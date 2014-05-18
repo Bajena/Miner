@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,7 +20,12 @@ namespace Miner.GameCore
 	    public SpriteFont Font { get; private set; }
 	    public Texture2D BlankTexture { get; private set; }
 
-        public ScreenManager(Game game)
+	    public GameScreen TopScreen
+	    {
+		    get { return _screens.Last(); }
+	    }
+
+	    public ScreenManager(Game game)
             : base(game)
         {
         }

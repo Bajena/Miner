@@ -15,9 +15,10 @@ namespace Miner.GameInterface
 			{
 				return _newPressOnly;
 			}
+			set { _newPressOnly = value; }
 		}
 
-		private readonly bool _newPressOnly;
+		private bool _newPressOnly;
 
         private delegate bool KeyPress(Keys key);
 

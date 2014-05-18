@@ -76,6 +76,7 @@
     <Compile Include="Extensions\KeysExtensions.cs" />
     <Compile Include="Extensions\RectangleExtensions.cs" />
     <Compile Include="Extensions\SpriteBatchExtensions.cs" />
+    <Compile Include="GameCore\HighScoresManager.cs" />
     <Compile Include="GameCore\TileMapFactory.cs" />
     <Compile Include="GameCore\MinerGame.cs" />
     <Compile Include="Enums\EAction.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="GameCore\SettingsManager.cs" />
     <Compile Include="GameInterface\GameScreens\ControlsOptionsMenuScreen.cs" />
     <Compile Include="GameInterface\GameScreens\GameScreen.cs" />
+    <Compile Include="GameInterface\GameScreens\HighScoresMenuScreen.cs" />
     <Compile Include="GameInterface\GameScreens\TimedPopupScreen.cs" />
     <Compile Include="GameInterface\InputAction.cs" />
     <Compile Include="GameInterface\InputState.cs" />
@@ -96,6 +98,7 @@
     <Compile Include="GameLogic\Components\AnimationComponent.cs" />
     <Compile Include="GameLogic\Components\HUD\TextComponent.cs" />
     <Compile Include="GameLogic\Components\OxygenComponent.cs" />
+    <Compile Include="GameLogic\Components\TimerComponent.cs" />
     <Compile Include="GameLogic\Components\WorldCollisionComponent.cs" />
     <Compile Include="GameLogic\Components\DrawableGameObjectComponent.cs" />
     <Compile Include="GameLogic\Components\GameObjectComponent.cs" />
@@ -104,10 +107,13 @@
     <Compile Include="GameLogic\Components\HUD\BarComponent.cs" />
     <Compile Include="GameLogic\Components\PhysicsComponent.cs" />
     <Compile Include="GameLogic\Level.cs" />
+    <Compile Include="GameLogic\Objects\Dynamite.cs" />
+    <Compile Include="GameLogic\Objects\Explosive.cs" />
     <Compile Include="GameLogic\Objects\GameObject.cs" />
     <Compile Include="GameLogic\Objects\Machine.cs" />
     <Compile Include="GameLogic\Objects\Player.cs" />
     <Compile Include="GameLogic\Objects\WorldCollidingGameObject.cs" />
+    <Compile Include="GameLogic\Serializable\HighScoresData.cs" />
     <Compile Include="GameLogic\Serializable\SerializableDictionary.cs" />
     <Compile Include="GameLogic\Tile.cs" />
     <Compile Include="GameLogic\PropertyContainer.cs" />

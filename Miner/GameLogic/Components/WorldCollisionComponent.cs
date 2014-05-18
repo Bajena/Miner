@@ -60,18 +60,6 @@ namespace Miner.GameLogic.Components
 							//DOdaj kafelek do listy kafelków kolidujących w danym kierunku
 							directionCollidingTiles.Add(tile);
 						}
-						//if (gameObject is Player)
-						//{
-						//    if (tile.TileType == ETileType.Exit/* && _keyCollected*/)
-						//    {
-						//        _game.LoadNextLevel();
-						//        return;
-						//    }
-						//    else if (tile.TileType == ETileType.OxygenRefill)
-						//    {
-						//        Player.Oxygen = SettingsManager.Instance.MaxOxygen;
-						//    }
-						//}
 					}
 				}
 			}
@@ -82,31 +70,16 @@ namespace Miner.GameLogic.Components
 		{
 			if (tile.CollisionType == ETileCollisionType.Impassable)
 			{
-				//var collisionDepth = RectangleExtensions.Intersects(ParentObject.BoundingBox, tile.BoundingBox);
-				//var collisionSide = CollisionHelper.GetCollisionOrigin(collisionDepth);
-
-				//Vector2 reverseVector = Vector2.Zero;
-				//var majorAxis = CollisionHelper.GetMajorAxis(Velocity);
-				//var minorAxis = CollisionHelper.GetMinorAxis(Velocity);
-
-				//    reverseVector = (majorAxis * collisionDepth).Length() / (majorAxis * Velocity).Length() * (-minorAxis*Velocity) + majorAxis*collisionDepth;
-
 				var velocity = ParentObject.Velocity;
 
 				ParentObject.Position += intersectionDepth;
 				if (direction == EDirection.Vertical)
 				{
-					//Position = Position + reverseVector;
-
 					velocity = new Vector2(velocity.X, 0);
 					ParentObject.Velocity = velocity;
-					//Position = new Vector2(Position.X+collisionDepth.X, Position.Y + collisionDepth.Y);
 				}
 				else if (direction == EDirection.Horizontal)
 				{
-					//Position = Position + reverseVector;
-					//Position -= Velocity;
-					//Position = new Vector2(Position.X + collisionDepth.X, Position.Y);
 					velocity = new Vector2(0, velocity.Y);
 					ParentObject.Velocity = velocity;
 				}

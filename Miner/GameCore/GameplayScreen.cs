@@ -69,6 +69,8 @@ namespace Miner
 			Game.NewGame();
 			var livesComponent = new ItemRepeatComponent(CurrentLevel.Player, new Vector2(20, 20),"Lives","UI/heart");
 			_hudItems.Add("Lives", livesComponent);
+			var dynamiteComponent = new ItemRepeatComponent(CurrentLevel.Player, new Vector2(20, 50), "Dynamite", "UI/dynamite");
+			_hudItems.Add("Dynamite", dynamiteComponent);
 			var oxygenComponent = new BarComponent(CurrentLevel.Player, new Vector2(ScreenManager.GraphicsDevice.Viewport.Width - 50.0f, 70), "Oxygen", SettingsManager.Instance.MaxOxygen, "UI/oxygen_bar_empty", "UI/oxygen_bar_full");
 			_hudItems.Add("Oxygen", oxygenComponent);
 			var pointsComponent = new TextComponent<int>(CurrentLevel.Player, _gameFont, new Vector2(ScreenManager.GraphicsDevice.Viewport.Width - 35, 15f), "Points",SpriteBatchExtensions.TextAlignment.Right, Color.Gold);

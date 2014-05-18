@@ -72,9 +72,9 @@ namespace Miner.GameLogic
 
 		}
 
-		public bool IsRectangleVisible(Rectangle boundingRectangle)
+		public bool IsRectangleVisible(BoundingRect boundingRectangle)
 		{
-			return boundingRectangle.Intersects(new Rectangle((int) Position.X, (int) Position.Y, (int) Size.X, (int) Size.Y));
+			return boundingRectangle.Intersects(BoundingRectangle);
 		}
 	}
 }

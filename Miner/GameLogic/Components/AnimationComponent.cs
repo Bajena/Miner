@@ -50,7 +50,11 @@ namespace Miner.GameLogic.Components
 					_currentAnimation = Animations[animationName];
 				else if (_currentAnimation.Name != animationName && (!_currentAnimation.HasToFinish || _currentAnimation.HasFinished))
 				{
-					_currentAnimation = Animations[animationName];
+					var newAnimation = Animations[animationName];
+
+
+					ParentObject.Position = ParentObject.Position - new Vector2((newAnimation.Frames[0].Width - _currentAnimation.CurrentFrame.Width)/2,(newAnimation.Frames[0].Height - _currentAnimation.CurrentFrame.Height)/2);
+					_currentAnimation = newAnimation;
 					_currentAnimation.HasStarted = false;
 					_currentAnimation.HasFinished = false;
 				}

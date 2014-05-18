@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Miner.GameInterface;
 using Miner.GameInterface.GameScreens;
 using Miner.GameLogic;
+using Miner.GameLogic.Serializable;
 
 namespace Miner.GameCore
 {
@@ -34,6 +35,8 @@ namespace Miner.GameCore
             graphics = new GraphicsDeviceManager(this);
             SettingsManager.Instance.InitializeDefault();
 
+			CreateGameFilesAndDirectories();
+
             //Set resolution
             graphics.PreferredBackBufferWidth = (int)SettingsManager.Instance.Resolution.X;
             graphics.PreferredBackBufferHeight = (int)SettingsManager.Instance.Resolution.Y;
@@ -48,19 +51,27 @@ namespace Miner.GameCore
             AddInitialScreens();
         }
 
-	    public void CreateGameDirectories()
+	    private void CreateGameFilesAndDirectories()
 	    {
-			List<string> paths = new List<string>()
+			var directories = new List<string>()
 			{
 				Path.Combine(AppDomain.CurrentDomain.BaseDirectory,ConfigurationManager.AppSettings["LevelsPath"]),
-				Path.Combine(AppDomain.CurrentDomain.BaseDirectory,ConfigurationManager.AppSettings["SettingsPath"])
+				Path.Combine(AppDomain.CurrentDomain.BaseDirectory,ConfigurationManager.AppSettings["UsersPath"])
 			};
-		    foreach (var path in paths)
+
+		    foreach (var directory in directories)
 		    {
-			    if (!Directory.Exists(path))
+			    if (!Directory.Exists(directory))
 			    {
-					Directory.CreateDirectory(path);
+					Directory.CreateDirectory(directory);
 			    }
+		    }
+
+		    var highScoresFile = HighScoresManager.GetHighScoresFilePath();
+		    if (!File.Exists(highScoresFile))
+		    {
+			    var highScores = new HighScoresData();
+				highScores.Serialize(highScoresFile);
 		    }
 
 	    }

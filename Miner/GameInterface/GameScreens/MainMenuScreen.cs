@@ -19,7 +19,8 @@ namespace Miner.GameInterface.GameScreens
             MenuEntry exitMenuEntry = new MenuEntry("Exit");
 
             playGameMenuEntry.Entered += PlayGameMenuEntryEntered;
-            optionsMenuEntry.Entered += OptionsMenuEntryEntered;
+			optionsMenuEntry.Entered += OptionsMenuEntryEntered;
+			highScoresMenuEntry.Entered += HighScoreMenuEntryEntered;
             exitMenuEntry.Entered += OnCancel;
 
             MenuEntries.Add(playGameMenuEntry);
@@ -30,7 +31,12 @@ namespace Miner.GameInterface.GameScreens
             MenuEntries.Add(exitMenuEntry);
         }
 
-        void PlayGameMenuEntryEntered(object sender, EventArgs e)
+	    private void HighScoreMenuEntryEntered(object sender, EventArgs e)
+	    {
+		    ScreenManager.AddScreen(new HighScoresMenuScreen());
+	    }
+
+	    void PlayGameMenuEntryEntered(object sender, EventArgs e)
         {
 			ScreenManager.AddScreen(new GameplayScreen()
 			{
