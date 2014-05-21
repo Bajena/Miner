@@ -66,7 +66,7 @@ namespace Miner.GameLogic.Components
 			return directionCollidingTiles;
 		}
 		
-		public void ReactToWorldCollision(Tile tile, EDirection direction, Vector2 intersectionDepth)
+		public virtual void ReactToWorldCollision(Tile tile, EDirection direction, Vector2 intersectionDepth)
 		{
 			if (tile.CollisionType == ETileCollisionType.Impassable)
 			{

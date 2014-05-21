@@ -8,28 +8,47 @@ namespace Miner.GameInterface.GameScreens
         public MainMenuScreen()
             : base("Main Menu")
         {
-	        TitlePositionY = 275;
-	        MenuEntriesPositionY = 350;
+        }
+
+	    public override void Activate()
+	    {
+		    base.Activate();
+
+			if (ScreenManager.ActiveGameplayHandler.CurrentGame != null)
+			{
+
+				MenuEntry resumeGameMenuEntry = new MenuEntry("Resume Game");
+				resumeGameMenuEntry.Entered += ResumeGameEntryEntered;
+
+				MenuEntries.Add(resumeGameMenuEntry);
+			}
+			TitlePositionY = 275;
+			MenuEntriesPositionY = 350;
 
 			MenuEntry playGameMenuEntry = new MenuEntry("New Game");
-			MenuEntry loadGameMenuEntry = new MenuEntry("LoadGame");
+			MenuEntry loadGameMenuEntry = new MenuEntry("Load Game");
 			MenuEntry optionsMenuEntry = new MenuEntry("Options");
 			MenuEntry highScoresMenuEntry = new MenuEntry("High Scores");
 			MenuEntry helpMenuEntry = new MenuEntry("Help");
-            MenuEntry exitMenuEntry = new MenuEntry("Exit");
+			MenuEntry exitMenuEntry = new MenuEntry("Exit");
 
-            playGameMenuEntry.Entered += PlayGameMenuEntryEntered;
+			playGameMenuEntry.Entered += PlayGameMenuEntryEntered;
 			optionsMenuEntry.Entered += OptionsMenuEntryEntered;
 			highScoresMenuEntry.Entered += HighScoreMenuEntryEntered;
-            exitMenuEntry.Entered += OnCancel;
+			exitMenuEntry.Entered += OnCancel;
 
-            MenuEntries.Add(playGameMenuEntry);
+			MenuEntries.Add(playGameMenuEntry);
 			MenuEntries.Add(loadGameMenuEntry);
-            MenuEntries.Add(optionsMenuEntry);
+			MenuEntries.Add(optionsMenuEntry);
 			MenuEntries.Add(highScoresMenuEntry);
 			MenuEntries.Add(helpMenuEntry);
-            MenuEntries.Add(exitMenuEntry);
-        }
+			MenuEntries.Add(exitMenuEntry);
+	    }
+
+	    private void ResumeGameEntryEntered(object sender, EventArgs e)
+	    {
+		    ScreenManager.ActiveGameplayHandler.RestoreGameplay();
+	    }
 
 	    private void HighScoreMenuEntryEntered(object sender, EventArgs e)
 	    {
@@ -37,11 +56,13 @@ namespace Miner.GameInterface.GameScreens
 	    }
 
 	    void PlayGameMenuEntryEntered(object sender, EventArgs e)
-        {
-			ScreenManager.AddScreen(new GameplayScreen()
-			{
-				ScreenManager = ScreenManager
-			});
+	    {
+		    var gameplayScreen = new GameplayScreen()
+		    {
+			    ScreenManager = ScreenManager
+		    };
+			LoadingScreen.Load(ScreenManager,true,gameplayScreen);
+			//ScreenManager.AddScreen(
             //LoadingScreen.Load(ScreenManager, true,new GameplayScreen());
         }
 

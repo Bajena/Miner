@@ -10,6 +10,7 @@ namespace Miner.Enums
 		Normal,
 		Exit,
 		Tunnel,
-		OxygenRefill
+		OxygenRefill,
+		SwitchMoveDirection
 	}
 }

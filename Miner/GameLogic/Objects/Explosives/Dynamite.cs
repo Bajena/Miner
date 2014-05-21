@@ -9,13 +9,29 @@ namespace Miner.GameLogic.Objects.Explosives
 {
 	public class Dynamite : Explosive
 	{
-		public Dynamite(MinerGame game,TimeSpan explosionTime, TimeSpan timeToExplosion) : base(game,explosionTime)
+		private readonly TimeSpan _timeToExplosion;
+
+		public Dynamite(MinerGame game, TimeSpan timeToExplosion) : base(game)
 		{
 			Type = "Dynamite";
-			SetupAnimations();
+			_timeToExplosion = timeToExplosion;
+			Initialize();
+		}
 
-			var explosionWaitTimer = new TimerComponent(this, timeToExplosion, false);
-			explosionWaitTimer.Tick+=WaitForExplosionFinished;
+		public Dynamite(MinerGame game)
+			: base(game)
+		{
+			Type = "Dynamite";
+			_timeToExplosion = TimeSpan.FromSeconds(1);
+			Initialize();
+		}
+
+		public override void Initialize()
+		{
+			base.Initialize();
+			var explosionWaitTimer = new TimerComponent(this, _timeToExplosion, false);
+			explosionWaitTimer.Tick += WaitForExplosionFinished;
+			explosionWaitTimer.Start();
 			Components.Add("ExplosionWaitTimer", explosionWaitTimer);
 		}
 
@@ -27,15 +43,15 @@ namespace Miner.GameLogic.Objects.Explosives
 		protected override void SetupAnimations()
 		{
 			base.SetupAnimations();
-
-			AnimationComponent.SpriteSheets.Add("Idle", Game.Content.Load<Texture2D>("Sprites/Explosives/dynamite"));
+			var texture = Game.Content.Load<Texture2D>("Sprites/Explosives/dynamite");
+			AnimationComponent.SpriteSheets.Add("Idle", texture);
 
 			AnimationComponent.Animations.Add("Idle", new SpriteAnimation()
 			{
 				AnimationDuration = 1,
 				Frames = new List<Rectangle>()
 				{
-					new Rectangle(0,0,22,32)
+					new Rectangle(0,0,texture.Width,texture.Height)
 				},
 				Loop = true,
 				Name = "Idle",

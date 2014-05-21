@@ -32,6 +32,7 @@ namespace Miner.GameLogic.Components
 			_repeat = repeat;
 
 			_lastIntervalStart = TimeSpan.Zero;
+			Active = false;
 		}
 
 		public void Start()

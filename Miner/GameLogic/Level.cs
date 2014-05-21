@@ -16,6 +16,7 @@ using Miner.GameInterface.GameScreens;
 using Miner.GameLogic.Objects;
 using Miner.GameLogic.Objects.Collectibles;
 using Miner.GameLogic.Objects.Explosives;
+using Miner.GameLogic.Objects.Machines;
 using Miner.GameLogic.Serializable;
 using Miner.Helpers;
 
@@ -77,6 +78,8 @@ namespace Miner.GameLogic
 
 			var gameObjectFactory = new GameObjectFactory(_game, levelData);
 			_collectibles.AddRange(gameObjectFactory.GetCollectibles());
+			_machines.AddRange(gameObjectFactory.GetMachines());
+			_explosives.AddRange(gameObjectFactory.GetExplosives());
 
 			_backgroundTexture = !String.IsNullOrEmpty(levelData.Background) ? _game.Content.Load<Texture2D>("Backgrounds/" + levelData.Background) : null;
 
@@ -99,14 +102,8 @@ namespace Miner.GameLogic
 		private void PlayerSetDynamite(object sender, DynamiteSetEventArgs e)
 		{
 			_explosives.Add(e.Dynamite);
-			e.Dynamite.ExplosionFinished += ExplosionFinished;
 		}
 
-		void ExplosionFinished(object sender, EventArgs e)
-		{
-			var explosive = sender as Explosive;
-			_explosives.Remove(explosive);
-		}
 		void PlayerDied(object sender, EventArgs e)
 		{
 			bool gameOver = Player.Lives == 0;
@@ -143,12 +140,17 @@ namespace Miner.GameLogic
 			foreach (var explosive in explosives)
 			{
 				explosive.Update(gameTime);
+				if (explosive.State==EExplosiveState.Exploded)
+					_explosives.Remove(explosive);
 			}
 			foreach (var collectible in _collectibles)
 			{
 				collectible.Update(gameTime);
 			}
-
+			foreach (var machine in _machines)
+			{
+				machine.Update(gameTime);
+			}
 			HandleCollisions();
 			Camera.Update(gameTime);
 
@@ -158,6 +160,7 @@ namespace Miner.GameLogic
 		{
 			ReactToPlayerTileCollisions();
 			HandleCollectiblesCollisions();
+			HandleMachinesCollision();
 		}
 
 		private void HandleCollectiblesCollisions()
@@ -171,11 +174,27 @@ namespace Miner.GameLogic
 						if (collectible is Key)
 						{
 							_keyCollected = true;
+							_game.ScreenManager.ShowMessage("You can now exit", TimeSpan.FromMilliseconds(500),true);
 						}
 
 						_collectibles.Remove(collectible);
 					}
 				}
+		}
+
+		private void HandleMachinesCollision()
+		{
+			var machinesToCheck = _machines.Where(c => Camera.IsRectangleVisible(c.BoundingBox)).ToArray();
+			foreach (var machine in machinesToCheck)
+			{
+				if (Player.IsCollidingWith(machine))
+				{
+					if (machine is EnemyMachine)
+					{
+						_game.ScreenManager.ShowMessage(machine.Type, TimeSpan.FromMilliseconds(100), true);
+					}
+				}
+			}
 		}
 
 		private void ReactToPlayerTileCollisions()
@@ -194,7 +213,7 @@ namespace Miner.GameLogic
 					}
 					else
 					{
-						_game.ScreenManager.ShowMessage("You have to collect the key!",TimeSpan.FromMilliseconds(500));
+						_game.ScreenManager.ShowMessage("You have to collect the key!",TimeSpan.FromMilliseconds(1500),true);
 					}
 				}
 				else if (tile.TileType == ETileType.OxygenRefill)
@@ -204,17 +223,6 @@ namespace Miner.GameLogic
 			}
 		}
 
-		private void NextLevelMessageAccepted(object sender, EventArgs e)
-		{
-			NextLevel();	
-		}
-
-		private void NextLevel()
-		{
-			Player.DynamiteSet -= PlayerSetDynamite;
-			Player.Died -= PlayerDied;
-			_game.LoadNextLevel();
-		}
 
 		public List<Tile> GetSurroundingTiles(BoundingRect rectangle)
 		{
@@ -241,6 +249,17 @@ namespace Miner.GameLogic
 			return tileList;
 		}
 
+		private void NextLevelMessageAccepted(object sender, EventArgs e)
+		{
+			NextLevel();
+		}
+
+		private void NextLevel()
+		{
+			Player.DynamiteSet -= PlayerSetDynamite;
+			Player.Died -= PlayerDied;
+			_game.LoadNextLevel();
+		}
 		#endregion
 
 		#region DRAW
@@ -273,6 +292,13 @@ namespace Miner.GameLogic
 				}
 			}
 
+			foreach (var machine in _machines)
+			{
+				if (Camera.IsRectangleVisible(machine.BoundingBox))
+				{
+					machine.Draw(spriteBatch);
+				}
+			}
 
 			spriteBatch.End();
 

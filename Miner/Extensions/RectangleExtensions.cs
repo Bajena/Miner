@@ -14,10 +14,10 @@ namespace Miner.Extensions
 		public static Vector2 Intersects(this BoundingRect rectA, BoundingRect rectB)
 		{
 			// Calculate half sizes.
-			float halfWidthA = rectA.Width / 2.0f;
-			float halfHeightA = rectA.Height / 2.0f;
-			float halfWidthB = rectB.Width / 2.0f;
-			float halfHeightB = rectB.Height / 2.0f;
+			float halfWidthA = rectA.Width/2.0f;
+			float halfHeightA = rectA.Height/2.0f;
+			float halfWidthB = rectB.Width/2.0f;
+			float halfHeightB = rectB.Height/2.0f;
 
 			// Calculate centers.
 			Vector2 centerA = new Vector2(rectA.Left + halfWidthA, rectA.Top + halfHeightA);
@@ -42,8 +42,8 @@ namespace Miner.Extensions
 		public static float GetHorizontalIntersectionDepth(this BoundingRect rectA, BoundingRect rectB)
 		{
 			// Calculate half sizes.
-			float halfWidthA = rectA.Width / 2.0f;
-			float halfWidthB = rectB.Width / 2.0f;
+			float halfWidthA = rectA.Width/2.0f;
+			float halfWidthB = rectB.Width/2.0f;
 
 			// Calculate centers.
 			float centerA = rectA.Left + halfWidthA;
@@ -64,8 +64,8 @@ namespace Miner.Extensions
 		public static float GetVerticalIntersectionDepth(this BoundingRect rectA, BoundingRect rectB)
 		{
 			// Calculate half sizes.
-			float halfHeightA = rectA.Height / 2.0f;
-			float halfHeightB = rectB.Height / 2.0f;
+			float halfHeightA = rectA.Height/2.0f;
+			float halfHeightB = rectB.Height/2.0f;
 
 			// Calculate centers.
 			float centerA = rectA.Top + halfHeightA;
@@ -85,8 +85,15 @@ namespace Miner.Extensions
 
 		public static bool Intersects(this BoundingRect rectA, BoundingRect rectB, EDirection direction, out Vector2 depth)
 		{
-			depth = direction == EDirection.Vertical ? new Vector2(0, rectA.GetVerticalIntersectionDepth(rectB)) : new Vector2(rectA.GetHorizontalIntersectionDepth(rectB), 0);
+			depth = direction == EDirection.Vertical
+				? new Vector2(0, rectA.GetVerticalIntersectionDepth(rectB))
+				: new Vector2(rectA.GetHorizontalIntersectionDepth(rectB), 0);
 			return depth.Y != 0 || depth.X != 0;
+		}
+
+		public static Rectangle CreateRectangleFromPoints(int x1, int y1, int x2, int y2)
+		{
+			return new Rectangle(x1, y1, x2 - x1, y2 - y1);
 		}
 	}
 }

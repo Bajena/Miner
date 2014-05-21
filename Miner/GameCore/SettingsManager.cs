@@ -88,7 +88,7 @@ namespace Miner.GameCore
 			Controls.Add(EAction.SetDynamite, new InputAction(new Keys[] { Keys.Space }, true));
             PlayerName = "Player";
 			Difficulty = EDifficulty.Medium;
-            Sound = true;
+            Sound = false;
             Resolution = new Vector2(800, 600);
         }
 

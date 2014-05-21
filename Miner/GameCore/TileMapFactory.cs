@@ -53,6 +53,11 @@ namespace Miner.GameCore
 						tile.CollisionType = ETileCollisionType.Passable;
 						tile.TileType = ETileType.Exit;
 						break;
+					case "22"://Zmiana kierunku
+						tile.CollisionType = ETileCollisionType.Passable;
+						tile.TileType = ETileType.SwitchMoveDirection;
+						tile.Visible = false;
+						break;
 				}
 			}
 

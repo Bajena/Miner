@@ -21,8 +21,10 @@ namespace Miner.GameInterface.GameScreens
 	    InputAction _cancelAction;
 	    private string _usageText;
 		MessageBoxType Type { get; set; }
-		
-        public event EventHandler<EventArgs> Accepted;
+
+		protected bool FadeBackground { get; set; }
+
+		public event EventHandler<EventArgs> Accepted;
         public event EventHandler<EventArgs> Cancelled;
 
 
@@ -41,7 +43,8 @@ namespace Miner.GameInterface.GameScreens
             TransitionOnTime = TimeSpan.FromSeconds(0.2);
             TransitionOffTime = TimeSpan.FromSeconds(0.2);
 
-        }
+		    FadeBackground = true;
+		}
 
         public override void Activate()
         {
@@ -72,7 +75,8 @@ namespace Miner.GameInterface.GameScreens
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
             SpriteFont font = ScreenManager.Font;
 
-            ScreenManager.FadeBackBufferToBlack(TransitionAlpha * 2 / 3);
+            if (FadeBackground)
+				ScreenManager.FadeBackBufferToBlack(TransitionAlpha * 2 / 3);
 
             Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
             Vector2 viewportSize = new Vector2(viewport.Width, viewport.Height);

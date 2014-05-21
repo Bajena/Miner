@@ -31,6 +31,7 @@ namespace Miner.GameInterface.GameScreens
 
         void ConfirmQuitMessageBoxAccepted(object sender, EventArgs e)
         {
+			ScreenManager.ActiveGameplayHandler.StoreGameplay();
             LoadingScreen.Load(ScreenManager, false, null, new BackgroundScreen(),
                                                            new MainMenuScreen());
         }

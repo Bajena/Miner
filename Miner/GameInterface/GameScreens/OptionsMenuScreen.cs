@@ -68,7 +68,7 @@ namespace Miner.GameInterface.GameScreens
 	    protected override void OnCancel()
 	    {
 			SaveNewOptions();
-			ScreenManager.AddScreen(new TimedPopupScreen("Settings saved",false,TimeSpan.FromSeconds(1)));
+			ScreenManager.AddScreen(new TimedPopupScreen("Settings saved",false,TimeSpan.FromSeconds(1),false));
 		    base.OnCancel();
 	    }
 

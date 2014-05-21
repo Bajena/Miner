@@ -16,8 +16,8 @@ namespace Miner.GameCore
 	    readonly List<GameScreen> _tempScreensList = new List<GameScreen>();
 	    readonly InputState _input = new InputState();
 	    bool _isInitialized;
-	    private Queue<TimedPopupScreen> _messageQueue; 
-
+	    private Queue<TimedPopupScreen> _messageQueue;
+	    public ActiveGameplayHandler ActiveGameplayHandler { get; set; }
 	    public SpriteBatch SpriteBatch { get; private set; }
 	    public SpriteFont Font { get; private set; }
 	    public Texture2D BlankTexture { get; private set; }
@@ -31,6 +31,7 @@ namespace Miner.GameCore
             : base(game)
         {
 			_messageQueue = new Queue<TimedPopupScreen>();
+			ActiveGameplayHandler = new ActiveGameplayHandler(this);
         }
 
         public override void Initialize()
@@ -40,11 +41,12 @@ namespace Miner.GameCore
             _isInitialized = true;
         }
 
-	    public void ShowMessage(string message, TimeSpan time)
+	    public void ShowMessage(string message, TimeSpan time, bool gameplayMessage)
 	    {
 			if (_messageQueue.Count == 0 || _messageQueue.Peek().Message != message)
 		    {
-			    _messageQueue.Enqueue(new TimedPopupScreen(message,false,time));
+				if ( !(TopScreen is TimedPopupScreen && (TopScreen as TimedPopupScreen).Message==message))
+					_messageQueue.Enqueue(new TimedPopupScreen(message, false, time, gameplayMessage));
 		    }
 	    }
 

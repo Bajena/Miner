@@ -28,10 +28,20 @@ namespace Miner.GameLogic.Objects
 
 	public class Player : WorldCollidingGameObject
 	{
-		public AnimationComponent AnimationComponent { get { return (AnimationComponent)DrawableComponents["Animation"]; } }
 		public TimerComponent OxygenTimer { get { return (TimerComponent)Components["OxygenTimer"]; } }
 
-		public float Oxygen { get { return Properties.GetProperty<float>("Oxygen"); } set { Properties.UpdateProperty("Oxygen", value); } }
+		public float Oxygen
+		{
+			get
+			{
+				return Properties.GetProperty<float>("Oxygen");
+			}
+			set
+			{
+				Properties.UpdateProperty("Oxygen", value > SettingsManager.Instance.MaxOxygen ? SettingsManager.Instance.MaxOxygen : value);
+			}
+		}
+
 		public int Lives { get { return Properties.GetProperty<int>("Lives"); } set { Properties.UpdateProperty("Lives", value); } }
 		public int Points { get { return Properties.GetProperty<int>("Points"); } set { Properties.UpdateProperty("Points", value); } }
 		public int Dynamite { get { return Properties.GetProperty<int>("Dynamite"); } set { Properties.UpdateProperty("Dynamite", value); } }
@@ -41,12 +51,13 @@ namespace Miner.GameLogic.Objects
 		{
 			get
 			{
-				var currentAnimationFrame = AnimationComponent.Animations[AnimationComponent.CurrentAnimation].CurrentFrame;
+				var currentAnimationFrame = AnimationComponent.Animations[AnimationComponent.CurrentAnimationName].CurrentFrame;
 				return new Vector2(currentAnimationFrame.Width, currentAnimationFrame.Height);
 			}
 		}
 
-		private float _sideMoveSpeed;
+		private float _sideMoveSpeed = 200.0f;
+		private float _jumpHeight = -400.0f;
 
 		public event EventHandler Died;
 
@@ -69,14 +80,11 @@ namespace Miner.GameLogic.Objects
 			Lives = SettingsManager.Instance.DefaultLives;
 			Points = 0;
 			Dynamite = SettingsManager.Instance.DefaultDynamite;
-			_sideMoveSpeed = 200.0f;
 
-			DrawableComponents.Add("Animation", new AnimationComponent(this));
-
-			var oxygenTimer = new TimerComponent(this, TimeSpan.FromSeconds(1), true);
-			oxygenTimer.Tick += new EventHandler<GameTimeEventArgs>(DecreaseOxygen);
+			var oxygenTimer = new TimerComponent(this, TimeSpan.FromSeconds(0.5), true);
+			oxygenTimer.Tick += DecreaseOxygen;
 			Components.Add("OxygenTimer", oxygenTimer);
-
+			OxygenTimer.Start();
 			SetupAnimations();
 		}
 
@@ -151,13 +159,13 @@ namespace Miner.GameLogic.Objects
 			if (SettingsManager.Instance.Controls[EAction.MoveRight].IsCalled(input))
 			{
 				Velocity = new Vector2(_sideMoveSpeed, Velocity.Y);
-				if (IsOnGround && AnimationComponent.CurrentAnimation != "Run") AnimationComponent.SetActiveAnimation("Run");
+				if (IsOnGround && AnimationComponent.CurrentAnimationName != "Run") AnimationComponent.SetActiveAnimation("Run");
 				//Position = new Vector2(Position.Left+1,Position.Y);
 			}
 			if (SettingsManager.Instance.Controls[EAction.MoveLeft].IsCalled(input))
 			{
 				Velocity = new Vector2(-_sideMoveSpeed, Velocity.Y);
-				if (IsOnGround && AnimationComponent.CurrentAnimation != "Run") AnimationComponent.SetActiveAnimation("Run");
+				if (IsOnGround && AnimationComponent.CurrentAnimationName != "Run") AnimationComponent.SetActiveAnimation("Run");
 				//Position = new Vector2(Position.Left+1,Position.Y);
 			}
 			if (SettingsManager.Instance.Controls[EAction.SetDynamite].IsCalled(input))
@@ -174,7 +182,7 @@ namespace Miner.GameLogic.Objects
 			if (Dynamite > 0)
 			{
 				Dynamite--;
-				var dynamite = new Dynamite(Game,TimeSpan.FromSeconds(0.5), TimeSpan.FromSeconds(2))
+				var dynamite = new Dynamite(Game, TimeSpan.FromSeconds(2))
 				{
 					Position = this.Position// + new Vector2(BoundingBox.Width/2,BoundingBox.Height/2)
 				};
@@ -187,7 +195,7 @@ namespace Miner.GameLogic.Objects
 		{
 			PhysicsComponent.HasGravity = true;
 			AnimationComponent.SetActiveAnimation("Jump");
-			Velocity = new Vector2(Velocity.X, -400.0f);
+			Velocity = new Vector2(Velocity.X, _jumpHeight);
 			IsOnGround = false;
 		}
 

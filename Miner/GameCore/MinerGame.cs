@@ -21,7 +21,6 @@ namespace Miner.GameCore
 		public ScreenManager ScreenManager;
 
         GraphicsDeviceManager graphics;
-		ScreenFactory screenFactory;
 
 		public Level CurrentLevel { get; set; }
 	    private int _currentLevelNumber = 0;
@@ -42,7 +41,6 @@ namespace Miner.GameCore
             graphics.PreferredBackBufferHeight = (int)SettingsManager.Instance.Resolution.Y;
             graphics.ApplyChanges();
 
-            screenFactory = new ScreenFactory();
             //Services.AddService(typeof(IScreenFactory), screenFactory);
 
             ScreenManager = new ScreenManager(this);

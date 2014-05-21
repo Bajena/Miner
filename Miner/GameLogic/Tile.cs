@@ -24,6 +24,7 @@ namespace Miner.GameLogic.Objects
 		public ETileCollisionType CollisionType { get; set; }
 		public Vector2 Position { get; set; }
 		public Vector2	Dimensions { get; set; }
+		public bool Visible { get; set; }
 
 		public BoundingRect BoundingBox
 		{
@@ -42,11 +43,12 @@ namespace Miner.GameLogic.Objects
 		{
 			_tileset = tileset;
 			_tilesetOffset = tilesetOffset;
+			Visible = true;
 		}
 		
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			if (Code != "-1")
+			if (Visible)
 			{
 				spriteBatch.Draw(_tileset, new Rectangle((int)Position.X, (int)Position.Y, (int)Dimensions.X, (int)Dimensions.Y),
 					new Rectangle((int) _tilesetOffset.X, (int) _tilesetOffset.Y, (int) Dimensions.X, (int) Dimensions.Y), Color.White);

@@ -70,7 +70,7 @@ namespace Miner.GameLogic.Components
 			Name = "Physics";
 			HasGravity = false;
 			HasDrag = true;
-			_gravity = new Vector2(0, 400);
+			_gravity = new Vector2(0, 600);
 			MaxVelocity = 5000;
 			
 			Velocity = Vector2.Zero;

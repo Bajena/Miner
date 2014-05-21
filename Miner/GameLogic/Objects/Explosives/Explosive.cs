@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using Miner.Enums;
 using Miner.GameCore;
 using Miner.GameLogic.Components;
 using Miner.Helpers;
@@ -10,62 +11,56 @@ namespace Miner.GameLogic.Objects.Explosives
 {
 	public abstract class Explosive : GameObject
 	{
-		public AnimationComponent AnimationComponent { get { return (AnimationComponent)DrawableComponents["Animation"]; } }
-
-		public bool IsExploding { get; set; }
-		public bool HasExploded { get; set; }
-
-		protected TimeSpan _explosionTimeSpan;
-		protected TimeSpan _explosionStart;
-
-		public event EventHandler<EventArgs> ExplosionStarted;
-		public event EventHandler<EventArgs> ExplosionFinished;
-
+		public EExplosiveState State { get; set; }
 		private SoundEffect _explodeSound;
 
-		protected Explosive(MinerGame game, TimeSpan explosionTime) : base(game)
+		protected Explosive(MinerGame game) : base(game)
 		{
-			_explosionTimeSpan = explosionTime;
-			DrawableComponents.Add("Animation", new AnimationComponent(this));
 			_explodeSound = game.Content.Load<SoundEffect>("Sounds/explode");
+			State = EExplosiveState.Idle;
+			SetupAnimations();
 		}
 
 		public override void Update(GameTime gameTime)
 		{
 			base.Update(gameTime);
-			CheckExplosionFinish(gameTime);
+			HandleState();
 		}
 
-		private void CheckExplosionFinish(GameTime gameTime)
+		private void HandleState()
 		{
-			if (IsExploding && gameTime.TotalGameTime - _explosionStart > _explosionTimeSpan)
+			switch (State)
 			{
-				IsExploding = false;
-				if (ExplosionFinished != null)
-					ExplosionFinished.Invoke(this, null);
+					case EExplosiveState.Exploding:
+						State = EExplosiveState.AfterExplosion;
+						break;
+					case EExplosiveState.AfterExplosion:
+						if (AnimationComponent.CurrentAnimationName=="Explode" && AnimationComponent.CurrentAnimation.HasFinished)
+							State = EExplosiveState.Exploded;
+						break;
 			}
+		}
+
+		protected bool CanExplode()
+		{
+			return ((int) State < (int) EExplosiveState.Exploding);
 		}
 
 		public virtual void Explode(GameTime gameTime)
 		{
-			if (!IsExploding)
-			{
-				IsExploding = true;
-				_explosionStart = gameTime.TotalGameTime;
-				AnimationComponent.SetActiveAnimation("Explode");
-				SoundHelper.Play(_explodeSound);
-				if (ExplosionStarted != null)
-					ExplosionStarted.Invoke(this, null);
-			}
+			State = EExplosiveState.Exploding;
+			AnimationComponent.SetActiveAnimation("Explode");
+			SoundHelper.Play(_explodeSound);
 		}
 
 		protected virtual void SetupAnimations()
 		{
-			AnimationComponent.SpriteSheets.Add("Explode", Game.Content.Load<Texture2D>("Sprites/Explosives/explosion"));
+			var explosionTexture = Game.Content.Load<Texture2D>("Sprites/Explosives/explosion");
+			AnimationComponent.SpriteSheets.Add("Explode", explosionTexture);
 
 			AnimationComponent.Animations.Add("Explode", new SpriteAnimation()
 			{
-				AnimationDuration = _explosionTimeSpan.TotalMilliseconds/1000,
+				AnimationDuration = 0.5,
 				Name = "Explode",
 				Loop = false,
 				SpriteSheet = AnimationComponent.SpriteSheets["Explode"],
@@ -73,7 +68,7 @@ namespace Miner.GameLogic.Objects.Explosives
 
 			for (int y = 0; y < 5; y++)
 				for (int x = 0;x<5;x++)
-					AnimationComponent.Animations["Explode"].Frames.Add(new Rectangle(x * 64, y*64, 64, 64));
+					AnimationComponent.Animations["Explode"].Frames.Add(new Rectangle(x * explosionTexture.Width / 5, y * explosionTexture.Width / 5, explosionTexture.Width / 5, explosionTexture.Height / 5));
 		}
 	}
 }

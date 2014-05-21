@@ -13,6 +13,8 @@ namespace Miner.GameLogic.Objects
 	public abstract class GameObject
 	{
 
+		public AnimationComponent AnimationComponent { get { return (AnimationComponent)DrawableComponents["Animation"]; } }
+
 		public Vector2 Position
 		{
 			get
@@ -67,6 +69,7 @@ namespace Miner.GameLogic.Objects
 
 			Components = new Dictionary<String, GameObjectComponent>();
 			DrawableComponents = new Dictionary<String, DrawableGameObjectComponent>();
+			DrawableComponents.Add("Animation", new AnimationComponent(this));
 		}
 
 		public virtual void Initialize()

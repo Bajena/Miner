@@ -11,18 +11,21 @@ namespace Miner.GameInterface.GameScreens
 		private readonly TimeSpan _timeToHide;
 		private TimeSpan _creationTime;
 
-		public TimedPopupScreen(string message, bool includeUsageText ,TimeSpan timeToHide) : base(message, includeUsageText, MessageBoxType.Info)
+		public TimedPopupScreen(string message, bool includeUsageText ,TimeSpan timeToHide, bool inGame) : base(message, includeUsageText, MessageBoxType.Info)
 		{
 			_timeToHide = timeToHide;
 			_creationTime = TimeSpan.Zero;
 			HandleInputIfActive = false;
+			if (inGame)
+				FadeBackground = false;
 		}
-		public TimedPopupScreen(string message, bool includeUsageText)
-			: base(message, includeUsageText, MessageBoxType.Info)
+		public TimedPopupScreen(string message, bool includeUsageText, bool inGame) : base(message, includeUsageText, MessageBoxType.Info)
 		{
 			_timeToHide = TimeSpan.FromSeconds(0.5);
 			_creationTime = TimeSpan.Zero;
 			HandleInputIfActive = false;
+			if (inGame)
+				FadeBackground = false;
 		}
 		public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
 		{

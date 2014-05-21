@@ -67,6 +67,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Enums\EDirection.cs" />
+    <Compile Include="Enums\EExplosiveState.cs" />
     <Compile Include="Enums\EScreenState.cs" />
     <Compile Include="Enums\ESide.cs" />
     <Compile Include="Enums\ETileCollisionType.cs" />
@@ -76,7 +77,9 @@
     <Compile Include="Extensions\KeysExtensions.cs" />
     <Compile Include="Extensions\RectangleExtensions.cs" />
     <Compile Include="Extensions\SpriteBatchExtensions.cs" />
+    <Compile Include="Extensions\Vector2Extensions.cs" />
     <Compile Include="GameCore\GameObjectFactory.cs" />
+    <Compile Include="GameCore\ActiveGameplayHandler.cs" />
     <Compile Include="GameCore\HighScoresManager.cs" />
     <Compile Include="GameCore\TileMapFactory.cs" />
     <Compile Include="GameCore\MinerGame.cs" />
@@ -108,14 +111,24 @@
     <Compile Include="GameLogic\Components\HUD\BarComponent.cs" />
     <Compile Include="GameLogic\Components\PhysicsComponent.cs" />
     <Compile Include="GameLogic\Level.cs" />
+    <Compile Include="GameLogic\Objects\Collectibles\Coin.cs" />
     <Compile Include="GameLogic\Objects\Collectibles\Collectible.cs" />
+    <Compile Include="GameLogic\Objects\Collectibles\Diamond.cs" />
+    <Compile Include="GameLogic\Objects\Collectibles\DynamiteCollectible.cs" />
+    <Compile Include="GameLogic\Objects\Collectibles\RandomBonus.cs" />
     <Compile Include="GameLogic\Objects\Explosives\Dynamite.cs" />
     <Compile Include="GameLogic\Objects\Explosives\Explosive.cs" />
+    <Compile Include="GameLogic\Objects\Explosives\GasBottle.cs" />
     <Compile Include="GameLogic\Objects\GameObject.cs" />
     <Compile Include="GameLogic\Objects\Collectibles\Key.cs" />
-    <Compile Include="GameLogic\Objects\Machine.cs" />
+    <Compile Include="GameLogic\Objects\Machines\Bulldozer.cs" />
+    <Compile Include="GameLogic\Objects\Machines\Cart.cs" />
+    <Compile Include="GameLogic\Objects\Machines\Drill.cs" />
+    <Compile Include="GameLogic\Objects\Machines\EnemyMachine.cs" />
+    <Compile Include="GameLogic\Objects\Machines\Machine.cs" />
     <Compile Include="GameLogic\Objects\Collectibles\OxygenBottle.cs" />
     <Compile Include="GameLogic\Objects\Player.cs" />
+    <Compile Include="GameLogic\Objects\SimpleMoveWorldCollisionComponent.cs" />
     <Compile Include="GameLogic\Objects\WorldCollidingGameObject.cs" />
     <Compile Include="GameLogic\Serializable\GameObjectData.cs" />
     <Compile Include="GameLogic\Serializable\HighScoresData.cs" />
@@ -131,7 +144,6 @@
     <Compile Include="Helpers\SoundHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GameCore\ScreenFactory.cs" />
     <Compile Include="GameInterface\GameScreens\BackgroundScreen.cs" />
     <Compile Include="GameCore\GameplayScreen.cs" />
     <Compile Include="GameInterface\GameScreens\LoadingScreen.cs" />

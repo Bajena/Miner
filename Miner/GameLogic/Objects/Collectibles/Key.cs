@@ -16,7 +16,7 @@ namespace Miner.GameLogic.Objects.Collectibles
 
 		protected override void SetupAnimations()
 		{
-			var keyTexture = Game.Content.Load<Texture2D>("Sprites/Collectibles/key");
+			var keyTexture = Game.Content.Load<Texture2D>("Sprites/Collectibles/key3");
 			AnimationComponent.SpriteSheets.Add("Idle",keyTexture );
 
 

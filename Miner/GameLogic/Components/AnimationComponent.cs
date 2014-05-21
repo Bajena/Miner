@@ -15,7 +15,8 @@ namespace Miner.GameLogic.Components
 	{
 		public Dictionary<String, Texture2D> SpriteSheets { get; set; }
 		public Dictionary<String, SpriteAnimation> Animations { get; set; }
-		public string CurrentAnimation { get { return _currentAnimation.Name; } }
+		public string CurrentAnimationName { get { return _currentAnimation.Name; } }
+		public SpriteAnimation CurrentAnimation { get { return _currentAnimation; } }
 		public EFacingDirection Facing { get; set; }
 		public float Scale { get; set; }
 		public bool RotatesByVelocity { get; set; }
@@ -30,7 +31,6 @@ namespace Miner.GameLogic.Components
 		{
 			Animations = new Dictionary<String, SpriteAnimation>();
 			SpriteSheets = new Dictionary<String, Texture2D>();
-
 			Name = "Animation";
 			Scale = 1.0f;
 			_rotation = 0.0f;
@@ -101,6 +101,11 @@ namespace Miner.GameLogic.Components
 
 			spriteBatch.Draw(_currentAnimation.SpriteSheet, new Vector2(_position.X + boundingBox.Width / 2, _position.Y + boundingBox.Height / 2),
 					_currentAnimation.CurrentFrame, Color.White, _rotation, new Vector2(boundingBox.Width / 2, boundingBox.Height / 2), Scale, _spriteEffect, 0);
+		}
+
+		public void AddEffect(SpriteEffects effect)
+		{
+			this._spriteEffect |= effect;
 		}
 	}
 }
