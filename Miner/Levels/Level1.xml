@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<LevelData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Name>Level1</Name>
+  <PlayerStartPosition>
+    <X>100</X>
+    <Y>300</Y>
+  </PlayerStartPosition>
+  <Background>level_background_1</Background>
+  <Tileset>rock_tileset</Tileset>
+  <Dimensions>
+    <X>34</X>
+    <Y>15</Y>
+  </Dimensions>
+  <TileDimensions>
+    <X>48</X>
+    <Y>48</Y>
+  </TileDimensions>
+  <Tiles>
+    0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
+	0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+	4  5  6  4  0  0  0  0  0  0  5  6  4  5  6  4  5  6  0  0  0  0  0  0  4  5  6  4  5  6  4  5  6  4
+	20 20 20 20 20 20 0  0  0  20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+	20 20 20 20 20 20 0  0  0  20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+	20 20 20 20 20 20 0  0  0  20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+	20 20 20 20 20 20 0  0  0  20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+	20 20 20 20 20 20 0  0  0  20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+	20 20 20 20 20 20 0  0  0  20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+	20 20 20 20 20 20 0  20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
+	22 20 20 20 20 20 20 20 20 20 20 20 20 20 22 0  0  0  22 20 20 20 20 20 20 20 20 20 20 20 20 20 22 21
+	0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+	0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+	0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+  </Tiles>
+  <Objects>
+    <GameObjectData>
+      <Position>
+        <X>6</X>
+        <Y>7</Y>
+      </Position>
+      <Type>Key</Type>
+    </GameObjectData>
+    <GameObjectData>
+      <Position>
+        <X>14</X>
+        <Y>8</Y>
+      </Position>
+      <Type>DynamiteCollectible</Type>
+    </GameObjectData>
+    <GameObjectData>
+      <Position>
+        <X>18</X>
+        <Y>8</Y>
+      </Position>
+      <Type>Coin</Type>
+    </GameObjectData>
+    <GameObjectData>
+      <Position>
+        <X>10</X>
+        <Y>8</Y>
+      </Position>
+      <Type>Diamond</Type>
+    </GameObjectData>
+    <GameObjectData>
+      <Position>
+        <X>10</X>
+        <Y>10</Y>
+      </Position>
+      <Type>RandomBonus</Type>
+    </GameObjectData>
+    <GameObjectData>
+      <Position>
+        <X>18</X>
+        <Y>9</Y>
+      </Position>
+      <Type>GasBottle</Type>
+    </GameObjectData>
+	
+	<GameObjectData>
+      <Type>Bulldozer</Type>
+      <Position>
+        <X>0</X>
+        <Y>10</Y>
+      </Position>
+    </GameObjectData>
+	<GameObjectData>
+      <Type>Drill</Type>
+      <Position>
+        <X>6</X>
+        <Y>10</Y>
+      </Position>
+    </GameObjectData>
+  </Objects>
+</LevelData>
