@@ -130,7 +130,7 @@ namespace Miner.GameLogic
 		{
 			HighScoresManager.AddHighScore(SettingsManager.Instance.PlayerName, Player.Points,
 				SettingsManager.Instance.Difficulty);
-			LoadingScreen.Load(_game.ScreenManager,false,new BackgroundScreen(),new MainMenuScreen());
+			LoadingScreen.Load(_game.ScreenManager,false,true,new BackgroundScreen(),new MainMenuScreen());
 		}
 
 		public void Update(GameTime gameTime)

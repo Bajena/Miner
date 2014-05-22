@@ -18,6 +18,8 @@ namespace Miner.GameLogic.Objects.Machines
 		public Bulldozer(MinerGame game)
 			: base(game)
 		{
+			Type = "Bulldozer";
+
 			Components.Add("Physics", new PhysicsComponent(this)
 			{
 				HasGravity = true

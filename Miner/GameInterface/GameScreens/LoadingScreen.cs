@@ -22,10 +22,11 @@ namespace Miner.GameInterface.GameScreens
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
         }
 
-        public static void Load(ScreenManager screenManager, bool loadingIsSlow,params GameScreen[] screensToLoad)
+        public static void Load(ScreenManager screenManager, bool loadingIsSlow,bool exitOtherScreens, params GameScreen[] screensToLoad)
         {
-            foreach (GameScreen screen in screenManager.GetScreens())
-                screen.ExitScreen();
+			if (exitOtherScreens)
+				foreach (GameScreen screen in screenManager.GetScreens())
+					screen.ExitScreen();
 
             var loadingScreen = new LoadingScreen(screenManager,loadingIsSlow,screensToLoad);
 

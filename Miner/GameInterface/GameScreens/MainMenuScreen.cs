@@ -35,6 +35,7 @@ namespace Miner.GameInterface.GameScreens
 			playGameMenuEntry.Entered += PlayGameMenuEntryEntered;
 			optionsMenuEntry.Entered += OptionsMenuEntryEntered;
 			highScoresMenuEntry.Entered += HighScoreMenuEntryEntered;
+			helpMenuEntry.Entered += new EventHandler(helpMenuEntry_Entered);
 			exitMenuEntry.Entered += OnCancel;
 
 			MenuEntries.Add(playGameMenuEntry);
@@ -44,6 +45,11 @@ namespace Miner.GameInterface.GameScreens
 			MenuEntries.Add(helpMenuEntry);
 			MenuEntries.Add(exitMenuEntry);
 	    }
+
+		void helpMenuEntry_Entered(object sender, EventArgs e)
+		{
+			LoadingScreen.Load(ScreenManager,true,true,new HelpScreen());
+		}
 
 	    private void ResumeGameEntryEntered(object sender, EventArgs e)
 	    {
@@ -61,8 +67,7 @@ namespace Miner.GameInterface.GameScreens
 		    {
 			    ScreenManager = ScreenManager
 		    };
-			LoadingScreen.Load(ScreenManager,true,gameplayScreen);
-			//ScreenManager.AddScreen(
+			LoadingScreen.Load(ScreenManager,true,true,gameplayScreen);
             //LoadingScreen.Load(ScreenManager, true,new GameplayScreen());
         }
 

@@ -117,6 +117,11 @@ namespace Miner.GameInterface.GameScreens
                                                        bool coveredByOtherScreen)
         {
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
+	        
+			if (_selectedEntry < 0)
+		        _selectedEntry = 0;
+			else if (_selectedEntry > MenuEntries.Count - 1)
+				_selectedEntry = MenuEntries.Count - 1;
 
             for (int i = 0; i < MenuEntries.Count; i++)
             {

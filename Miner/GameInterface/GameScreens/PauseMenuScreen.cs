@@ -21,7 +21,7 @@ namespace Miner.GameInterface.GameScreens
         void QuitGameMenuEntryEntered(object sender, EventArgs e)
         {
 			ScreenManager.GameStateKeeper.StoreGameplay();
-			LoadingScreen.Load(ScreenManager, false, null, new BackgroundScreen(),
+			LoadingScreen.Load(ScreenManager, false, true,null, new BackgroundScreen(),
 														   new MainMenuScreen());
         }
 
