@@ -5,12 +5,12 @@ using System.Text;
 
 namespace Miner.GameCore
 {
-	public class ActiveGameplayHandler
+	public class GameStateKeeper
 	{
 		private readonly ScreenManager _screenManager;
 		public GameplayScreen CurrentGame { get; set; }
 
-		public ActiveGameplayHandler(ScreenManager screenManager)
+		public GameStateKeeper(ScreenManager screenManager)
 		{
 			_screenManager = screenManager;
 		}

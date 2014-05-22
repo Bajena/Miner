@@ -14,7 +14,7 @@ namespace Miner.GameInterface.GameScreens
 	    {
 		    base.Activate();
 
-			if (ScreenManager.ActiveGameplayHandler.CurrentGame != null)
+			if (ScreenManager.GameStateKeeper.CurrentGame != null)
 			{
 
 				MenuEntry resumeGameMenuEntry = new MenuEntry("Resume Game");
@@ -47,7 +47,7 @@ namespace Miner.GameInterface.GameScreens
 
 	    private void ResumeGameEntryEntered(object sender, EventArgs e)
 	    {
-		    ScreenManager.ActiveGameplayHandler.RestoreGameplay();
+		    ScreenManager.GameStateKeeper.RestoreGameplay();
 	    }
 
 	    private void HighScoreMenuEntryEntered(object sender, EventArgs e)

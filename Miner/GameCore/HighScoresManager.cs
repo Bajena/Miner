@@ -38,7 +38,16 @@ namespace Miner.GameCore
 
 		public static HighScoresData LoadHighScores()
 		{
-			return HighScoresData.Deserialize(GetHighScoresFilePath());
+			try
+			{
+				return HighScoresData.Deserialize(GetHighScoresFilePath());
+			}
+			catch (FileNotFoundException exception)
+			{
+				var emptyHighScores = new HighScoresData();
+				emptyHighScores.Serialize(GetHighScoresFilePath());
+				return emptyHighScores;
+			}
 		}
 	}
 }

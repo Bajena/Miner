@@ -111,7 +111,6 @@ namespace Miner.GameLogic
 			messageBox.Accepted += DeathMessageBoxCancelled;
 			messageBox.Cancelled += DeathMessageBoxCancelled;
 			_game.ScreenManager.AddScreen(messageBox);
-
 		}
 
 		private void DeathMessageBoxCancelled(object sender, EventArgs e)
@@ -129,8 +128,9 @@ namespace Miner.GameLogic
 
 		public void GameOver()
 		{
-			HighScoresManager.AddHighScore(SettingsManager.Instance.PlayerName,Player.Points, SettingsManager.Instance.Difficulty);
-			_game.ScreenManager.GetScreens().First(x => x is GameplayScreen).ExitScreen();
+			HighScoresManager.AddHighScore(SettingsManager.Instance.PlayerName, Player.Points,
+				SettingsManager.Instance.Difficulty);
+			LoadingScreen.Load(_game.ScreenManager,false,new BackgroundScreen(),new MainMenuScreen());
 		}
 
 		public void Update(GameTime gameTime)

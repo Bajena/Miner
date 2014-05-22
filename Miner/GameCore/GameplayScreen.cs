@@ -138,8 +138,7 @@ namespace Miner
 			//_content.Unload();
 		}
 
-		public override void Update(GameTime gameTime, bool otherScreenHasFocus,
-													   bool coveredByOtherScreen)
+		public override void Update(GameTime gameTime, bool otherScreenHasFocus,bool coveredByOtherScreen)
 		{
 			base.Update(gameTime, otherScreenHasFocus, false);
 

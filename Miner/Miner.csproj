@@ -79,7 +79,7 @@
     <Compile Include="Extensions\SpriteBatchExtensions.cs" />
     <Compile Include="Extensions\Vector2Extensions.cs" />
     <Compile Include="GameCore\GameObjectFactory.cs" />
-    <Compile Include="GameCore\ActiveGameplayHandler.cs" />
+    <Compile Include="GameCore\GameStateKeeper.cs" />
     <Compile Include="GameCore\HighScoresManager.cs" />
     <Compile Include="GameCore\TileMapFactory.cs" />
     <Compile Include="GameCore\MinerGame.cs" />

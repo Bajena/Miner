@@ -17,7 +17,7 @@ namespace Miner.GameCore
 	    readonly InputState _input = new InputState();
 	    bool _isInitialized;
 	    private Queue<TimedPopupScreen> _messageQueue;
-	    public ActiveGameplayHandler ActiveGameplayHandler { get; set; }
+	    public GameStateKeeper GameStateKeeper { get; set; }
 	    public SpriteBatch SpriteBatch { get; private set; }
 	    public SpriteFont Font { get; private set; }
 	    public Texture2D BlankTexture { get; private set; }
@@ -31,7 +31,7 @@ namespace Miner.GameCore
             : base(game)
         {
 			_messageQueue = new Queue<TimedPopupScreen>();
-			ActiveGameplayHandler = new ActiveGameplayHandler(this);
+			GameStateKeeper = new GameStateKeeper(this);
         }
 
         public override void Initialize()
@@ -148,7 +148,7 @@ namespace Miner.GameCore
             // If we have a graphics device, tell the screen to unload content.
             if (_isInitialized)
             {
-                //screen.Unload();
+                screen.Unload();
             }
 
             _screens.Remove(screen);
