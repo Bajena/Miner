@@ -28,14 +28,11 @@ namespace Miner
 			get { return (MinerGame) ScreenManager.Game; }
 		}
 
-		//protected Level _currentLevel {get{}}
-
 		private Level CurrentLevel
 		{
 			get { return Game.CurrentLevel; }
 		}
 
-		ContentManager _content;
 		SpriteFont _gameFont;
 
 		float _pauseAlpha;
@@ -64,14 +61,10 @@ namespace Miner
 		{
 			if (!_gamePaused)
 			{
-				if (_content == null)
-					_content = new ContentManager(ScreenManager.Game.Services, "Content");
-
-				_gameFont = _content.Load<SpriteFont>("menufont");
+				_gameFont = Game.Content.Load<SpriteFont>("menufont");
 				_hudItems = new Dictionary<string, HudComponent>();
 
-				_gameMusic = _content.Load<Song>("Sounds/music");
-				SoundHelper.Play(_gameMusic);
+				_gameMusic = Game.Content.Load<Song>("Sounds/music");
 				//SaveTestLevel();
 
 				Game.NewGame();
@@ -90,7 +83,7 @@ namespace Miner
 
 				foreach (var hudComponent in _hudItems)
 				{
-					hudComponent.Value.Initialize(_content);
+					hudComponent.Value.Initialize(Game.Content);
 				}
 			}
 			else Resume();
@@ -142,7 +135,7 @@ namespace Miner
 		/// </summary>
 		public override void Unload()
 		{
-			_content.Unload();
+			//_content.Unload();
 		}
 
 		public override void Update(GameTime gameTime, bool otherScreenHasFocus,
@@ -189,7 +182,11 @@ namespace Miner
 
 		private void Resume()
 		{
-			SoundHelper.ResumeMusic();
+			if (MediaPlayer.State==MediaState.Paused)
+				SoundHelper.ResumeMusic();
+			else if (MediaPlayer.State==MediaState.Stopped)
+				SoundHelper.Play(_gameMusic);
+
 			_gamePaused = false;
 		}
 
@@ -203,14 +200,7 @@ namespace Miner
 			CurrentLevel.Draw(spriteBatch);
 
 			spriteBatch.Begin();
-			spriteBatch.DrawString(_gameFont,CurrentLevel.Name,new Vector2(ScreenManager.GraphicsDevice.Viewport.Width/2,0), Color.White,0,Vector2.Zero,new Vector2(0.75f),SpriteEffects.None,0 );
-			//spriteBatch.DrawString(_gameFont, "Gracz:" + CurrentLevel.Player.Position.ToString(), new Vector2(0, 0), Color.Red);
-			//spriteBatch.DrawString(_gameFont, "Kamera:" + CurrentLevel.Camera.Position.ToString(), new Vector2(0, 30), Color.Red);
-			//spriteBatch.DrawString(_gameFont, "Tile[0,0]:" + CurrentLevel.Tiles[0, 0].Position.ToString(), new Vector2(0, 60), Color.Red);
-			foreach (var hudItem in _hudItems)
-			{
-				hudItem.Value.Draw(spriteBatch);
-			}
+			DrawHud(spriteBatch);
 			spriteBatch.End();
 
 			// If the game is transitioning on or off, fade it out to black.
@@ -219,6 +209,18 @@ namespace Miner
 				float alpha = MathHelper.Lerp(1f - TransitionAlpha, 1f, _pauseAlpha / 2);
 
 				ScreenManager.FadeBackBufferToBlack(alpha);
+			}
+		}
+
+		private void DrawHud(SpriteBatch spriteBatch)
+		{
+			spriteBatch.DrawString(_gameFont, CurrentLevel.Name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Width / 2, 0), Color.White, 0, Vector2.Zero, new Vector2(0.75f), SpriteEffects.None, 0);
+			//spriteBatch.DrawString(_gameFont, "Gracz:" + CurrentLevel.Player.Position.ToString(), new Vector2(0, 0), Color.Red);
+			//spriteBatch.DrawString(_gameFont, "Kamera:" + CurrentLevel.Camera.Position.ToString(), new Vector2(0, 30), Color.Red);
+			//spriteBatch.DrawString(_gameFont, "Tile[0,0]:" + CurrentLevel.Tiles[0, 0].Position.ToString(), new Vector2(0, 60), Color.Red);
+			foreach (var hudItem in _hudItems)
+			{
+				hudItem.Value.Draw(spriteBatch);
 			}
 		}
 

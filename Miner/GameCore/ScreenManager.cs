@@ -148,7 +148,7 @@ namespace Miner.GameCore
             // If we have a graphics device, tell the screen to unload content.
             if (_isInitialized)
             {
-                screen.Unload();
+                //screen.Unload();
             }
 
             _screens.Remove(screen);

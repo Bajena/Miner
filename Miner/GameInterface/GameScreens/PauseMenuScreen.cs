@@ -9,7 +9,7 @@ namespace Miner.GameInterface.GameScreens
             : base("Paused")
         {
             MenuEntry resumeGameMenuEntry = new MenuEntry("Resume Game");
-            MenuEntry quitGameMenuEntry = new MenuEntry("Quit Game");
+            MenuEntry quitGameMenuEntry = new MenuEntry("Main Menu");
             
             resumeGameMenuEntry.Entered += OnCancel;
             quitGameMenuEntry.Entered += QuitGameMenuEntryEntered;
@@ -20,20 +20,10 @@ namespace Miner.GameInterface.GameScreens
 
         void QuitGameMenuEntryEntered(object sender, EventArgs e)
         {
-            const string message = "Are you sure you want to quit this game?";
-
-            MessageBoxScreen confirmQuitMessageBox = new MessageBoxScreen(message,true,MessageBoxType.YesNo);
-
-            confirmQuitMessageBox.Accepted += ConfirmQuitMessageBoxAccepted;
-
-            ScreenManager.AddScreen(confirmQuitMessageBox);
-        }
-
-        void ConfirmQuitMessageBoxAccepted(object sender, EventArgs e)
-        {
 			ScreenManager.ActiveGameplayHandler.StoreGameplay();
-            LoadingScreen.Load(ScreenManager, false, null, new BackgroundScreen(),
-                                                           new MainMenuScreen());
+			LoadingScreen.Load(ScreenManager, false, null, new BackgroundScreen(),
+														   new MainMenuScreen());
         }
+
     }
 }
