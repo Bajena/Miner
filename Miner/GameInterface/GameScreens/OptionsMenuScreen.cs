@@ -34,7 +34,7 @@ namespace Miner.GameInterface.GameScreens
             var backMenuEntry = new MenuEntry("Back");
 
 			_soundMenuEntry.Entered += SoundMenuEntryEntered;
-			_soundMenuEntry.Entered += DebugEntryEntered;
+			_debugMenuEntry.Entered += DebugEntryEntered;
             _difficultyMenuEntry.Entered += DifficultyMenuEntryEntered;
 			_controlsMenuEntry.Entered += ControlsMenuEntryEntryEntered;
 			
