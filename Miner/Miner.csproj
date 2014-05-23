@@ -66,8 +66,10 @@
     <XnaCompressContent>true</XnaCompressContent>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Enums\ECollectibleState.cs" />
     <Compile Include="Enums\EDirection.cs" />
     <Compile Include="Enums\EExplosiveState.cs" />
+    <Compile Include="Enums\EMachineState.cs" />
     <Compile Include="Enums\EScreenState.cs" />
     <Compile Include="Enums\ESide.cs" />
     <Compile Include="Enums\ETileCollisionType.cs" />

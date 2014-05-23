@@ -136,12 +136,9 @@ namespace Miner.GameLogic
 		public void Update(GameTime gameTime)
 		{
 			Player.Update(gameTime);
-			var explosives = _explosives.ToArray();
-			foreach (var explosive in explosives)
+			foreach (var explosive in _explosives)
 			{
 				explosive.Update(gameTime);
-				if (explosive.State==EExplosiveState.Exploded)
-					_explosives.Remove(explosive);
 			}
 			foreach (var collectible in _collectibles)
 			{
@@ -151,16 +148,51 @@ namespace Miner.GameLogic
 			{
 				machine.Update(gameTime);
 			}
+			CleanupObjects();
 			HandleCollisions();
 			Camera.Update(gameTime);
 
+
+		}
+
+		private void CleanupObjects()
+		{
+			_explosives.RemoveAll(x => x.State == EExplosiveState.Exploded);
+
+			_machines.RemoveAll(x => x.State == EMachineState.Dead);
+			
+		   _collectibles.RemoveAll(x => x.State == ECollectibleState.Collected);
+			
 		}
 
 		public void HandleCollisions()
 		{
 			ReactToPlayerTileCollisions();
 			HandleCollectiblesCollisions();
-			HandleMachinesCollision();
+			HandleMachinesCollisions();
+			HandleExplosivesCollisions();
+		}
+
+		private void HandleExplosivesCollisions()
+		{
+			var explodingExplosives = _explosives.Where(x => x.State == EExplosiveState.Exploding);
+
+			foreach (var explosive in explodingExplosives)
+			{
+				if (Player.IsCollidingWith(explosive))
+				{
+					if (!SettingsManager.Instance.Debug)
+						Player.OnDied();
+					else
+						_game.ScreenManager.ShowMessage("BOOM!", TimeSpan.FromMilliseconds(400), true);
+				}
+
+				var machinesToHandle = _machines.Where(x => x.IsDestructable && x.IsCollidingWith(explosive));
+				foreach (var machine in machinesToHandle)
+				{
+					machine.HandleCollisionWithExplosive(explosive);
+				}
+			}
 		}
 
 		private void HandleCollectiblesCollisions()
@@ -176,13 +208,11 @@ namespace Miner.GameLogic
 							_keyCollected = true;
 							_game.ScreenManager.ShowMessage("You can now exit", TimeSpan.FromMilliseconds(500),true);
 						}
-
-						_collectibles.Remove(collectible);
 					}
 				}
 		}
 
-		private void HandleMachinesCollision()
+		private void HandleMachinesCollisions()
 		{
 			var machinesToCheck = _machines.Where(c => Camera.IsRectangleVisible(c.BoundingBox)).ToArray();
 			foreach (var machine in machinesToCheck)
@@ -191,7 +221,10 @@ namespace Miner.GameLogic
 				{
 					if (machine is EnemyMachine)
 					{
-						_game.ScreenManager.ShowMessage(machine.Type, TimeSpan.FromMilliseconds(100), true);
+						if (SettingsManager.Instance.Debug)
+							_game.ScreenManager.ShowMessage(machine.Type, TimeSpan.FromMilliseconds(100), true);
+						else
+							Player.OnDied();
 					}
 				}
 			}

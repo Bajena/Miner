@@ -43,6 +43,7 @@ namespace Miner.GameLogic.Components
 		public void Stop()
 		{
 			_lastIntervalStart = TimeSpan.Zero;
+			Active = false;
 		}
 
 		public override void Update(GameTime gameTime)
@@ -59,7 +60,7 @@ namespace Miner.GameLogic.Components
 					if (Tick!=null)
 						Tick(this,new GameTimeEventArgs(gameTime));
 					if (!_repeat)
-						Active = false;
+						Stop();
 
 					_lastIntervalStart = gameTime.TotalGameTime;
 				}

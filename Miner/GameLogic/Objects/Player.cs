@@ -182,7 +182,7 @@ namespace Miner.GameLogic.Objects
 			if (Dynamite > 0)
 			{
 				Dynamite--;
-				var dynamite = new Dynamite(Game, TimeSpan.FromSeconds(2))
+				var dynamite = new Dynamite(Game)
 				{
 					Position = this.Position// + new Vector2(BoundingBox.Width/2,BoundingBox.Height/2)
 				};

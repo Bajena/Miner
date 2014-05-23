@@ -11,17 +11,21 @@ namespace Miner.GameInterface.GameScreens
 	    readonly MenuEntry _soundMenuEntry;
 		readonly MenuEntry _difficultyMenuEntry;
 		readonly MenuEntry _controlsMenuEntry;
+		private MenuEntry _debugMenuEntry;
 
 	    private EDifficulty _difficulty;
+	    private bool _debug;
 	    private bool _sound;
-        
-        public OptionsMenuScreen()
+
+	    public OptionsMenuScreen()
             : base("Options")
         {
 	        _sound = SettingsManager.Instance.Sound;
-	        _difficulty = SettingsManager.Instance.Difficulty;
+			_difficulty = SettingsManager.Instance.Difficulty;
+			_debug = SettingsManager.Instance.Debug;
 
-            _soundMenuEntry = new MenuEntry(string.Empty);
+			_soundMenuEntry = new MenuEntry(string.Empty);
+			_debugMenuEntry = new MenuEntry(string.Empty);
 			_difficultyMenuEntry = new MenuEntry(string.Empty);
 			_controlsMenuEntry = new MenuEntry("Control Settings");
 
@@ -29,26 +33,35 @@ namespace Miner.GameInterface.GameScreens
 
             var backMenuEntry = new MenuEntry("Back");
 
-            _soundMenuEntry.Entered += SoundMenuEntryEntered;
+			_soundMenuEntry.Entered += SoundMenuEntryEntered;
+			_soundMenuEntry.Entered += DebugEntryEntered;
             _difficultyMenuEntry.Entered += DifficultyMenuEntryEntered;
-			_controlsMenuEntry.Entered += new EventHandler(ControlsMenuEntryEntryEntered);
+			_controlsMenuEntry.Entered += ControlsMenuEntryEntryEntered;
 			
 			backMenuEntry.Entered += OnCancel;
             
             MenuEntries.Add(_soundMenuEntry);
+			MenuEntries.Add(_debugMenuEntry);
             MenuEntries.Add(_difficultyMenuEntry);
 			MenuEntries.Add(_controlsMenuEntry);
             MenuEntries.Add(backMenuEntry);
         }
 
-		void ControlsMenuEntryEntryEntered(object sender, EventArgs e)
+	    private void DebugEntryEntered(object sender, EventArgs e)
+	    {
+		    _debug = !_debug;
+			SetMenuEntryText();
+	    }
+
+	    void ControlsMenuEntryEntryEntered(object sender, EventArgs e)
 		{
 			ScreenManager.AddScreen(new ControlsOptionsMenuScreen());
 		}
 
         void SetMenuEntryText()
         {
-            _soundMenuEntry.Text = "Sound: " + (_sound ? "on" : "off");
+			_soundMenuEntry.Text = "Sound: " + (_sound ? "on" : "off");
+			_debugMenuEntry.Text = "Debug Mode: " + (_debug ? "on" : "off");
             _difficultyMenuEntry.Text = "Difficulty: " + _difficulty;
         }
 
@@ -76,6 +89,7 @@ namespace Miner.GameInterface.GameScreens
 	    {
 			SettingsManager.Instance.Sound = _sound;
 		    SettingsManager.Instance.Difficulty = _difficulty;
+		    SettingsManager.Instance.Debug = _debug;
 			SettingsManager.Instance.SaveToDisk();
 	    }
     }

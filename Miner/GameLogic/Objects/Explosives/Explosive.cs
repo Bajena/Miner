@@ -23,8 +23,8 @@ namespace Miner.GameLogic.Objects.Explosives
 
 		public override void Update(GameTime gameTime)
 		{
-			base.Update(gameTime);
 			HandleState();
+			base.Update(gameTime);
 		}
 
 		private void HandleState()

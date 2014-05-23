@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Miner.Enums;
 using Miner.GameCore;
 using Miner.GameLogic.Components;
+using Miner.GameLogic.Objects.Explosives;
 
 namespace Miner.GameLogic.Objects.Machines
 {
@@ -27,6 +29,9 @@ namespace Miner.GameLogic.Objects.Machines
 			Components.Add("WorldCollision", new SimpleMoveWorldCollisionComponent(this, game.CurrentLevel));
 
 			Velocity = new Vector2(100f,0);
+
+			IsDestructable = true;
+			_pointsForKill = 500;
 		}
 
 		protected override void SetupAnimations()
@@ -59,6 +64,16 @@ namespace Miner.GameLogic.Objects.Machines
 		public List<Tile> GetCollidedTiles()
 		{
 			return WorldCollisionComponent.CollidingTiles;
+		}
+
+		public override void HandleCollisionWithExplosive(Explosive explosive)
+		{
+			base.HandleCollisionWithExplosive(explosive);
+			if (State == EMachineState.Dying)
+			{
+				State = EMachineState.Dead;
+			}
+
 		}
 	}
 }

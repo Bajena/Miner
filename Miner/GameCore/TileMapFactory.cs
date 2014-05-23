@@ -4,6 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Miner.Enums;
@@ -19,7 +20,9 @@ namespace Miner.GameCore
 		{
 			var mapDimensions = levelData.Dimensions;
 			var tilesArray = new Tile[(int) mapDimensions.X, (int) mapDimensions.Y];
-			var trimmedAnd = levelData.Tiles.Trim().Replace("  ", " ").Replace("\n\t", " ").Replace("  ", " ");
+
+			var trimmedAnd = levelData.Tiles.Trim().Replace("\n", " ");
+			trimmedAnd = Regex.Replace(trimmedAnd, @"\s+", " ");
 			var tileCodes = trimmedAnd.Split(' ');
 
 			int i = 0;

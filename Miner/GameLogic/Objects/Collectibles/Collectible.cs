@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Audio;
+using Miner.Enums;
 using Miner.GameCore;
 using Miner.GameLogic.Components;
 using Miner.Helpers;
@@ -9,9 +10,12 @@ namespace Miner.GameLogic.Objects.Collectibles
 	{
 		protected SoundEffect _collectedSound;
 
+		public ECollectibleState State {get;set;}
+
 		public Collectible(MinerGame game) : base(game)
 		{
 			SetupAnimations();
+			State = ECollectibleState.NotCollected;
 		}
 
 
@@ -23,6 +27,7 @@ namespace Miner.GameLogic.Objects.Collectibles
 			{
 				SoundHelper.Play(_collectedSound);
 			}
+			State= ECollectibleState.Collected;
 		}
 	}
 }

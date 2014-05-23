@@ -71,6 +71,8 @@ namespace Miner.GameCore
 		[XmlIgnore]
 		public float MaxOxygen = 100;
 		[XmlIgnore]
+		public bool Debug = true;
+		[XmlIgnore]
 		public int DefaultLives = 3;
 		[XmlIgnore]
 	    public int DefaultDynamite = 3;
