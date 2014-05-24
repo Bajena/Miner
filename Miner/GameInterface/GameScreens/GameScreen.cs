@@ -49,9 +49,12 @@ namespace Miner.GameInterface.GameScreens
 		    HandleInputIfActive = true;
 	    }
 
-	    public virtual void Activate() { }
+	    public virtual void Activate()
+	    {
+	    }
 
-        public virtual void Deactivate() { }
+
+	    public virtual void Deactivate() { }
 
         public virtual void Unload() { }
 

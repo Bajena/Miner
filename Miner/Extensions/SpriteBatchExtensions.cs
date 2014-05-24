@@ -32,5 +32,26 @@ namespace Miner.Extensions
 
 			return position;
 		}
+
+		public static Vector2 DrawString(this SpriteBatch spriteBatch, SpriteFont font, string text, Vector2 position, Color color, TextAlignment alignment,Vector2 scale)
+		{
+			Vector2 size = font.MeasureString(text);
+
+			switch (alignment)
+			{
+				case TextAlignment.Left:
+					break;
+				case TextAlignment.Center:
+					position.X -= size.X / 2;
+					break;
+				case TextAlignment.Right:
+					position.X -= size.X;
+					break;
+			}
+
+			spriteBatch.DrawString(font, text, position, color,0,Vector2.Zero,scale,SpriteEffects.None, 0);
+
+			return position;
+		}
 	}
 }

@@ -15,7 +15,7 @@ namespace Miner.GameCore
 		private static List<string> _levelList = new List<string>()
 		{
 			"Level1",
-			"Level2"
+			"Level2",
 		};
 
 		public ScreenManager ScreenManager;
@@ -36,12 +36,9 @@ namespace Miner.GameCore
 
 			CreateGameFilesAndDirectories();
 
-            //Set resolution
             graphics.PreferredBackBufferWidth = (int)SettingsManager.Instance.Resolution.X;
             graphics.PreferredBackBufferHeight = (int)SettingsManager.Instance.Resolution.Y;
             graphics.ApplyChanges();
-
-            //Services.AddService(typeof(IScreenFactory), screenFactory);
 
             ScreenManager = new ScreenManager(this);
             Components.Add(ScreenManager);
@@ -85,13 +82,39 @@ namespace Miner.GameCore
 		    _currentLevelNumber = 0;
 			CurrentLevel = new Level(this, _levelList[0]);
 			CurrentLevel.Initialize();
+
 	    }
 
 	    public void LoadNextLevel()
 	    {
-			CurrentLevel = new Level(this, _levelList[++_currentLevelNumber],CurrentLevel.Player);
-			CurrentLevel.Initialize();
+		    if (_currentLevelNumber < _levelList.Count - 1)
+		    {
+			    CurrentLevel = new Level(this, _levelList[++_currentLevelNumber], CurrentLevel.Player);
+			    CurrentLevel.Initialize();
+		    }
+		    else
+		    {
+				OnLastLevelComplete();
+		    }
 	    }
+
+	    private void OnLastLevelComplete()
+		{
+			CurrentLevel = null;
+		    var gameplayScreen = ScreenManager.GameStateKeeper.GetActiveGameplayScreen();
+			ScreenManager.RemoveScreen(gameplayScreen);
+		    var gameEndedMessageBox = new MessageBoxScreen("All levels complete!", true, MessageBoxType.Info);
+			gameEndedMessageBox.Accepted += gameEndedMessageBox_Accepted;
+			gameEndedMessageBox.Cancelled += gameEndedMessageBox_Accepted;
+			ScreenManager.AddScreen(gameEndedMessageBox);
+
+		}
+
+		void gameEndedMessageBox_Accepted(object sender, EventArgs e)
+		{
+			ScreenManager.AddScreen(new BackgroundScreen());
+			ScreenManager.AddScreen(new MainMenuScreen());
+		}
 
         /// <summary>
         /// Creates starting screens
@@ -99,9 +122,7 @@ namespace Miner.GameCore
         private void AddInitialScreens()
         {
             ScreenManager.AddScreen(new BackgroundScreen());
-
             ScreenManager.AddScreen(new NamePromptMenuScreen());
-			//ScreenManager.AddScreen(new GameplayScreen());	
         }
 
         /// <summary>

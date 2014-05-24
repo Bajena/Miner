@@ -101,6 +101,7 @@
     <Compile Include="GameInterface\GameScreens\NamePromptMenuScreen.cs" />
     <Compile Include="GameInterface\MenuEntries\TextInputMenuEntry.cs" />
     <Compile Include="GameInterface\MenuEntries\UserInputMenuEntry.cs" />
+    <Compile Include="GameInterface\MinerHud.cs" />
     <Compile Include="GameLogic\Camera.cs" />
     <Compile Include="GameLogic\Components\AnimationComponent.cs" />
     <Compile Include="GameLogic\Components\HUD\TextComponent.cs" />

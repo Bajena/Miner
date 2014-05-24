@@ -1,4 +1,5 @@
 using System;
+using Miner.GameCore;
 using Miner.GameInterface.MenuEntries;
 
 namespace Miner.GameInterface.GameScreens
@@ -14,7 +15,7 @@ namespace Miner.GameInterface.GameScreens
 	    {
 		    base.Activate();
 
-			if (ScreenManager.GameStateKeeper.CurrentGame != null)
+			if (ScreenManager.GameStateKeeper.StoredGameplayScreen != null)
 			{
 
 				MenuEntry resumeGameMenuEntry = new MenuEntry("Resume Game");
@@ -32,7 +33,7 @@ namespace Miner.GameInterface.GameScreens
 			MenuEntry helpMenuEntry = new MenuEntry("Help");
 			MenuEntry exitMenuEntry = new MenuEntry("Exit");
 
-			playGameMenuEntry.Entered += PlayGameMenuEntryEntered;
+			playGameMenuEntry.Entered += NewGameMenuEntryEntered;
 			optionsMenuEntry.Entered += OptionsMenuEntryEntered;
 			highScoresMenuEntry.Entered += HighScoreMenuEntryEntered;
 			helpMenuEntry.Entered += new EventHandler(helpMenuEntry_Entered);
@@ -61,14 +62,11 @@ namespace Miner.GameInterface.GameScreens
 		    ScreenManager.AddScreen(new HighScoresMenuScreen());
 	    }
 
-	    void PlayGameMenuEntryEntered(object sender, EventArgs e)
+	    void NewGameMenuEntryEntered(object sender, EventArgs e)
 	    {
-		    var gameplayScreen = new GameplayScreen()
-		    {
-			    ScreenManager = ScreenManager
-		    };
-			LoadingScreen.Load(ScreenManager,true,true,gameplayScreen);
-            //LoadingScreen.Load(ScreenManager, true,new GameplayScreen());
+			ScreenManager.GameStateKeeper.ClearStoredGameplay();
+		    var gameplayScreen = new GameplayScreen();
+			LoadingScreen.Load(ScreenManager, true, true, gameplayScreen);
         }
 
         void OptionsMenuEntryEntered(object sender, EventArgs e)

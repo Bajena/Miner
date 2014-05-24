@@ -44,6 +44,7 @@ namespace Miner.GameLogic
 		private Vector2 _tileDimensions { get; set; }
 		private bool _keyCollected;
 		private MinerGame _game;
+		private bool _levelComplete;
 
 		public Level(MinerGame game, string name)
 		{
@@ -51,12 +52,17 @@ namespace Miner.GameLogic
 			Name = name;
 		}
 
+		/// <summary>
+		/// Konstruktor służący do przekazywania obiektu gracza między poziomami
+		/// </summary>
+		/// <param name="game"></param>
+		/// <param name="name"></param>
+		/// <param name="player"></param>
 		public Level(MinerGame game, string name, Player player)
 		{
 			_game = game;
 			Name = name;
 			Player = player;
-			player.Velocity = Vector2.Zero;
 		}
 
 		#region INIT
@@ -64,36 +70,52 @@ namespace Miner.GameLogic
 		{
 			var levelData = LevelData.Deserialize(GetLevelPath(Name));
 
-			_machines = new List<Machine>();
-			_explosives = new List<Explosive>();
-			_collectibles = new List<Collectible>();
+			_backgroundTexture = !String.IsNullOrEmpty(levelData.Background) ? _game.Content.Load<Texture2D>("Backgrounds/" + levelData.Background) : null;
+
+			InitializePlayer(levelData);
+			InitializeGameObjects(levelData);
+			InitializeTileMap(levelData);
+
+			Camera = new Camera(_game.GraphicsDevice.Viewport, this, Player);
+			Size = new Vector2(Tiles.GetLength(0) * _tileDimensions.X, Tiles.GetLength(1) * _tileDimensions.Y);
+		}
+		
+		private void InitializePlayer(LevelData levelData)
+		{
+			PlayerStartPosition = levelData.PlayerStartPosition;
 
 			if (Player == null)
 			{
 				Player = new Player(_game);
 			}
+
 			Player.Died += PlayerDied;
 			Player.DynamiteSet += PlayerSetDynamite;
 			Player.Respawn(PlayerStartPosition);
+
+		}
+
+		private void InitializeGameObjects(LevelData levelData)
+		{
+			_machines = new List<Machine>();
+			_explosives = new List<Explosive>();
+			_collectibles = new List<Collectible>();
 
 			var gameObjectFactory = new GameObjectFactory(_game, levelData);
 			_collectibles.AddRange(gameObjectFactory.GetCollectibles());
 			_machines.AddRange(gameObjectFactory.GetMachines());
 			_explosives.AddRange(gameObjectFactory.GetExplosives());
+		}
 
-			_backgroundTexture = !String.IsNullOrEmpty(levelData.Background) ? _game.Content.Load<Texture2D>("Backgrounds/" + levelData.Background) : null;
-
-			_tileDimensions = levelData.TileDimensions;
+		private void InitializeTileMap(LevelData levelData)
+		{
 			var tileset = _game.Content.Load<Texture2D>("Tilesets/" + levelData.Tileset);
-
 			tileset.Name = levelData.Tileset;
+			_tileDimensions = levelData.TileDimensions;
 			var tileMapFactory = new TileMapFactory();
 			Tiles = tileMapFactory.BuildTileMap(levelData, tileset);
-
-			Camera = new Camera(_game.GraphicsDevice.Viewport, this, Player);
-
-			Size = new Vector2(Tiles.GetLength(0) * _tileDimensions.X, Tiles.GetLength(1) * _tileDimensions.Y);
 		}
+
 
 		#endregion
 
@@ -135,6 +157,9 @@ namespace Miner.GameLogic
 
 		public void Update(GameTime gameTime)
 		{
+			if (_levelComplete)
+				return;
+
 			Player.Update(gameTime);
 			foreach (var explosive in _explosives)
 			{
@@ -240,9 +265,9 @@ namespace Miner.GameLogic
 					{
 						var levelEndPopup = new MessageBoxScreen("Level complete!", true, MessageBoxType.Info);
 						levelEndPopup.Accepted += NextLevelMessageAccepted;
+						levelEndPopup.Cancelled += NextLevelMessageAccepted;
 						_game.ScreenManager.AddScreen(levelEndPopup);
-						NextLevel();
-						return;
+						_levelComplete = true;
 					}
 					else
 					{
@@ -254,6 +279,13 @@ namespace Miner.GameLogic
 					Player.Oxygen = SettingsManager.Instance.MaxOxygen;
 				}
 			}
+		}
+
+		private void NextLevelMessageAccepted(object sender, EventArgs e)
+		{
+			Player.DynamiteSet -= PlayerSetDynamite;
+			Player.Died -= PlayerDied;
+			_game.LoadNextLevel();
 		}
 
 
@@ -282,17 +314,6 @@ namespace Miner.GameLogic
 			return tileList;
 		}
 
-		private void NextLevelMessageAccepted(object sender, EventArgs e)
-		{
-			NextLevel();
-		}
-
-		private void NextLevel()
-		{
-			Player.DynamiteSet -= PlayerSetDynamite;
-			Player.Died -= PlayerDied;
-			_game.LoadNextLevel();
-		}
 		#endregion
 
 		#region DRAW

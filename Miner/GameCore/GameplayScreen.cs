@@ -33,14 +33,11 @@ namespace Miner
 			get { return Game.CurrentLevel; }
 		}
 
-		SpriteFont _gameFont;
-
 		float _pauseAlpha;
 		InputAction _pauseAction;
-		private Dictionary<string,HudComponent> _hudItems { get; set; }
-
 		private Song _gameMusic;
 		private bool _gamePaused;
+		private MinerHud _gameHud;
 
 
 		public GameplayScreen()
@@ -61,88 +58,23 @@ namespace Miner
 		{
 			if (!_gamePaused)
 			{
-				_gameFont = Game.Content.Load<SpriteFont>("menufont");
-				_hudItems = new Dictionary<string, HudComponent>();
-
-				_gameMusic = Game.Content.Load<Song>("Sounds/music");
-				//SaveTestLevel();
-
 				Game.NewGame();
-				var livesComponent = new ItemRepeatComponent(CurrentLevel.Player, new Vector2(20, 20), "Lives", "UI/heart");
-				_hudItems.Add("Lives", livesComponent);
-				var dynamiteComponent = new ItemRepeatComponent(CurrentLevel.Player, new Vector2(20, 50), "Dynamite", "UI/dynamite");
-				_hudItems.Add("Dynamite", dynamiteComponent);
-				var oxygenComponent = new BarComponent(CurrentLevel.Player,
-					new Vector2(ScreenManager.GraphicsDevice.Viewport.Width - 50.0f, 70), "Oxygen", SettingsManager.Instance.MaxOxygen,
-					"UI/oxygen_bar_empty_big", "UI/oxygen_bar_full_big");
-				_hudItems.Add("Oxygen", oxygenComponent);
-				var pointsComponent = new TextComponent<int>(CurrentLevel.Player, _gameFont,
-					new Vector2(ScreenManager.GraphicsDevice.Viewport.Width - 35, 15f), "Points",
-					SpriteBatchExtensions.TextAlignment.Right, Color.Gold);
-				_hudItems.Add("Points", pointsComponent);
-
-				foreach (var hudComponent in _hudItems)
-				{
-					hudComponent.Value.Initialize(Game.Content);
-				}
+				LoadResources();
+				SoundHelper.Play(_gameMusic);
 			}
-			else Resume();
 		}
 
-		private void SaveTestLevel()
+		private void LoadResources()
 		{
-			var testLevel = new LevelData()
-			{
-				Name = "Level1",
-				Background = "level_background_1",
-				Tileset = "rock_tileset",
-				TileDimensions = new Vector2(48, 48),
-				PlayerStartPosition = new Vector2(100, 300),
-				Tiles = @"0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 
-	0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
-	4  5  6  4  5  6  4  5  6  4  5  6  4  5  6  4  5  6  4  5  6  4  5  6  4  5  6  4  5  6  4  5  6  4
-	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
-	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
-	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
-	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
-	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
-	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
-	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
-	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20
-	20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 0  0  0  20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 21
-	0  0  0  0  0  20 20 20  0  0  0 20 20 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
-	0  0  0  0  0  20 20 20  0  0  0 20 20 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
-	0  0  0  0  0  20 20 20  0  0  0 20 20 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0",
-				Objects = new List<GameObjectData>()
-				{
-					new GameObjectData()
-					{
-						Position = new Vector2(300, 300),
-						Type = "Key"
-					}
-				}
-			};
-			testLevel.Serialize(Level.GetLevelPath(testLevel.Name));
-		}
-
-		public override void Deactivate()
-		{
-			base.Deactivate();
-		}
-
-		/// <summary>
-		/// Unload graphics content used by the game.
-		/// </summary>
-		public override void Unload()
-		{
-			//_content.Unload();
+			_gameMusic = Game.Content.Load<Song>("Sounds/music");
+			_gameHud = new MinerHud(Game);
+			_gameHud.Initialize();
 		}
 
 		public override void Update(GameTime gameTime, bool otherScreenHasFocus,bool coveredByOtherScreen)
 		{
 			base.Update(gameTime, otherScreenHasFocus, false);
 
-			// Gradually fade in or out depending on whether we are covered by the pause screen.
 			_pauseAlpha = coveredByOtherScreen ? Math.Min(_pauseAlpha + 1f / 32, 1) : Math.Max(_pauseAlpha - 1f / 32, 0);
 
 			if (IsActive)
@@ -150,7 +82,11 @@ namespace Miner
 				if (_gamePaused)
 					Resume();
 				//Game
-				CurrentLevel.Update(gameTime);
+				if (CurrentLevel != null)
+				{
+					CurrentLevel.Update(gameTime);
+					_gameHud.Update(gameTime);
+				}
 			}
 		}
 
@@ -167,7 +103,8 @@ namespace Miner
 			}
 			else
 			{
-				CurrentLevel.Player.HandleInput(gameTime, input);
+				if (CurrentLevel != null)
+					CurrentLevel.Player.HandleInput(gameTime, input);
 			}
 		}
 
@@ -196,10 +133,11 @@ namespace Miner
 			SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
 
 			//Poziom jest rysowany z przesunieciem wzgledem kamery
-			CurrentLevel.Draw(spriteBatch);
+			if(CurrentLevel!=null)
+				CurrentLevel.Draw(spriteBatch);
 
 			spriteBatch.Begin();
-			DrawHud(spriteBatch);
+			_gameHud.Draw(spriteBatch);
 			spriteBatch.End();
 
 			// If the game is transitioning on or off, fade it out to black.
@@ -208,18 +146,6 @@ namespace Miner
 				float alpha = MathHelper.Lerp(1f - TransitionAlpha, 1f, _pauseAlpha / 2);
 
 				ScreenManager.FadeBackBufferToBlack(alpha);
-			}
-		}
-
-		private void DrawHud(SpriteBatch spriteBatch)
-		{
-			spriteBatch.DrawString(_gameFont, CurrentLevel.Name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Width / 2, 0), Color.White, 0, Vector2.Zero, new Vector2(0.75f), SpriteEffects.None, 0);
-			//spriteBatch.DrawString(_gameFont, "Gracz:" + CurrentLevel.Player.Position.ToString(), new Vector2(0, 0), Color.Red);
-			//spriteBatch.DrawString(_gameFont, "Kamera:" + CurrentLevel.Camera.Position.ToString(), new Vector2(0, 30), Color.Red);
-			//spriteBatch.DrawString(_gameFont, "Tile[0,0]:" + CurrentLevel.Tiles[0, 0].Position.ToString(), new Vector2(0, 60), Color.Red);
-			foreach (var hudItem in _hudItems)
-			{
-				hudItem.Value.Draw(spriteBatch);
 			}
 		}
 
