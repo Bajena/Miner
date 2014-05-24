@@ -83,6 +83,7 @@
     <Compile Include="GameCore\GameObjectFactory.cs" />
     <Compile Include="GameCore\GameStateKeeper.cs" />
     <Compile Include="GameCore\HighScoresManager.cs" />
+    <Compile Include="GameCore\SavedGamesManager.cs" />
     <Compile Include="GameCore\TileMapFactory.cs" />
     <Compile Include="GameCore\MinerGame.cs" />
     <Compile Include="Enums\EAction.cs" />
@@ -136,13 +137,14 @@
     <Compile Include="GameLogic\Objects\WorldCollidingGameObject.cs" />
     <Compile Include="GameLogic\Serializable\GameObjectData.cs" />
     <Compile Include="GameLogic\Serializable\HighScoresData.cs" />
+    <Compile Include="GameLogic\Serializable\PlayerData.cs" />
+    <Compile Include="GameLogic\Serializable\SaveData.cs" />
     <Compile Include="GameLogic\Serializable\SerializableDictionary.cs" />
     <Compile Include="GameLogic\Tile.cs" />
     <Compile Include="GameLogic\PropertyContainer.cs" />
     <Compile Include="GameLogic\Serializable\LevelData.cs" />
     <Compile Include="GameLogic\Serializable\TileData.cs" />
     <Compile Include="GameLogic\SpriteAnimation.cs" />
-    <Compile Include="GameLogic\TileFactory.cs" />
     <Compile Include="Helpers\BoundingRect.cs" />
     <Compile Include="Helpers\CollisionHelper.cs" />
     <Compile Include="Helpers\SoundHelper.cs" />
@@ -226,9 +228,7 @@
       <XnaReferenceType>Content</XnaReferenceType>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GameLogic\Properties\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>

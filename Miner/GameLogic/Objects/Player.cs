@@ -26,6 +26,7 @@ namespace Miner.GameLogic.Objects
 		}
 	}
 
+
 	public class Player : WorldCollidingGameObject
 	{
 		public TimerComponent OxygenTimer { get { return (TimerComponent)Components["OxygenTimer"]; } }
@@ -46,15 +47,6 @@ namespace Miner.GameLogic.Objects
 		public int Points { get { return Properties.GetProperty<int>("Points"); } set { Properties.UpdateProperty("Points", value); } }
 		public int Dynamite { get { return Properties.GetProperty<int>("Dynamite"); } set { Properties.UpdateProperty("Dynamite", value); } }
 		public bool IsOnGround { get { return Properties.GetProperty<bool>("IsOnGround"); } set { Properties.UpdateProperty("IsOnGround", value); } }
-
-		public Vector2 Size
-		{
-			get
-			{
-				var currentAnimationFrame = AnimationComponent.Animations[AnimationComponent.CurrentAnimationName].CurrentFrame;
-				return new Vector2(currentAnimationFrame.Width, currentAnimationFrame.Height);
-			}
-		}
 
 		private float _sideMoveSpeed = 200.0f;
 		private float _jumpHeight = -400.0f;

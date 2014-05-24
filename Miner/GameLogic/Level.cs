@@ -65,10 +65,37 @@ namespace Miner.GameLogic
 			Player = player;
 		}
 
+		public Level(MinerGame game, SaveData saveData)
+		{
+			_game = game;
+			Name = saveData.LevelName;
+			
+		}
+
 		#region INIT
-		public void Initialize()
+
+	
+		public void Initialize(SaveData saveData = null)
 		{
 			var levelData = LevelData.Deserialize(GetLevelPath(Name));
+
+			if (saveData != null)
+			{
+				levelData.Objects = saveData.GameObjects;
+				levelData.PlayerStartPosition = saveData.Player.Position;
+
+				_backgroundTexture = !String.IsNullOrEmpty(levelData.Background) ? _game.Content.Load<Texture2D>("Backgrounds/" + levelData.Background) : null;
+				Player = new Player(_game)
+				{
+					Oxygen = saveData.Player.Oxygen,
+					Lives = saveData.Player.Lives,
+					Dynamite = saveData.Player.Dynamite,
+					Position = saveData.Player.Position,
+					Points = saveData.Player.Points
+				};
+
+				_keyCollected = saveData.KeyCollected;
+			}
 
 			_backgroundTexture = !String.IsNullOrEmpty(levelData.Background) ? _game.Content.Load<Texture2D>("Backgrounds/" + levelData.Background) : null;
 

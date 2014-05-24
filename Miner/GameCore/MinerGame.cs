@@ -85,6 +85,11 @@ namespace Miner.GameCore
 
 	    }
 
+	    public void LoadGame(string saveName)
+	    {
+		    var saveData = SavedGamesManager.GetSaveData(saveName);
+	    }
+
 	    public void LoadNextLevel()
 	    {
 		    if (_currentLevelNumber < _levelList.Count - 1)
