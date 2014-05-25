@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Miner.GameCore;
 using Miner.GameInterface.MenuEntries;
@@ -39,6 +40,10 @@ namespace Miner.GameInterface.GameScreens
 			if (nameMenuEntry.InputText.Length > 0)
 			{
 				SettingsManager.Instance.PlayerName = nameMenuEntry.InputText;
+
+				if (!Directory.Exists(SettingsManager.GetPlayerDirectory(SettingsManager.Instance.PlayerName)))
+					Directory.CreateDirectory(SettingsManager.GetPlayerDirectory(SettingsManager.Instance.PlayerName));
+				
 				ScreenManager.AddScreen(new MainMenuScreen());
 				if (SettingsManager.PlayerSettingsExist(nameMenuEntry.InputText))
 				{

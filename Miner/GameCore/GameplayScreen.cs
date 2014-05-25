@@ -58,7 +58,8 @@ namespace Miner
 		{
 			if (!_gamePaused)
 			{
-				Game.NewGame();
+				if (CurrentLevel==null)
+					Game.NewGame();
 				LoadResources();
 				SoundHelper.Play(_gameMusic);
 			}

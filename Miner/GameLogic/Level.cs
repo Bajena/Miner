@@ -5,6 +5,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net.Mime;
+using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
@@ -50,6 +51,7 @@ namespace Miner.GameLogic
 		{
 			_game = game;
 			Name = name;
+			//Initialize();
 		}
 
 		/// <summary>
@@ -63,13 +65,14 @@ namespace Miner.GameLogic
 			_game = game;
 			Name = name;
 			Player = player;
+			//Initialize();
 		}
 
 		public Level(MinerGame game, SaveData saveData)
 		{
 			_game = game;
 			Name = saveData.LevelName;
-			
+			Initialize(saveData);
 		}
 
 		#region INIT
@@ -100,7 +103,7 @@ namespace Miner.GameLogic
 			_backgroundTexture = !String.IsNullOrEmpty(levelData.Background) ? _game.Content.Load<Texture2D>("Backgrounds/" + levelData.Background) : null;
 
 			InitializePlayer(levelData);
-			InitializeGameObjects(levelData);
+			InitializeGameObjects(levelData , saveData!=null);
 			InitializeTileMap(levelData);
 
 			Camera = new Camera(_game.GraphicsDevice.Viewport, this, Player);
@@ -122,16 +125,24 @@ namespace Miner.GameLogic
 
 		}
 
-		private void InitializeGameObjects(LevelData levelData)
+		/// <summary>
+		/// Inicjalizuje obiekty - maszyny, elementy zbieralne i materiały wybuchowe
+		/// </summary>
+		/// <param name="levelData"></param>
+		/// <param name="exactPositions">
+		/// Jeżeli exactPositions jest = true , to obiekty są ustawiane w pozycjach podanych w levelData.
+		/// W przeciwnym przypadku pozycja ustalana jest jako pozycja danego kafelka, czyli np. [2,3] przy wymiarach kafelka [48,48] odpowiada pozycji [96,144]
+		/// </param>
+		private void InitializeGameObjects(LevelData levelData, bool exactPositions)
 		{
 			_machines = new List<Machine>();
 			_explosives = new List<Explosive>();
 			_collectibles = new List<Collectible>();
 
 			var gameObjectFactory = new GameObjectFactory(_game, levelData);
-			_collectibles.AddRange(gameObjectFactory.GetCollectibles());
-			_machines.AddRange(gameObjectFactory.GetMachines());
-			_explosives.AddRange(gameObjectFactory.GetExplosives());
+			_collectibles.AddRange(gameObjectFactory.GetCollectibles(exactPositions));
+			_machines.AddRange(gameObjectFactory.GetMachines(exactPositions));
+			_explosives.AddRange(gameObjectFactory.GetExplosives(exactPositions));
 		}
 
 		private void InitializeTileMap(LevelData levelData)
@@ -423,5 +434,45 @@ namespace Miner.GameLogic
 		}
 
 		#endregion
+
+		public SaveData getSaveData()
+		{
+			var gameObjects = new List<GameObjectData>();
+			gameObjects.AddRange(_explosives.Select(x => new GameObjectData()
+				{
+					Type = x.Type,
+					Position = x.Position
+				}));
+			gameObjects.AddRange(_machines.Select(x => new GameObjectData()
+				{
+					Type = x.Type,
+					Position = x.Position
+				}));
+			gameObjects.AddRange(_collectibles.Select(x => new GameObjectData()
+				{
+					Type = x.Type,
+					Position = x.Position
+				}));
+
+			var playerData = new PlayerData()
+			{
+				Position = Player.Position,
+				Dynamite = Player.Dynamite,
+				Lives = Player.Lives,
+				Oxygen = Player.Oxygen,
+				Points = Player.Points,
+				Type = Player.Type
+			};
+
+			var saveData = new SaveData()
+			{
+				GameObjects = gameObjects,
+				KeyCollected = _keyCollected,
+				LevelName = Name,
+				Player = playerData
+			};
+
+			return saveData;
+		}
 	}
 }

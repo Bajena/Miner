@@ -22,13 +22,16 @@ namespace Miner.GameCore
 			_levelData = levelData;
 		}
 
-		public List<Collectible> GetCollectibles()
+		public List<Collectible> GetCollectibles(bool exactPositions)
 		{
 			var collectibles = new List<Collectible>();
+
 			foreach (var gameObject in _levelData.Objects)
 			{
-				var screenPosition = new Vector2(_levelData.TileDimensions.X*gameObject.Position.X,
-					_levelData.TileDimensions.Y*gameObject.Position.Y);
+
+				var screenPosition = exactPositions ?
+					gameObject.Position :
+					new Vector2(_levelData.TileDimensions.X * gameObject.Position.X, _levelData.TileDimensions.Y * gameObject.Position.Y);
 				switch (gameObject.Type)
 				{
 					case "Key":
@@ -73,12 +76,14 @@ namespace Miner.GameCore
 			return collectibles;
 		}
 
-		public List<Machine> GetMachines()
+		public List<Machine> GetMachines(bool exactPositions)
 		{
 			var machines = new List<Machine>();
 			foreach (var gameObject in _levelData.Objects)
 			{
-				var screenPosition = new Vector2(_levelData.TileDimensions.X * gameObject.Position.X,_levelData.TileDimensions.Y * gameObject.Position.Y);
+				var screenPosition = exactPositions ?
+					gameObject.Position : 
+					new Vector2(_levelData.TileDimensions.X * gameObject.Position.X,_levelData.TileDimensions.Y * gameObject.Position.Y);
 				switch (gameObject.Type)
 				{
 					case "Bulldozer":
@@ -99,12 +104,15 @@ namespace Miner.GameCore
 			return machines;
 		}
 
-		public IEnumerable<Explosive> GetExplosives()
+		public IEnumerable<Explosive> GetExplosives(bool exactPositions)
 		{
 			var explosives = new List<Explosive>();
 			foreach (var gameObject in _levelData.Objects)
 			{
-				var screenPosition = new Vector2(_levelData.TileDimensions.X * gameObject.Position.X, _levelData.TileDimensions.Y * gameObject.Position.Y);
+				var screenPosition = exactPositions ?
+					gameObject.Position :
+					new Vector2(_levelData.TileDimensions.X * gameObject.Position.X, _levelData.TileDimensions.Y * gameObject.Position.Y);
+
 				switch (gameObject.Type)
 				{
 					case "GasBottle":

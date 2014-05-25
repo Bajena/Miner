@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Xna.Framework;
 using Miner.GameCore;
 using Miner.GameInterface.MenuEntries;
 
@@ -20,8 +21,12 @@ namespace Miner.GameInterface.GameScreens
 
 				MenuEntry resumeGameMenuEntry = new MenuEntry("Resume Game");
 				resumeGameMenuEntry.Entered += ResumeGameEntryEntered;
-
 				MenuEntries.Add(resumeGameMenuEntry);
+
+				MenuEntry saveGameMenuEntry = new MenuEntry("Save Game");
+				saveGameMenuEntry.Entered += SaveGameMenuEntryEntered;
+
+				MenuEntries.Add(saveGameMenuEntry);
 			}
 			TitlePositionY = 275;
 			MenuEntriesPositionY = 350;
@@ -34,6 +39,7 @@ namespace Miner.GameInterface.GameScreens
 			MenuEntry exitMenuEntry = new MenuEntry("Exit");
 
 			playGameMenuEntry.Entered += NewGameMenuEntryEntered;
+			loadGameMenuEntry.Entered+=new EventHandler(LoadGameMenuEntryEntered);
 			optionsMenuEntry.Entered += OptionsMenuEntryEntered;
 			highScoresMenuEntry.Entered += HighScoreMenuEntryEntered;
 			helpMenuEntry.Entered += new EventHandler(helpMenuEntry_Entered);
@@ -47,7 +53,20 @@ namespace Miner.GameInterface.GameScreens
 			MenuEntries.Add(exitMenuEntry);
 	    }
 
-		void helpMenuEntry_Entered(object sender, EventArgs e)
+	    private void LoadGameMenuEntryEntered(object sender, EventArgs e)
+		{
+			ScreenManager.GameStateKeeper.ClearStoredGameplay();
+			(ScreenManager.Game as MinerGame).LoadGame("Save1");
+			var gameplayScreen = new GameplayScreen();
+			LoadingScreen.Load(ScreenManager, true, true, gameplayScreen);
+	    }
+
+	    private void SaveGameMenuEntryEntered(object sender, EventArgs e)
+	    {
+		    (ScreenManager.Game as MinerGame).SaveGame("Save1");
+	    }
+
+	    void helpMenuEntry_Entered(object sender, EventArgs e)
 		{
 			LoadingScreen.Load(ScreenManager,true,true,new HelpScreen());
 		}
