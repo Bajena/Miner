@@ -93,6 +93,8 @@
     <Compile Include="GameInterface\GameScreens\GameScreen.cs" />
     <Compile Include="GameInterface\GameScreens\HelpScreen.cs" />
     <Compile Include="GameInterface\GameScreens\HighScoresMenuScreen.cs" />
+    <Compile Include="GameInterface\GameScreens\LoadGameMenuScreen.cs" />
+    <Compile Include="GameInterface\GameScreens\SaveGameMenuScreen.cs" />
     <Compile Include="GameInterface\GameScreens\TimedPopupScreen.cs" />
     <Compile Include="GameInterface\InputAction.cs" />
     <Compile Include="GameInterface\InputState.cs" />

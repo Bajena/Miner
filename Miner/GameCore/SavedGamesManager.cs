@@ -19,6 +19,13 @@ namespace Miner.GameCore
 			return Path.Combine(playerPath, ConfigurationManager.AppSettings["SavesPath"], saveName + ".xml");
 		}
 
+		public static string GetPlayerSavesDirectory(string playerName)
+		{
+			var playerPath = SettingsManager.GetPlayerDirectory(playerName);
+
+			return Path.Combine(playerPath, ConfigurationManager.AppSettings["SavesPath"]);
+		}
+
 		public static SaveData LoadGame(string saveName)
 		{
 			var filePath = GetSaveFilePath(saveName);
@@ -42,18 +49,16 @@ namespace Miner.GameCore
 		public static void SaveGame(string saveName, SaveData data)
 		{
 			var path = GetSaveFilePath(saveName);
-			try
-			{
-				var directory = Path.GetDirectoryName(path);
-				if (!Directory.Exists(directory))
-					Directory.CreateDirectory(directory);
+			var directory = Path.GetDirectoryName(path);
+			if (!Directory.Exists(directory))
+				Directory.CreateDirectory(directory);
 
-				data.Serialize(path);
-			}
-			catch (Exception)
-			{
-				MessageBox.Show("Error writing to file: " + path);
-			}
+			data.Serialize(path);
 		}
+
+		public static IEnumerable<string> GetPlayerSaveFiles(string playerName)
+		{
+			return Directory.GetFiles(GetPlayerSavesDirectory(playerName));
+		} 
 	}
 }
