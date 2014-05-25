@@ -81,23 +81,19 @@ namespace Miner.GameCore
 	    {
 		    _currentLevelNumber = 0;
 			CurrentLevel = new Level(this, _levelList[0]);
-			CurrentLevel.Initialize();
 
 	    }
 
 	    public void LoadGame(string saveName)
 	    {
 		    var saveData = SavedGamesManager.LoadGame(saveName);
-
 			CurrentLevel = new Level(this,saveData);
-			CurrentLevel.Initialize(saveData);
 	    }
 
 	    public void SaveGame(string saveName)
 	    {
 			var saveData = CurrentLevel.getSaveData();
 			SavedGamesManager.SaveGame(saveName,saveData);
-			
 	    }
 
 	    public void LoadNextLevel()

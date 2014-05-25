@@ -38,6 +38,7 @@ namespace Miner.GameLogic.Components
 
 			if (_level != null)
 			{
+				//Kafelki
 				var objectBounds = ParentObject.BoundingBox;
 				var tilesToCheck = _level.GetSurroundingTiles(objectBounds);
 
@@ -62,7 +63,12 @@ namespace Miner.GameLogic.Components
 						}
 					}
 				}
+
+				//Czy obiekt nie wychodzi poza poziom
+				KeepObjectInLevelBounds();
 			}
+
+
 			return directionCollidingTiles;
 		}
 		
@@ -87,6 +93,18 @@ namespace Miner.GameLogic.Components
 					velocity = new Vector2(0, velocity.Y);
 					ParentObject.Velocity = velocity;
 				}
+			}
+		}
+
+		private void KeepObjectInLevelBounds()
+		{
+			if (ParentObject.Position.X < 0)
+			{
+				ParentObject.Position = new Vector2(0,ParentObject.Position.Y);
+			}
+			else if (ParentObject.Position.X + ParentObject.BoundingBox.Width > _level.Size.X)
+			{
+				ParentObject.Position = new Vector2(_level.Size.X - ParentObject.BoundingBox.Width);
 			}
 		}
 	}

@@ -45,6 +45,7 @@ namespace Miner.GameLogic
 		private Vector2 _tileDimensions { get; set; }
 		private bool _keyCollected;
 		private MinerGame _game;
+		private readonly SaveData _saveData; //Potrzebne tylko do inicjalizacji
 		private bool _levelComplete;
 
 		public Level(MinerGame game, string name)
@@ -65,45 +66,44 @@ namespace Miner.GameLogic
 			_game = game;
 			Name = name;
 			Player = player;
-			//Initialize();
 		}
 
 		public Level(MinerGame game, SaveData saveData)
 		{
 			_game = game;
 			Name = saveData.LevelName;
-			Initialize(saveData);
+			_saveData = saveData;
 		}
 
 		#region INIT
 
 	
-		public void Initialize(SaveData saveData = null)
+		public void Initialize()
 		{
 			var levelData = LevelData.Deserialize(GetLevelPath(Name));
 
-			if (saveData != null)
+			if (_saveData != null)
 			{
-				levelData.Objects = saveData.GameObjects;
-				levelData.PlayerStartPosition = saveData.Player.Position;
+				levelData.Objects = _saveData.GameObjects;
+				levelData.PlayerStartPosition = _saveData.Player.Position;
 
 				_backgroundTexture = !String.IsNullOrEmpty(levelData.Background) ? _game.Content.Load<Texture2D>("Backgrounds/" + levelData.Background) : null;
 				Player = new Player(_game)
 				{
-					Oxygen = saveData.Player.Oxygen,
-					Lives = saveData.Player.Lives,
-					Dynamite = saveData.Player.Dynamite,
-					Position = saveData.Player.Position,
-					Points = saveData.Player.Points
+					Oxygen = _saveData.Player.Oxygen,
+					Lives = _saveData.Player.Lives,
+					Dynamite = _saveData.Player.Dynamite,
+					Position = _saveData.Player.Position,
+					Points = _saveData.Player.Points
 				};
 
-				_keyCollected = saveData.KeyCollected;
+				_keyCollected = _saveData.KeyCollected;
 			}
 
 			_backgroundTexture = !String.IsNullOrEmpty(levelData.Background) ? _game.Content.Load<Texture2D>("Backgrounds/" + levelData.Background) : null;
 
 			InitializePlayer(levelData);
-			InitializeGameObjects(levelData , saveData!=null);
+			InitializeGameObjects(levelData , _saveData!=null);
 			InitializeTileMap(levelData);
 
 			Camera = new Camera(_game.GraphicsDevice.Viewport, this, Player);

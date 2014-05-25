@@ -84,7 +84,8 @@ namespace Miner.GameInterface.GameScreens
 	    void NewGameMenuEntryEntered(object sender, EventArgs e)
 	    {
 			ScreenManager.GameStateKeeper.ClearStoredGameplay();
-		    var gameplayScreen = new GameplayScreen();
+			(ScreenManager.Game as MinerGame).NewGame();
+			var gameplayScreen = new GameplayScreen();
 			LoadingScreen.Load(ScreenManager, true, true, gameplayScreen);
         }
 
