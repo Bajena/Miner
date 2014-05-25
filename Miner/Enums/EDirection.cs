@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Miner.Enums
 {
+	/// <summary>
+	/// Reprezentuje kierunek. Używane podczas wykrywania kolizji.
+	/// </summary>
 	public enum EDirection
 	{
 		Horizontal,

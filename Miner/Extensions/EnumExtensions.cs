@@ -11,11 +11,11 @@ namespace Miner.Extensions
     public static class EnumExtensions
     {
         /// <summary>
-        /// Gets next enum value
+        /// Zwraca następną wartość typu wyliczeniowego
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="e"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">Typ wyliczeniowy</typeparam>
+        /// <param name="e">Obiekt typu wyliczeniowego</param>
+		/// <returns>Kolejna wartość typu wyliczeniowego</returns>
         public static T GetNextValue<T>(T e)
         {
             T[] all = (T[])Enum.GetValues(typeof(T));

@@ -34,7 +34,7 @@ namespace Miner.GameInterface
 			var dynamiteComponent = new ItemRepeatComponent(_game.CurrentLevel.Player, new Vector2(20, 50), "Dynamite", "UI/dynamite");
 			_hudItems.Add("Dynamite", dynamiteComponent);
 			var oxygenComponent = new BarComponent(_game.CurrentLevel.Player,
-				new Vector2(_game.ScreenManager.GraphicsDevice.Viewport.Width - 50.0f, 70), "Oxygen", SettingsManager.Instance.MaxOxygen,
+				new Vector2(_game.ScreenManager.GraphicsDevice.Viewport.Width - 5f, 70), "Oxygen", SettingsManager.Instance.MaxOxygen,
 				"UI/oxygen_bar_empty_big", "UI/oxygen_bar_full_big");
 			_hudItems.Add("Oxygen", oxygenComponent);
 			var pointsComponent = new TextComponent<int>(_game.CurrentLevel.Player, _gameFont, new Vector2(_game.ScreenManager.GraphicsDevice.Viewport.Width, 0), "Points",SpriteBatchExtensions.TextAlignment.Right, Color.Gold, new Vector2(0.75f));

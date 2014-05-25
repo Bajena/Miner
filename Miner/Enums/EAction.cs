@@ -6,7 +6,7 @@ using System.Text;
 namespace Miner.Enums
 {
     /// <summary>
-    /// Describes player action
+    /// Reprezentuje akcje, które może wykonać gracz
     /// </summary>
     public enum EAction
     {

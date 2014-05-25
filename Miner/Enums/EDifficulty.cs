@@ -6,7 +6,7 @@ using System.Text;
 namespace Miner.Enums
 {
     /// <summary>
-    /// Game difficulty
+    /// Reprezentuje poziom trudności gry
     /// </summary>
     public enum EDifficulty
     {

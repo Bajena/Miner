@@ -9,6 +9,9 @@ using Miner.GameLogic.Serializable;
 
 namespace Miner.GameCore
 {
+	/// <summary>
+	/// Statyczna klasa służąca do zapisu/odczytu najlepszych wyników.
+	/// </summary>
 	public static class HighScoresManager
 	{
 		public static int MaxHighScores = int.Parse(ConfigurationManager.AppSettings["MaxHighScores"]);

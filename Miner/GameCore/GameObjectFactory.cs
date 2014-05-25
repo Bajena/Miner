@@ -11,17 +11,30 @@ using Miner.GameLogic.Serializable;
 
 namespace Miner.GameCore
 {
+	/// <summary>
+	/// Tworzy na podstawie obiekty występujące na danym poziomie takie jak maszyny, materiały wybuchowe i przedmioty do zebrania.
+	/// </summary>
 	public class GameObjectFactory
 	{
 		private readonly MinerGame _game;
 		private readonly LevelData _levelData;
 
+		/// <summary>
+		/// Konstruktor. Przyjmuje jako parametry obiekt gry oraz obiekt z zserializowanymi danymi poziomu
+		/// </summary>
+		/// <param name="game">Obiekt gry</param>
+		/// <param name="levelData">Dane poziomu</param>
 		public GameObjectFactory(MinerGame game,LevelData levelData)
 		{
 			_game = game;
 			_levelData = levelData;
 		}
 
+		/// <summary>
+		/// Tworzy zbieralne przedmioty
+		/// </summary>
+		/// <param name="exactPositions">Jeśli exactPositions = false , to pozycje obiektów są wyliczane jako w układzie wsp. , w którym jednostką są wymiary kafelka</param>
+		/// <returns>Lista zbieralnych przedmiotów</returns>
 		public List<Collectible> GetCollectibles(bool exactPositions)
 		{
 			var collectibles = new List<Collectible>();
@@ -76,6 +89,11 @@ namespace Miner.GameCore
 			return collectibles;
 		}
 
+		/// <summary>
+		/// Tworzy maszyny
+		/// </summary>
+		/// <param name="exactPositions">Jeśli exactPositions = false , to pozycje obiektów są wyliczane jako w układzie wsp. , w którym jednostką są wymiary kafelka</param>
+		/// <returns>Lista maszyn</returns>
 		public List<Machine> GetMachines(bool exactPositions)
 		{
 			var machines = new List<Machine>();
@@ -104,6 +122,11 @@ namespace Miner.GameCore
 			return machines;
 		}
 
+		/// <summary>
+		/// Tworzy materiały wybuchowe
+		/// </summary>
+		/// <param name="exactPositions">Jeśli exactPositions = false , to pozycje obiektów są wyliczane jako w układzie wsp. , w którym jednostką są wymiary kafelka</param>
+		/// <returns>Lista materiałów wybuchowych</returns>
 		public IEnumerable<Explosive> GetExplosives(bool exactPositions)
 		{
 			var explosives = new List<Explosive>();

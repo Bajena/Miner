@@ -9,17 +9,21 @@ namespace Miner.Extensions
 {
 	public static class ContentManagerExtensions
 	{
+		/// <summary>
+		/// Ładuje wszystkie obiekty typu T z folderu contentFolder
+		/// </summary>
+		/// <typeparam name="T">Typ obiektu - np. Texture2d</typeparam>
+		/// <param name="contentManager">Manager zasobów</param>
+		/// <param name="contentFolder">Folder, z którego ładowane będą zasoby</param>
+		/// <returns>Słownik zasobów</returns>
 		public static Dictionary<String, T> LoadContent<T>(this ContentManager contentManager, String contentFolder)
         {
-            // Load directory info, abort if none
             var dir = new DirectoryInfo(contentManager.RootDirectory + "\\" + contentFolder);
             if (!dir.Exists)
                 throw new DirectoryNotFoundException();
  
-            // Init the resulting list
             var result = new Dictionary<String, T>();
  
-            // Load all files that matches the file filter
             FileInfo[] files = dir.GetFiles("*.*");
             foreach (FileInfo file in files)
             {
@@ -28,7 +32,6 @@ namespace Miner.Extensions
                 result[key] = contentManager.Load<T>(contentFolder + "/" + key);
             }
  
-            // Return the result
             return result;
         }
     }

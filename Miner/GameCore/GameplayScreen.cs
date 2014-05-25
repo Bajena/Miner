@@ -1,33 +1,31 @@
 using System;
-using System.Collections.Generic;
-using System.Threading;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using Miner;
-using Miner.Enums;
-using Miner.Extensions;
-using Miner.GameCore;
 using Miner.GameInterface;
 using Miner.GameInterface.GameScreens;
 using Miner.GameLogic;
-using Miner.GameLogic.Components;
-using Miner.GameLogic.Objects;
-using Miner.GameLogic.Serializable;
 using Miner.Helpers;
 
-namespace Miner
+namespace Miner.GameCore
 {
+	/// <summary>
+	/// Ekran gry. Jeœli jest aktywny kontroluje aktywny poziom.
+	/// </summary>
 	public class GameplayScreen : GameScreen
 	{
+		/// <summary>
+		/// Obiekt gry
+		/// </summary>
 		protected MinerGame Game
 		{
 			get { return (MinerGame) ScreenManager.Game; }
 		}
 
+		/// <summary>
+		/// Aktualny poziom gry
+		/// </summary>
 		private Level CurrentLevel
 		{
 			get { return Game.CurrentLevel; }
@@ -38,7 +36,6 @@ namespace Miner
 		private Song _gameMusic;
 		private bool _gamePaused;
 		private MinerHud _gameHud;
-
 
 		public GameplayScreen()
 		{
@@ -52,7 +49,7 @@ namespace Miner
 
 
 		/// <summary>
-		/// Load graphics content for the game.
+		/// Aktywuje ekran gry. Jesli ekran jest tworzony na nowo, a nie przywrócony ze stanu pauzy, wtedy ³adowane s¹ zasoby i inicjalizowany jest aktualny poziom.
 		/// </summary>
 		public override void Activate()
 		{
@@ -71,6 +68,12 @@ namespace Miner
 			_gameHud.Initialize();
 		}
 
+		/// <summary>
+		/// Aktualizuje ekran gry
+		/// </summary>
+		/// <param name="gameTime">Czas gry</param>
+		/// <param name="otherScreenHasFocus">Czy inny ekran jest aktywny</param>
+		/// <param name="coveredByOtherScreen">Czy jest przykryty przez inny ekran</param>
 		public override void Update(GameTime gameTime, bool otherScreenHasFocus,bool coveredByOtherScreen)
 		{
 			base.Update(gameTime, otherScreenHasFocus, false);
@@ -90,6 +93,12 @@ namespace Miner
 			}
 		}
 
+		/// <summary>
+		/// Reaguje na wciskane klawisze. 
+		/// Jeœli ekran jest aktywny, wtedy przekazuje kontrolê do aktywnego poziomu.
+		/// </summary>
+		/// <param name="gameTime">Czas gry</param>
+		/// <param name="input">Stan klawwiszy</param>
 		public override void HandleInput(GameTime gameTime, InputState input)
 		{
 			if (input == null)
@@ -126,6 +135,10 @@ namespace Miner
 			_gamePaused = false;
 		}
 
+		/// <summary>
+		/// Rysuje ekran
+		/// </summary>
+		/// <param name="gameTime"></param>
 		public override void Draw(GameTime gameTime)
 		{
 			ScreenManager.GraphicsDevice.Clear(ClearOptions.Target,Color.Black, 0, 0);
