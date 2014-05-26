@@ -19,7 +19,7 @@ namespace Miner.GameInterface.GameScreens
 		public override void Activate()
 		{
 			base.Activate();
-			_saveNameEntry = new TextInputMenuEntry("Save name:");
+			_saveNameEntry = new TextInputMenuEntry("Save name: ");
 			var okMenuEntry = new MenuEntry("OK");
 			var backMenuEntry = new MenuEntry("Back");
 

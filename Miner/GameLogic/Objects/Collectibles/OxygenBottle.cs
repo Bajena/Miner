@@ -39,7 +39,7 @@ namespace Miner.GameLogic.Objects.Collectibles
 		public override void OnCollected(Player player)
 		{
 			base.OnCollected(player);
-			player.Oxygen += 10;
+			player.Oxygen += 0.5f * SettingsManager.Instance.MaxOxygen;
 		}
 	}
 }

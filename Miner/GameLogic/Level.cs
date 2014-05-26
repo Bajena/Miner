@@ -85,7 +85,6 @@ namespace Miner.GameLogic
 			if (_saveData != null)
 			{
 				levelData.Objects = _saveData.GameObjects;
-				levelData.PlayerStartPosition = _saveData.Player.Position;
 
 				_backgroundTexture = !String.IsNullOrEmpty(levelData.Background) ? _game.Content.Load<Texture2D>("Backgrounds/" + levelData.Background) : null;
 				Player = new Player(_game)
@@ -121,7 +120,6 @@ namespace Miner.GameLogic
 
 			Player.Died += PlayerDied;
 			Player.DynamiteSet += PlayerSetDynamite;
-			Player.Respawn(PlayerStartPosition);
 
 		}
 
