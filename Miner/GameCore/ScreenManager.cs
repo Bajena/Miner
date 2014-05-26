@@ -10,18 +10,27 @@ using Miner.GameInterface.GameScreens;
 
 namespace Miner.GameCore
 {
+	/// <summary>
+	/// Klasa zarz¹dzaj¹ca ekranami gry
+	/// </summary>
     public class ScreenManager : DrawableGameComponent
     {
-	    readonly List<GameScreen> _screens = new List<GameScreen>();
+		readonly List<GameScreen> _screens = new List<GameScreen>();
 	    readonly List<GameScreen> _tempScreensList = new List<GameScreen>();
 	    readonly InputState _input = new InputState();
 	    bool _isInitialized;
 	    private Queue<TimedPopupScreen> _messageQueue;
-	    public GameStateKeeper GameStateKeeper { get; set; }
+	    /// <summary>
+	    /// Przechowuje stan rozgrywki podczas pauzy
+	    /// </summary>
+		public GameStateKeeper GameStateKeeper { get; set; }
 	    public SpriteBatch SpriteBatch { get; private set; }
 	    public SpriteFont Font { get; private set; }
 	    public Texture2D BlankTexture { get; private set; }
 
+		/// <summary>
+		/// Aktualny ekran gry
+		/// </summary>
 	    public GameScreen TopScreen
 	    {
 		    get { return _screens.Last(); }
@@ -41,6 +50,12 @@ namespace Miner.GameCore
             _isInitialized = true;
         }
 
+		/// <summary>
+		/// Wyœwietla komunikat na ekranie.
+		/// </summary>
+		/// <param name="message">Treœæ wiadomoœci</param>
+		/// <param name="time">Czas wyœwietlania wiadomoœci</param>
+		/// <param name="gameplayMessage">Czy komunikat ma pociemniaæ ekran</param>
 	    public void ShowMessage(string message, TimeSpan time, bool gameplayMessage)
 	    {
 			if (_messageQueue.Count == 0 || _messageQueue.Peek().Message != message)
@@ -50,6 +65,9 @@ namespace Miner.GameCore
 		    }
 	    }
 
+		/// <summary>
+		/// £aduje zasoby takie jak czcionka
+		/// </summary>
         protected override void LoadContent()
         {
             ContentManager content = Game.Content;
@@ -64,10 +82,6 @@ namespace Miner.GameCore
             }
         }
 
-
-        /// <summary>
-        /// Unload your graphics content.
-        /// </summary>
         protected override void UnloadContent()
         {
             foreach (GameScreen screen in _screens)
@@ -76,6 +90,10 @@ namespace Miner.GameCore
             }
         }
 
+		/// <summary>
+		/// Odœwie¿a ekrany
+		/// </summary>
+		/// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
             _input.Update();
@@ -119,6 +137,10 @@ namespace Miner.GameCore
 	        }
         }
 
+		/// <summary>
+		/// Rysuje aktywne ekrany
+		/// </summary>
+		/// <param name="gameTime"></param>
         public override void Draw(GameTime gameTime)
         {
             foreach (GameScreen screen in _screens)
@@ -130,6 +152,10 @@ namespace Miner.GameCore
             }
         }
 
+		/// <summary>
+		/// Dodaje ekran do listy ekranów
+		/// </summary>
+		/// <param name="screen"></param>
         public void AddScreen(GameScreen screen)
         {
             screen.ScreenManager = this;
@@ -143,6 +169,10 @@ namespace Miner.GameCore
             _screens.Add(screen);
         }
 		
+		/// <summary>
+		/// Usuwa ekran z listy ekranow
+		/// </summary>
+		/// <param name="screen"></param>
         public void RemoveScreen(GameScreen screen)
         {
             // If we have a graphics device, tell the screen to unload content.
@@ -155,11 +185,19 @@ namespace Miner.GameCore
             _tempScreensList.Remove(screen);
         }
 
+		/// <summary>
+		/// Zwraca kopiê listy ekranów
+		/// </summary>
+		/// <returns></returns>
         public GameScreen[] GetScreens()
         {
             return _screens.ToArray();
         }
 
+		/// <summary>
+		/// Przyciemnia t³o
+		/// </summary>
+		/// <param name="alpha">Wspó³czynnik wygaszenia</param>
         public void FadeBackBufferToBlack(float alpha)
         {
             SpriteBatch.Begin();

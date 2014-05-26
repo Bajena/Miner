@@ -17,6 +17,7 @@ namespace Miner.GameLogic.Components
 		public Dictionary<String, SpriteAnimation> Animations { get; set; }
 		public string CurrentAnimationName { get { return _currentAnimation.Name; } }
 		public SpriteAnimation CurrentAnimation { get { return _currentAnimation; } }
+		public Rectangle CollisionBox { get; set; }
 		public EFacingDirection Facing { get; set; }
 		public float Scale { get; set; }
 		public bool RotatesByVelocity { get; set; }
@@ -72,8 +73,12 @@ namespace Miner.GameLogic.Components
 
 			_currentAnimation.Update(gameTime);
 
-			boundingBox = new BoundingRect(_position.X, _position.Y, _currentAnimation.CurrentFrame.Width * Scale, _currentAnimation.CurrentFrame.Height * Scale);
-			
+			if (CollisionBox!=Rectangle.Empty)
+				boundingBox = new BoundingRect(_position.X, _position.Y, CollisionBox.Width * Scale, CollisionBox.Height * Scale);
+			else
+			{
+				boundingBox = new  BoundingRect(_position.X, _position.Y, _currentAnimation.CurrentFrame.Width * Scale, _currentAnimation.CurrentFrame.Height * Scale);
+			}
 			if (_velocity.X > 0.1)
 			{
 				Facing = EFacingDirection.Right;
@@ -92,14 +97,15 @@ namespace Miner.GameLogic.Components
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			var boundingBox = ParentObject.BoundingBox;
 			_position = ParentObject.Position;
 			_velocity = ParentObject.Velocity;
+
+			var boundingBox = new BoundingRect(_position.X-CollisionBox.X, _position.Y-CollisionBox.Y, _currentAnimation.CurrentFrame.Width * Scale, _currentAnimation.CurrentFrame.Height * Scale);
 
 			if (RotatesByVelocity)
 				_rotation = (float)Math.Atan2(_velocity.Y, _velocity.X);
 
-			spriteBatch.Draw(_currentAnimation.SpriteSheet, new Vector2(_position.X + boundingBox.Width / 2, _position.Y + boundingBox.Height / 2),
+			spriteBatch.Draw(_currentAnimation.SpriteSheet, new Vector2(boundingBox.Left + boundingBox.Width / 2, boundingBox.Top + boundingBox.Height / 2),
 					_currentAnimation.CurrentFrame, Color.White, _rotation, new Vector2(boundingBox.Width / 2, boundingBox.Height / 2), Scale, _spriteEffect, 0);
 		}
 

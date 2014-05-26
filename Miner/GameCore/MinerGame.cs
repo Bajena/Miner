@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Miner.GameInterface;
 using Miner.GameInterface.GameScreens;
@@ -10,22 +11,24 @@ using Miner.GameLogic.Serializable;
 
 namespace Miner.GameCore
 {
-    public class MinerGame : Microsoft.Xna.Framework.Game
-	{
-		private static List<string> _levelList = new List<string>()
-		{
-			"Level1",
-			"Level2",
-		};
-
+    public class MinerGame : Game
+    {
+		/// <summary>
+		/// Manager ekranów gry
+		/// </summary>
 		public ScreenManager ScreenManager;
 
-        GraphicsDeviceManager graphics;
-
+		/// <summary>
+		/// Aktualnie rozgrywany poziom
+		/// </summary>
 		public Level CurrentLevel { get; set; }
-	    private int _currentLevelNumber = 0;
+
+		private int _currentLevelNumber = 0;
+		private List<string> _levelList;
+		private GraphicsDeviceManager graphics;
+
         /// <summary>
-        /// The main game constructor.
+        /// Glówny konstruktor gry
         /// </summary>
         public MinerGame()
         {
@@ -35,6 +38,7 @@ namespace Miner.GameCore
             SettingsManager.Instance.InitializeDefault();
 
 			CreateGameFilesAndDirectories();
+			LoadLevelList();
 
             graphics.PreferredBackBufferWidth = (int)SettingsManager.Instance.Resolution.X;
             graphics.PreferredBackBufferHeight = (int)SettingsManager.Instance.Resolution.Y;
@@ -46,6 +50,17 @@ namespace Miner.GameCore
             AddInitialScreens();
         }
 
+		/// <summary>
+		/// £aduje listê poziomów z pliku konfiguracyjnego
+		/// </summary>
+	    private void LoadLevelList()
+	    {
+		    _levelList = ConfigurationManager.AppSettings["Levels"].Split(';').ToList();
+	    }
+
+		/// <summary>
+		/// Tworzy wymagane foldery i pliki
+		/// </summary>
 	    private void CreateGameFilesAndDirectories()
 	    {
 			var directories = new List<string>()
@@ -71,12 +86,19 @@ namespace Miner.GameCore
 
 	    }
 
+		/// <summary>
+		/// £aduje poziom o podanej nazwie
+		/// </summary>
+		/// <param name="name">Nazwa poziomu</param>
 	    public void LoadLevel(string name)
 	    {
 			CurrentLevel = new Level(this, name);
 			CurrentLevel.Initialize();
 	    }
 
+		/// <summary>
+		/// Tworzy now¹ grê
+		/// </summary>
 	    public void NewGame()
 	    {
 		    _currentLevelNumber = 0;
@@ -84,18 +106,29 @@ namespace Miner.GameCore
 
 	    }
 
+		/// <summary>
+		/// £aduje grê z zapisanego pliku o podanej nazwie
+		/// </summary>
+		/// <param name="saveName">Nazwa pliku z zapisem</param>
 	    public void LoadGame(string saveName)
 	    {
 		    var saveData = SavedGamesManager.LoadGame(saveName);
 			CurrentLevel = new Level(this,saveData);
 	    }
 
+		/// <summary>
+		/// Zapisuje gre do pliku o podanej nazwie
+		/// </summary>
+		/// <param name="saveName">Nazwa pliku, do którego zapisana bêdzie rozgrywka</param>
 	    public void SaveGame(string saveName)
 	    {
 			var saveData = CurrentLevel.getSaveData();
 			SavedGamesManager.SaveGame(saveName,saveData);
 	    }
 
+		/// <summary>
+		/// £aduje kolejny poziom
+		/// </summary>
 	    public void LoadNextLevel()
 	    {
 		    if (_currentLevelNumber < _levelList.Count - 1)
@@ -109,8 +142,12 @@ namespace Miner.GameCore
 		    }
 	    }
 
+		/// <summary>
+		/// Wykonuje akcje po ukoñczeniu gry - zapisuje wynik, pokazuje informacjê o ukoñczeniu gry i wraca do menu g³ównego.
+		/// </summary>
 	    private void OnLastLevelComplete()
 		{
+			HighScoresManager.AddHighScore(SettingsManager.Instance.PlayerName,CurrentLevel.Player.Points,SettingsManager.Instance.Difficulty);
 			CurrentLevel = null;
 		    var gameplayScreen = ScreenManager.GameStateKeeper.GetActiveGameplayScreen();
 			ScreenManager.RemoveScreen(gameplayScreen);
@@ -128,7 +165,7 @@ namespace Miner.GameCore
 		}
 
         /// <summary>
-        /// Creates starting screens
+        /// £aduje pocz¹tkowe ekrany
         /// </summary>
         private void AddInitialScreens()
         {
@@ -137,7 +174,7 @@ namespace Miner.GameCore
         }
 
         /// <summary>
-        /// Draws current game screens
+        /// Rysuje aktywne ekrany
         /// </summary>
         /// <param name="gameTime"></param>
         protected override void Draw(GameTime gameTime)

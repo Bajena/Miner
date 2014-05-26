@@ -312,10 +312,6 @@ namespace Miner.GameLogic
 						_game.ScreenManager.ShowMessage("You have to collect the key!",TimeSpan.FromMilliseconds(1500),true);
 					}
 				}
-				else if (tile.TileType == ETileType.OxygenRefill)
-				{
-					Player.Oxygen = SettingsManager.Instance.MaxOxygen;
-				}
 			}
 		}
 

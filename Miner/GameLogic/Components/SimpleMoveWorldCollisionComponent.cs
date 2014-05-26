@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Miner.Enums;
-using Miner.GameLogic.Components;
+using Miner.GameLogic.Objects;
 
-namespace Miner.GameLogic.Objects
+namespace Miner.GameLogic.Components
 {
 	public class SimpleMoveWorldCollisionComponent : WorldCollisionComponent
 	{

@@ -25,6 +25,7 @@ namespace Miner.Enums
 		/// <summary>
 		/// Powoduje odwrócenie kierunku poruszania się obiektu
 		/// </summary>
-		SwitchMoveDirection
+		SwitchMoveDirection,
+		
 	}
 }

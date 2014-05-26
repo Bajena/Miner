@@ -21,6 +21,18 @@ namespace Miner.Enums
 		/// <summary>
 		/// Można przejść od dołu
 		/// </summary>
-		Platform
+		Platform,
+		/// <summary>
+		/// Dół drabiny
+		/// </summary>
+		LadderBottom,
+		/// <summary>
+		/// Środek drabiny
+		/// </summary>
+		LadderMiddle,
+		/// <summary>
+		/// Góra drabiny
+		/// </summary>
+		LadderTop
 	}
 }

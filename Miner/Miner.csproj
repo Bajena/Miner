@@ -98,7 +98,6 @@
     <Compile Include="GameInterface\GameScreens\TimedPopupScreen.cs" />
     <Compile Include="GameInterface\InputAction.cs" />
     <Compile Include="GameInterface\InputState.cs" />
-    <Compile Include="GameCore\IScreenFactory.cs" />
     <Compile Include="GameCore\ScreenManager.cs" />
     <Compile Include="GameInterface\MenuEntries\KeySelectMenuEntry.cs" />
     <Compile Include="GameInterface\GameScreens\NamePromptMenuScreen.cs" />
@@ -109,6 +108,7 @@
     <Compile Include="GameLogic\Components\AnimationComponent.cs" />
     <Compile Include="GameLogic\Components\HUD\TextComponent.cs" />
     <Compile Include="GameLogic\Components\OxygenComponent.cs" />
+    <Compile Include="GameLogic\Components\PlayerWorldCollisionComponent.cs" />
     <Compile Include="GameLogic\Components\TimerComponent.cs" />
     <Compile Include="GameLogic\Components\WorldCollisionComponent.cs" />
     <Compile Include="GameLogic\Components\DrawableGameObjectComponent.cs" />
@@ -135,8 +135,7 @@
     <Compile Include="GameLogic\Objects\Machines\Machine.cs" />
     <Compile Include="GameLogic\Objects\Collectibles\OxygenBottle.cs" />
     <Compile Include="GameLogic\Objects\Player.cs" />
-    <Compile Include="GameLogic\Objects\SimpleMoveWorldCollisionComponent.cs" />
-    <Compile Include="GameLogic\Objects\WorldCollidingGameObject.cs" />
+    <Compile Include="GameLogic\Components\SimpleMoveWorldCollisionComponent.cs" />
     <Compile Include="GameLogic\Serializable\GameObjectData.cs" />
     <Compile Include="GameLogic\Serializable\HighScoresData.cs" />
     <Compile Include="GameLogic\Serializable\PlayerData.cs" />

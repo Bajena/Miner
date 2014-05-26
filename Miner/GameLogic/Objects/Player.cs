@@ -27,9 +27,11 @@ namespace Miner.GameLogic.Objects
 	}
 
 
-	public class Player : WorldCollidingGameObject
+	public class Player : GameObject
 	{
 		public TimerComponent OxygenTimer { get { return (TimerComponent)Components["OxygenTimer"]; } }
+		public PhysicsComponent PhysicsComponent { get { return (PhysicsComponent)Components["Physics"]; } }
+		public WorldCollisionComponent WorldCollisionComponent { get { return (WorldCollisionComponent)Components["WorldCollision"]; } }
 
 		public float Oxygen
 		{
@@ -47,6 +49,7 @@ namespace Miner.GameLogic.Objects
 		public int Points { get { return Properties.GetProperty<int>("Points"); } set { Properties.UpdateProperty("Points", value); } }
 		public int Dynamite { get { return Properties.GetProperty<int>("Dynamite"); } set { Properties.UpdateProperty("Dynamite", value); } }
 		public bool IsOnGround { get { return Properties.GetProperty<bool>("IsOnGround"); } set { Properties.UpdateProperty("IsOnGround", value); } }
+		public bool IsCollidingWithLadder { get { return Properties.GetProperty<bool>("IsCollidingWithLadder"); } set { Properties.UpdateProperty("IsCollidingWithLadder", value); } }
 
 		private float _sideMoveSpeed = 200.0f;
 		private float _jumpHeight = -400.0f;
@@ -77,6 +80,11 @@ namespace Miner.GameLogic.Objects
 			oxygenTimer.Tick += DecreaseOxygen;
 			Components.Add("OxygenTimer", oxygenTimer);
 			OxygenTimer.Start();
+			Components.Add("Physics", new PhysicsComponent(this)
+			{
+				HasGravity = true
+			});
+			Components.Add("WorldCollision", new WorldCollisionComponent(this, game.CurrentLevel));
 			SetupAnimations();
 		}
 
@@ -89,6 +97,7 @@ namespace Miner.GameLogic.Objects
 
 		private void SetupAnimations()
 		{
+			AnimationComponent.CollisionBox = new Rectangle(14,8,36,56);
 			AnimationComponent.SpriteSheets.Add("Idle", Game.Content.Load<Texture2D>("Sprites/Player/Idle"));
 			AnimationComponent.SpriteSheets.Add("Run", Game.Content.Load<Texture2D>("Sprites/Player/Run"));
 			AnimationComponent.SpriteSheets.Add("Jump", Game.Content.Load<Texture2D>("Sprites/Player/Jump"));
@@ -138,15 +147,22 @@ namespace Miner.GameLogic.Objects
 
 			Velocity = new Vector2(0, Velocity.Y);
 
-			if (input.IsKeyDown(Keys.Z)) Oxygen = Oxygen - 1 >= 0 ? Oxygen - 1 : Oxygen;
-			if (input.IsKeyDown(Keys.X)) Oxygen = Oxygen + 1 <= SettingsManager.Instance.MaxOxygen ? Oxygen + 1 : Oxygen;
+			if (SettingsManager.Instance.Debug)
+			{
+				if (input.IsKeyDown(Keys.Z)) Oxygen = Oxygen - 1 >= 0 ? Oxygen - 1 : Oxygen;
+				if (input.IsKeyDown(Keys.X)) Oxygen = Oxygen + 1 <= SettingsManager.Instance.MaxOxygen ? Oxygen + 1 : Oxygen;
 
-			if (input.IsKeyDown(Keys.Q)) Points--;
-			if (input.IsKeyDown(Keys.W)) Points++;
+				if (input.IsKeyDown(Keys.Q)) Points--;
+				if (input.IsKeyDown(Keys.W)) Points++;
+			}
 
 			if (SettingsManager.Instance.Controls[EAction.Jump].IsCalled(input) && IsOnGround)
 			{
 				Jump();
+			}
+			else if (SettingsManager.Instance.Controls[EAction.Jump].IsCalled(input) && IsCollidingWithLadder)
+			{
+				
 			}
 			if (SettingsManager.Instance.Controls[EAction.MoveRight].IsCalled(input))
 			{
@@ -168,6 +184,7 @@ namespace Miner.GameLogic.Objects
 			if (IsOnGround && Velocity.X == 0.0)
 				AnimationComponent.SetActiveAnimation("Idle");
 		}
+
 
 		private void SetDynamite()
 		{
@@ -201,7 +218,13 @@ namespace Miner.GameLogic.Objects
 
 		public override void Update(GameTime gameTime)
 		{
+			WorldCollisionComponent.CollidingTiles.Clear();
 			base.Update(gameTime);
+		}
+
+		public List<Tile> GetCollidedTiles()
+		{
+			return WorldCollisionComponent.CollidingTiles;
 		}
 	}
 }
