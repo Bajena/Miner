@@ -26,6 +26,17 @@ namespace Miner.Enums
 		/// Powoduje odwrócenie kierunku poruszania się obiektu
 		/// </summary>
 		SwitchMoveDirection,
-		
+		/// <summary>
+		/// Dół drabiny
+		/// </summary>
+		LadderBottom,
+		/// <summary>
+		/// Środek drabiny
+		/// </summary>
+		LadderMiddle,
+		/// <summary>
+		/// Góra drabiny
+		/// </summary>
+		LadderTop
 	}
 }

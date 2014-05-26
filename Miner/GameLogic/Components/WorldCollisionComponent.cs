@@ -56,7 +56,7 @@ namespace Miner.GameLogic.Components
 							CollidingTiles.Add(tile);
 
 
-						if (tile.CollisionType == ETileCollisionType.Impassable)
+						if (tile.CollisionType == ETileCollisionType.Impassable || tile.CollisionType==ETileCollisionType.Platform)
 						{
 							//DOdaj kafelek do listy kafelków kolidujących w danym kierunku
 							directionCollidingTiles.Add(tile);
@@ -94,6 +94,22 @@ namespace Miner.GameLogic.Components
 					ParentObject.Velocity = velocity;
 				}
 			}
+			else if (tile.CollisionType == ETileCollisionType.Platform)
+			{
+				var velocity = ParentObject.Velocity;
+				var previousBottomY = ParentObject.Position.Y - velocity.Y + ParentObject.BoundingBox.Height;
+				if (direction == EDirection.Vertical &&  previousBottomY <= tile.BoundingBox.Top)
+				{
+					velocity = new Vector2(velocity.X, 0);
+					ParentObject.Velocity = velocity;
+					ParentObject.Properties.UpdateProperty("IsOnGround", true);
+				}
+				else if (direction == EDirection.Vertical &&
+				         CollisionHelper.GetCollisionOrigin(intersectionDepth, direction) == ESide.Bottom)
+				{
+					
+				}
+			}
 		}
 
 		private void KeepObjectInLevelBounds()
@@ -106,6 +122,12 @@ namespace Miner.GameLogic.Components
 			{
 				ParentObject.Position = new Vector2(_level.Size.X - ParentObject.BoundingBox.Width);
 			}
+		}
+
+		protected bool IsHeadingTowardsTile(Tile tile)
+		{
+			var deltaX = tile.Position.X - ParentObject.Position.X;
+			return deltaX * ParentObject.Velocity.X > 0;
 		}
 	}
 }

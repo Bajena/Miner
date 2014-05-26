@@ -66,12 +66,11 @@ namespace Miner.GameCore
 		    } 
 	    }
 
-	    public Vector2 Resolution { get; set; }
+		public Vector2 Resolution { get; set; }
+		public bool Debug { get; set; }
 
 		[XmlIgnore]
 		public float MaxOxygen = 100;
-		[XmlIgnore]
-		public bool Debug = true;
 		[XmlIgnore]
 		public int DefaultLives = 3;
 		[XmlIgnore]
@@ -84,12 +83,15 @@ namespace Miner.GameCore
 
 	    public void InitializeDefault()
         {
-			Controls.Add(EAction.Jump, new InputAction(new Keys[] { Keys.Up }, true));
+			Controls.Add(EAction.Jump, new InputAction(new Keys[] { Keys.Up }, false));
 			Controls.Add(EAction.MoveLeft, new InputAction(new Keys[] { Keys.Left }, false));
 			Controls.Add(EAction.MoveRight, new InputAction(new Keys[] { Keys.Right }, false));
+			//Controls.Add(EAction.MoveUp, new InputAction(new Keys[] { Keys.Up }, false));
+			Controls.Add(EAction.MoveDown, new InputAction(new Keys[] { Keys.Down }, false));
 			Controls.Add(EAction.SetDynamite, new InputAction(new Keys[] { Keys.Space }, true));
             PlayerName = "Player";
 			Difficulty = EDifficulty.Medium;
+		    Debug = true;
             Sound = false;
             Resolution = new Vector2(800, 600);
         }

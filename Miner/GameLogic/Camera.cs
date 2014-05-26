@@ -22,7 +22,7 @@ namespace Miner.GameLogic
 			}
 		}
 
-		private Vector2 ViewMargin = new Vector2(0.35f, 0.15f);
+		private Vector2 ViewMargin = new Vector2(0.35f, 0.25f);
 		private readonly Viewport _viewport;
 		private readonly Level _level;
 		private readonly Player _playerToFollow;

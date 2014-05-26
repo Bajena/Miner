@@ -122,6 +122,7 @@
     <Compile Include="GameLogic\Objects\Collectibles\Collectible.cs" />
     <Compile Include="GameLogic\Objects\Collectibles\Diamond.cs" />
     <Compile Include="GameLogic\Objects\Collectibles\DynamiteCollectible.cs" />
+    <Compile Include="GameLogic\Objects\Collectibles\LifeBonus.cs" />
     <Compile Include="GameLogic\Objects\Collectibles\RandomBonus.cs" />
     <Compile Include="GameLogic\Objects\Explosives\Dynamite.cs" />
     <Compile Include="GameLogic\Objects\Explosives\Explosive.cs" />

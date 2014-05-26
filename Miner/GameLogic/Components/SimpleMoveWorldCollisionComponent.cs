@@ -20,10 +20,5 @@ namespace Miner.GameLogic.Components
 			base.ReactToWorldCollision(tile, direction, intersectionDepth);
 		}
 
-		private bool IsHeadingTowardsTile(Tile tile)
-		{
-			var deltaX = tile.Position.X - ParentObject.Position.X;
-			return deltaX*ParentObject.Velocity.X > 0;
-		}
 	}
 }

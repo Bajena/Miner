@@ -8,7 +8,7 @@ using Miner.GameLogic.Objects;
 
 namespace Miner.GameLogic.Components
 {
-	class PlayerWorldCollisionComponent : WorldCollisionComponent
+	public class PlayerWorldCollisionComponent : WorldCollisionComponent
 	{
 		public PlayerWorldCollisionComponent(Player parentObject, Level level) : base(parentObject, level)
 		{
@@ -20,6 +20,13 @@ namespace Miner.GameLogic.Components
 			//{
 				
 			//}
+			var player = (ParentObject as Player);
+
+			player.IsCollidingWithLadder = false;
+			if (tile.TileType == ETileType.LadderMiddle || tile.TileType==ETileType.LadderTop)
+			{
+				player.IsCollidingWithLadder = true;
+			}
 			base.ReactToWorldCollision(tile, direction, intersectionDepth);
 		}
 

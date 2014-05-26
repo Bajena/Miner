@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,9 +22,11 @@ namespace Miner.GameCore
 			var mapDimensions = levelData.Dimensions;
 			var tilesArray = new Tile[(int) mapDimensions.X, (int) mapDimensions.Y];
 
-			var trimmedAnd = levelData.Tiles.Trim().Replace("\n", " ");
-			trimmedAnd = Regex.Replace(trimmedAnd, @"\s+", " ");
-			var tileCodes = trimmedAnd.Split(' ');
+			var trimmedAnd = levelData.Tiles.Trim().Replace("\n", "");
+			trimmedAnd = Regex.Replace(trimmedAnd, @"\s+", "");
+			var tileCodes = trimmedAnd.Split(',');
+
+			//var comaSeparated = string.Join(", ", tileCodes);
 
 			int i = 0;
 			for (int y = 0; y < tilesArray.GetLength(1); y++)
@@ -45,12 +48,14 @@ namespace Miner.GameCore
 			tile.Dimensions = levelData.TileDimensions;
 			tile.Position = new Vector2(tilePosition.X * tile.Dimensions.X, tilePosition.Y * tile.Dimensions.Y);
 			tile.Code = tileCode;
+
 			if (tileset.Name == "rock_tileset")
 			{
 				switch (tileCode)
 				{
-					case "20"://Pusty
+					case "0"://Pusty
 						tile.CollisionType = ETileCollisionType.Passable;
+						tile.Visible = false;
 						break;
 					case "21"://Wyjście
 						tile.CollisionType = ETileCollisionType.Passable;
@@ -60,6 +65,22 @@ namespace Miner.GameCore
 						tile.CollisionType = ETileCollisionType.Passable;
 						tile.TileType = ETileType.SwitchMoveDirection;
 						tile.Visible = false;
+						break;
+					case "23"://Drabina
+						tile.CollisionType = ETileCollisionType.Passable;
+						tile.TileType = ETileType.LadderMiddle;
+						break;
+					case "24"://Bonus
+						tile.CollisionType = ETileCollisionType.Passable;
+						tile.Visible = SettingsManager.Instance.Debug;
+						break;
+					case "25"://Potworek
+						tile.CollisionType = ETileCollisionType.Passable;
+						tile.Visible = SettingsManager.Instance.Debug;
+						break;
+					case "26"://Drabina góra
+						tile.CollisionType = ETileCollisionType.Platform;
+						tile.TileType=ETileType.LadderTop;
 						break;
 				}
 			}
@@ -72,7 +93,8 @@ namespace Miner.GameCore
 			int code;
 			if (int.TryParse(tileCode, out code))
 			{
-				if (code == -1) return new Vector2(-1, -1);
+				if (code > 0)
+					code--;
 
 				int tilesetWidth = (int)(tileset.Width / tileDimensions.X);
 				int tilesetHeight = (int)(tileset.Height / tileDimensions.Y);

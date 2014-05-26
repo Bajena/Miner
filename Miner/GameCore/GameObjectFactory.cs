@@ -83,6 +83,12 @@ namespace Miner.GameCore
 							Position = screenPosition
 						});
 						break;
+					case "LifeBonus":
+						collectibles.Add(new LifeBonus(_game)
+						{
+							Position = screenPosition
+						});
+						break;
 				}
 			}
 
