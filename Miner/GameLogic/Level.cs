@@ -30,11 +30,29 @@ namespace Miner.GameLogic
 			return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["LevelsPath"], levelName + ".xml");
 		}
 
+		/// <summary>
+		/// Nazwa poziomu
+		/// </summary>
 		public string Name { get; set; }
+		/// <summary>
+		/// Obiekt gracza
+		/// </summary>
 		public Player Player { get; set; }
+		/// <summary>
+		/// Obiekt kamery
+		/// </summary>
 		public Camera Camera { get; set; }
+		/// <summary>
+		/// Pozycja startowa gracza. Tutaj również odradza się gracz po śmierci.
+		/// </summary>
 		public Vector2 PlayerStartPosition { get; set; }
+		/// <summary>
+		/// Wymiary poziomu w pikselach
+		/// </summary>
 		public Vector2 Size { get; set; }
+		/// <summary>
+		/// Tablica kafelków
+		/// </summary>
 		public Tile[,] Tiles { get; set; }
 
 		private List<Machine> _machines;
@@ -48,6 +66,11 @@ namespace Miner.GameLogic
 		private readonly SaveData _saveData; //Potrzebne tylko do inicjalizacji
 		private bool _levelComplete;
 
+		/// <summary>
+		/// Konstruktor. Poziom jest ładowany z pliku xml o tej samej nazwie co parametr name.
+		/// </summary>
+		/// <param name="game"></param>
+		/// <param name="name"></param>
 		public Level(MinerGame game, string name)
 		{
 			_game = game;
@@ -68,6 +91,11 @@ namespace Miner.GameLogic
 			Player = player;
 		}
 
+		/// <summary>
+		/// Konstruktor służący do ładowania poziomu oraz odtworzenia zapisanego stanu gry.
+		/// </summary>
+		/// <param name="game"></param>
+		/// <param name="saveData"></param>
 		public Level(MinerGame game, SaveData saveData)
 		{
 			_game = game;
@@ -77,7 +105,9 @@ namespace Miner.GameLogic
 
 		#region INIT
 
-	
+		/// <summary>
+		/// Ładuje poziom z pliku xml.
+		/// </summary>
 		public void Initialize()
 		{
 			var levelData = LevelData.Deserialize(GetLevelPath(Name));
@@ -109,6 +139,10 @@ namespace Miner.GameLogic
 			Size = new Vector2(Tiles.GetLength(0) * _tileDimensions.X, Tiles.GetLength(1) * _tileDimensions.Y);
 		}
 		
+		/// <summary>
+		/// Tworzy (jeśli nie przekazano w konstrukotrze) i inicjalizuje obiekt gracza
+		/// </summary>
+		/// <param name="levelData"></param>
 		private void InitializePlayer(LevelData levelData)
 		{
 			PlayerStartPosition = levelData.PlayerStartPosition;
@@ -143,6 +177,10 @@ namespace Miner.GameLogic
 			_explosives.AddRange(gameObjectFactory.GetExplosives(exactPositions));
 		}
 
+		/// <summary>
+		/// Parsuje i tłumaczy ciąg znaków na mapę kafelków
+		/// </summary>
+		/// <param name="levelData"></param>
 		private void InitializeTileMap(LevelData levelData)
 		{
 			var tileset = _game.Content.Load<Texture2D>("Tilesets/" + levelData.Tileset);
@@ -157,11 +195,21 @@ namespace Miner.GameLogic
 
 		#region UPDATE
 		
+		/// <summary>
+		/// Metoda wywoływana w odpowiedzi na postawienie przez gracza dynamitu. Dodaje dynamit do listy materiałów wybuchowych
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void PlayerSetDynamite(object sender, DynamiteSetEventArgs e)
 		{
 			_explosives.Add(e.Dynamite);
 		}
 
+		/// <summary>
+		/// Metoda wywoływana w odpowiedzi na śmierć gracza. Kończy grę lub respawnuje gracza.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void PlayerDied(object sender, EventArgs e)
 		{
 			bool gameOver = Player.Lives == 0;
@@ -184,13 +232,17 @@ namespace Miner.GameLogic
 			}
 		}
 
-		public void GameOver()
+		private void GameOver()
 		{
 			HighScoresManager.AddHighScore(SettingsManager.Instance.PlayerName, Player.Points,
 				SettingsManager.Instance.Difficulty);
 			LoadingScreen.Load(_game.ScreenManager,false,true,new BackgroundScreen(),new MainMenuScreen());
 		}
 
+		/// <summary>
+		/// Aktualizuje obiekty, rozwiązuje kolizje oraz sprząta niepotrzebne obiekty
+		/// </summary>
+		/// <param name="gameTime"></param>
 		public void Update(GameTime gameTime)
 		{
 			if (_levelComplete)
@@ -225,16 +277,18 @@ namespace Miner.GameLogic
 		   _collectibles.RemoveAll(x => x.State == ECollectibleState.Collected);
 			
 		}
-
-		public void HandleCollisions()
+		/// <summary>
+		/// Wywołuje akcje w odpowiedzi na kolizje między obiektami oraz planszą
+		/// </summary>
+		private void HandleCollisions()
 		{
 			ReactToPlayerTileCollisions();
-			HandleCollectiblesCollisions();
-			HandleMachinesCollisions();
-			HandleExplosivesCollisions();
+			HandlePlayerCollectiblesCollisions();
+			HandlePlayerMachinesCollisions();
+			HandlePlayerExplosivesCollisions();
 		}
 
-		private void HandleExplosivesCollisions()
+		private void HandlePlayerExplosivesCollisions()
 		{
 			var explodingExplosives = _explosives.Where(x => x.State == EExplosiveState.Exploding);
 
@@ -256,7 +310,7 @@ namespace Miner.GameLogic
 			}
 		}
 
-		private void HandleCollectiblesCollisions()
+		private void HandlePlayerCollectiblesCollisions()
 		{
 			var collectiblesToCheck = _collectibles.Where(c => Camera.IsRectangleVisible(c.BoundingBox)).ToArray();
 			foreach (var collectible in collectiblesToCheck)
@@ -273,7 +327,7 @@ namespace Miner.GameLogic
 				}
 		}
 
-		private void HandleMachinesCollisions()
+		private void HandlePlayerMachinesCollisions()
 		{
 			var machinesToCheck = _machines.Where(c => Camera.IsRectangleVisible(c.BoundingBox)).ToArray();
 			foreach (var machine in machinesToCheck)
@@ -320,7 +374,11 @@ namespace Miner.GameLogic
 			_game.LoadNextLevel();
 		}
 
-
+		/// <summary>
+		/// Zwraca kafelki otaczające dany prostokąt na planszy
+		/// </summary>
+		/// <param name="rectangle"></param>
+		/// <returns></returns>
 		public List<Tile> GetSurroundingTiles(BoundingRect rectangle)
 		{
 			int leftTile = (int)Math.Floor(rectangle.Left / _tileDimensions.X);
@@ -349,6 +407,10 @@ namespace Miner.GameLogic
 		#endregion
 
 		#region DRAW
+		/// <summary>
+		/// Rysuje poziom
+		/// </summary>
+		/// <param name="spriteBatch"></param>
 		public void Draw(SpriteBatch spriteBatch)
 		{
 			if (_backgroundTexture != null)
@@ -390,6 +452,10 @@ namespace Miner.GameLogic
 
 		}
 
+		/// <summary>
+		/// Ryusje kafelki. Rysowane kafelki są ograniczone do tych, widzianych oczami kamery.
+		/// </summary>
+		/// <param name="spriteBatch"></param>
 		private void DrawTiles(SpriteBatch spriteBatch)
 		{
 			var tilesToDraw = GetSurroundingTiles(Camera.BoundingRectangle);
@@ -399,6 +465,10 @@ namespace Miner.GameLogic
 			}
 		}
 
+		/// <summary>
+		/// Rsyuje tło. Obraz tła jest powielany w pionie i poziomie.
+		/// </summary>
+		/// <param name="spriteBatch"></param>
 		private void DrawBackground(SpriteBatch spriteBatch)
 		{
 			var viewport = spriteBatch.GraphicsDevice.Viewport;
@@ -429,7 +499,11 @@ namespace Miner.GameLogic
 
 		#endregion
 
-		public SaveData getSaveData()
+		/// <summary>
+		/// Zwraca dane o poziomie oraz obiektach znajdujących się na nim w celu zapisu gry do pliku.
+		/// </summary>
+		/// <returns></returns>
+		public SaveData GetSaveData()
 		{
 			var gameObjects = new List<GameObjectData>();
 			gameObjects.AddRange(_explosives.Select(x => new GameObjectData()
