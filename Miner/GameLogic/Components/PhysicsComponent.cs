@@ -132,7 +132,7 @@ namespace Miner.GameLogic.Components
 		{
 			var worldCollisionComponent = (WorldCollisionComponent)ParentObject.Components["WorldCollision"];
 			
-			if (worldCollisionComponent != null)
+			if (worldCollisionComponent != null && worldCollisionComponent.Active)
 			{
 				worldCollisionComponent.CollidingTiles.Clear();
 

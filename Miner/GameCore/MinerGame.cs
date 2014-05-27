@@ -122,7 +122,7 @@ namespace Miner.GameCore
 		/// <param name="saveName">Nazwa pliku, do którego zapisana bêdzie rozgrywka</param>
 	    public void SaveGame(string saveName)
 	    {
-			var saveData = CurrentLevel.getSaveData();
+			var saveData = CurrentLevel.GetSaveData();
 			SavedGamesManager.SaveGame(saveName,saveData);
 	    }
 

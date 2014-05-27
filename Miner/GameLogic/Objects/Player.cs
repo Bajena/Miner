@@ -149,26 +149,40 @@ namespace Miner.GameLogic.Objects
 
 			Velocity = new Vector2(0, Velocity.Y);
 
+			//kody
 			if (SettingsManager.Instance.Debug)
 			{
-				if (input.IsKeyDown(Keys.Z)) Oxygen = Oxygen - 1 >= 0 ? Oxygen - 1 : Oxygen;
-				if (input.IsKeyDown(Keys.X)) Oxygen = Oxygen + 1 <= SettingsManager.Instance.MaxOxygen ? Oxygen + 1 : Oxygen;
+				if (input.IsKeyDown(Keys.NumPad7)) Oxygen = Oxygen - 1 >= 0 ? Oxygen - 1 : Oxygen;
+				if (input.IsKeyDown(Keys.NumPad9)) Oxygen = Oxygen + 1 <= SettingsManager.Instance.MaxOxygen ? Oxygen + 1 : Oxygen;
 
-				if (input.IsKeyDown(Keys.Q)) Points--;
-				if (input.IsKeyDown(Keys.W)) Points++;
+				if (input.IsKeyDown(Keys.NumPad4)) Points--;
+				if (input.IsKeyDown(Keys.NumPad6)) Points++;
+
+				if (input.IsKeyDown(Keys.NumPad1))
+				{
+					WorldCollisionComponent.Active = false;
+					PhysicsComponent.HasGravity = false;
+				}
+				if (input.IsKeyDown(Keys.NumPad3))
+				{
+					WorldCollisionComponent.Active = false;
+					PhysicsComponent.HasGravity = false;
+				}
 			}
 			if (SettingsManager.Instance.Controls[EAction.MoveRight].IsCalled(input))
 			{
 				Velocity = new Vector2(_sideMoveSpeed, Velocity.Y);
 				if (IsOnGround && AnimationComponent.CurrentAnimationName != "Run") AnimationComponent.SetActiveAnimation("Run");
-				EndClimb();
+				if (IsClimbing)
+					EndClimb();
 				//Position = new Vector2(Position.Left+1,Position.Y);
 			}
 			if (SettingsManager.Instance.Controls[EAction.MoveLeft].IsCalled(input))
 			{
 				Velocity = new Vector2(-_sideMoveSpeed, Velocity.Y);
 				if (IsOnGround && AnimationComponent.CurrentAnimationName != "Run") AnimationComponent.SetActiveAnimation("Run");
-				EndClimb();
+				if (IsClimbing)
+					EndClimb();
 				//Position = new Vector2(Position.Left+1,Position.Y);
 			}
 			if (SettingsManager.Instance.Controls[EAction.Jump].IsCalled(input) && IsOnGround)
@@ -226,7 +240,6 @@ namespace Miner.GameLogic.Objects
 
 		private void Jump()
 		{
-			PhysicsComponent.HasGravity = true;
 			AnimationComponent.SetActiveAnimation("Jump");
 			Velocity = new Vector2(Velocity.X, _jumpHeight);
 			IsOnGround = false;
