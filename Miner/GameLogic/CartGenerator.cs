@@ -9,6 +9,9 @@ using Miner.GameLogic.Objects.Machines;
 
 namespace Miner.GameLogic
 {
+	/// <summary>
+	/// Klasa tworząca w miejscu tuneli wózki co n sekund
+	/// </summary>
 	public class CartGenerator
 	{
 		private readonly MinerGame _game;
@@ -57,6 +60,10 @@ namespace Miner.GameLogic
 			_timer.Update(gameTime);
 		}
 
+		/// <summary>
+		/// Zwraca niedodane jeszcze do poziomu wózki
+		/// </summary>
+		/// <returns></returns>
 		public IEnumerable<Cart> GetCreatedCarts()
 		{
 			var cartsToReturn = new List<Cart>(_newCarts);

@@ -115,19 +115,19 @@ namespace Miner.GameCore
 		/// Maksymalna liczba tlenu, jaką może mieć gracz
 		/// </summary>
 		[XmlIgnore]
-		public float MaxOxygen = 100;
+		public float MaxOxygen;
 
 		/// <summary>
 		/// Liczba żyć, z którymi zaczyna sie grę
 		/// </summary>
 		[XmlIgnore]
-		public int DefaultLives = 3;
+		public int DefaultLives;
 
 		/// <summary>
 		/// Liczba dynamitów, z którymi zaczyna się grę
 		/// </summary>
 		[XmlIgnore]
-	    public int DefaultDynamite = 3;
+	    public int DefaultDynamite;
 
 		public SettingsManager()
 		{
@@ -147,8 +147,9 @@ namespace Miner.GameCore
 			Controls.Add(EAction.SetDynamite, new InputAction(new Keys[] { Keys.Space }, true));
             PlayerName = "Player";
 			Difficulty = EDifficulty.Medium;
-		    Debug = true;
-            Sound = false;
+			SetOptionsForDifficulty(Difficulty);
+		    Debug = false;
+            Sound = true;
             Resolution = new Vector2(800, 600);
         }
 
@@ -163,17 +164,17 @@ namespace Miner.GameCore
 			    case EDifficulty.Easy:
 				    MaxOxygen = 200;
 				    DefaultLives = 5;
-				    DefaultDynamite = 5;
+				    DefaultDynamite = 10;
 				    break;
 				case EDifficulty.Medium:
-					MaxOxygen = 100;
+					MaxOxygen = 150;
 					DefaultLives = 3;
-					DefaultDynamite = 3;
+					DefaultDynamite = 5;
 					break;
 				case EDifficulty.Hard:
-					MaxOxygen = 65;
+					MaxOxygen = 100;
 					DefaultLives = 1;
-					DefaultDynamite = 1;
+					DefaultDynamite = 3;
 					break;
 		    }
 	    }

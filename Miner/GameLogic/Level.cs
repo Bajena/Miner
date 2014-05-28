@@ -76,7 +76,6 @@ namespace Miner.GameLogic
 		{
 			_game = game;
 			Name = name;
-			//Initialize();
 		}
 
 		/// <summary>
@@ -89,11 +88,7 @@ namespace Miner.GameLogic
 		{
 			_game = game;
 			Name = name;
-
-			Player = new Player(game)
-			{
-				Points = player.Points
-			};
+			Player = player;
 		}
 
 		/// <summary>
@@ -156,8 +151,8 @@ namespace Miner.GameLogic
 			if (Player == null)
 			{
 				Player = new Player(_game);
-				Player.Respawn(PlayerStartPosition);
 			}
+			Player.Respawn(PlayerStartPosition);
 
 			Player.Died += PlayerDied;
 			Player.DynamiteSet += PlayerSetDynamite;

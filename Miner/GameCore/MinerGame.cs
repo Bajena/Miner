@@ -86,7 +86,27 @@ namespace Miner.GameCore
 
 	    }
 
-		/// <summary>
+	    /// <summary>
+	    /// Tworzy wymagane foldery i pliki
+	    /// </summary>
+	    private void CreateUsersFilesAndDirectories(string userName)
+	    {
+			var directories = new List<string>()
+			{
+				Path.Combine(SettingsManager.GetPlayerDirectory(userName)),
+				Path.Combine(SavedGamesManager.GetPlayerSavesDirectory(userName))
+			};
+
+			foreach (var directory in directories)
+			{
+				if (!Directory.Exists(directory))
+				{
+					Directory.CreateDirectory(directory);
+				}
+			}
+	    }
+
+	    /// <summary>
 		/// £aduje poziom o podanej nazwie
 		/// </summary>
 		/// <param name="name">Nazwa poziomu</param>
