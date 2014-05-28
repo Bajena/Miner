@@ -9,8 +9,14 @@ using Miner.Helpers;
 
 namespace Miner.GameLogic.Objects.Explosives
 {
+	/// <summary>
+	/// Klasa bazowa dla materiałów wybuchowych
+	/// </summary>
 	public abstract class Explosive : GameObject
 	{
+		/// <summary>
+		/// Stan materiału wybuchowego
+		/// </summary>
 		public EExplosiveState State { get; set; }
 		private SoundEffect _explodeSound;
 
@@ -23,11 +29,14 @@ namespace Miner.GameLogic.Objects.Explosives
 
 		public override void Update(GameTime gameTime)
 		{
-			HandleState();
+			ManageState();
 			base.Update(gameTime);
 		}
 
-		private void HandleState()
+		/// <summary>
+		/// Odpowiada za zmiany stanów obiektu
+		/// </summary>
+		private void ManageState()
 		{
 			switch (State)
 			{
@@ -46,6 +55,10 @@ namespace Miner.GameLogic.Objects.Explosives
 			return ((int) State < (int) EExplosiveState.Exploding);
 		}
 
+		/// <summary>
+		/// Akcje wywoływane w momencie wybuchu
+		/// </summary>
+		/// <param name="gameTime">Czas gry</param>
 		public virtual void Explode(GameTime gameTime)
 		{
 			State = EExplosiveState.Exploding;
@@ -53,7 +66,10 @@ namespace Miner.GameLogic.Objects.Explosives
 			SoundHelper.Play(_explodeSound);
 		}
 
-		protected virtual void SetupAnimations()
+		/// <summary>
+		/// Ustawia animacje obiektu
+		/// </summary>
+		protected override void SetupAnimations()
 		{
 			var explosionTexture = Game.Content.Load<Texture2D>("Sprites/Explosives/explosion");
 			AnimationComponent.SpriteSheets.Add("Explode", explosionTexture);

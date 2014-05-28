@@ -107,7 +107,6 @@
     <Compile Include="GameLogic\Camera.cs" />
     <Compile Include="GameLogic\Components\AnimationComponent.cs" />
     <Compile Include="GameLogic\Components\HUD\TextComponent.cs" />
-    <Compile Include="GameLogic\Components\OxygenComponent.cs" />
     <Compile Include="GameLogic\Components\PlayerWorldCollisionComponent.cs" />
     <Compile Include="GameLogic\Components\TimerComponent.cs" />
     <Compile Include="GameLogic\Components\WorldCollisionComponent.cs" />
@@ -136,7 +135,7 @@
     <Compile Include="GameLogic\Objects\Machines\Machine.cs" />
     <Compile Include="GameLogic\Objects\Collectibles\OxygenBottle.cs" />
     <Compile Include="GameLogic\Objects\Player.cs" />
-    <Compile Include="GameLogic\Components\SimpleMoveWorldCollisionComponent.cs" />
+    <Compile Include="GameLogic\Components\SimpleEnemyWorldCollisionComponent.cs" />
     <Compile Include="GameLogic\Serializable\GameObjectData.cs" />
     <Compile Include="GameLogic\Serializable\HighScoresData.cs" />
     <Compile Include="GameLogic\Serializable\PlayerData.cs" />
@@ -160,7 +159,6 @@
     <Compile Include="GameInterface\GameScreens\MessageBoxScreen.cs" />
     <Compile Include="GameInterface\GameScreens\OptionsMenuScreen.cs" />
     <Compile Include="GameInterface\GameScreens\PauseMenuScreen.cs" />
-    <Compile Include="Helpers\TextInputHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

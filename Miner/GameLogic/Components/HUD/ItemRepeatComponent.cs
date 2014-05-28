@@ -9,6 +9,9 @@ using Miner.GameLogic.Objects;
 
 namespace Miner.GameLogic.Components
 {
+	/// <summary>
+	/// Element HUD wyświetlający teksturę n razy w zaelżności np. od liczby żyć, dynamitów.
+	/// </summary>
 	public class ItemRepeatComponent : HudComponent
 	{
 		private readonly string _texturePath;

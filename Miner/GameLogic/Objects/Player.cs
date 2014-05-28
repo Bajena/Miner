@@ -26,13 +26,28 @@ namespace Miner.GameLogic.Objects
 		}
 	}
 
-
+	/// <summary>
+	/// Klasa gracza
+	/// </summary>
 	public class Player : GameObject
 	{
+		/// <summary>
+		/// Licznik powodujący zmniejszanie się ilości tlenu
+		/// </summary>
 		public TimerComponent OxygenTimer { get { return (TimerComponent)Components["OxygenTimer"]; } }
+
+		/// <summary>
+		/// Komponent odpowiadający za fizykę
+		/// </summary>
 		public PhysicsComponent PhysicsComponent { get { return (PhysicsComponent)Components["Physics"]; } }
+		/// <summary>
+		/// Komponent odpowiadający za kolizje z planszą
+		/// </summary>
 		public PlayerWorldCollisionComponent WorldCollisionComponent { get { return (PlayerWorldCollisionComponent)Components["WorldCollision"]; } }
 
+		/// <summary>
+		/// Pozostały tlen
+		/// </summary>
 		public float Oxygen
 		{
 			get
@@ -45,19 +60,52 @@ namespace Miner.GameLogic.Objects
 			}
 		}
 
+		/// <summary>
+		/// Liczba żyć
+		/// </summary>
 		public int Lives { get { return Properties.GetProperty<int>("Lives"); } set { Properties.UpdateProperty("Lives", value); } }
+		/// <summary>
+		/// Liczba zebranych punktów
+		/// </summary>
 		public int Points { get { return Properties.GetProperty<int>("Points"); } set { Properties.UpdateProperty("Points", value); } }
+		/// <summary>
+		/// Liczba dostępnego dynamitu
+		/// </summary>
 		public int Dynamite { get { return Properties.GetProperty<int>("Dynamite"); } set { Properties.UpdateProperty("Dynamite", value); } }
+		/// <summary>
+		/// Czy gracz stoi na ziemi?
+		/// </summary>
 		public bool IsOnGround { get { return Properties.GetProperty<bool>("IsOnGround"); } set { Properties.UpdateProperty("IsOnGround", value); } }
+		/// <summary>
+		/// Czy koliduje z drabiną?
+		/// </summary>
 		public bool IsCollidingWithLadder { get { return Properties.GetProperty<bool>("IsCollidingWithLadder"); } set { Properties.UpdateProperty("IsCollidingWithLadder", value); } }
+		/// <summary>
+		/// Czy gracz jest w trakcie wspinania się po drabinie?
+		/// </summary>
 		public bool IsClimbing { get { return Properties.GetProperty<bool>("IsClimbing"); } set { Properties.UpdateProperty("IsClimbing", value); } }
 
+		/// <summary>
+		/// Prędkość poruszania się do boku
+		/// </summary>
 		private float _sideMoveSpeed = 200.0f;
+		/// <summary>
+		/// Prędkość poruszania się po drabinie
+		/// </summary>
 		private float _climbingSpeed = 200.0f;
-		private float _jumpHeight = -400.0f;
+		/// <summary>
+		/// Prędkość nadawana graczowi podczas skoku
+		/// </summary>
+		private float _jumpSpeed = -400.0f;
 
+		/// <summary>
+		/// Zdarzenie wywoływane w momencie śmierci gracza
+		/// </summary>
 		public event EventHandler Died;
 
+		/// <summary>
+		/// Wywołuje zdarzenie Died
+		/// </summary>
 		protected internal void OnDied()
 		{
 			Lives--;
@@ -65,6 +113,9 @@ namespace Miner.GameLogic.Objects
 				Died(this, null);
 		}
 
+		/// <summary>
+		/// Zdarzenie wywoływane w momencie położenia przez gracza dynamitu
+		/// </summary>
 		public event EventHandler<DynamiteSetEventArgs> DynamiteSet;
 
 		public Player(MinerGame game)
@@ -90,6 +141,9 @@ namespace Miner.GameLogic.Objects
 			SetupAnimations();
 		}
 
+		/// <summary>
+		/// Zmniejsza ilość pozostałego tlenu
+		/// </summary>
 		void DecreaseOxygen(object sender, GameTimeEventArgs e)
 		{
 			Oxygen--;
@@ -97,7 +151,7 @@ namespace Miner.GameLogic.Objects
 				OnDied();
 		}
 
-		private void SetupAnimations()
+		protected override void SetupAnimations()
 		{
 			AnimationComponent.CollisionBox = new Rectangle(14,8,36,56);
 			AnimationComponent.SpriteSheets.Add("Idle", Game.Content.Load<Texture2D>("Sprites/Player/Idle"));
@@ -241,7 +295,7 @@ namespace Miner.GameLogic.Objects
 		private void Jump()
 		{
 			AnimationComponent.SetActiveAnimation("Jump");
-			Velocity = new Vector2(Velocity.X, _jumpHeight);
+			Velocity = new Vector2(Velocity.X, _jumpSpeed);
 			IsOnGround = false;
 		}
 

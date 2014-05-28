@@ -9,6 +9,9 @@ using Miner.GameCore;
 
 namespace Miner.GameLogic.Objects.Machines
 {
+	/// <summary>
+	/// Wiertło - porusza się harmonicznym ruchem w górę i w dół. Nie można go zniszczyć.
+	/// </summary>
 	public class Drill : EnemyMachine
 	{
 		public Drill(MinerGame game) : base(game)

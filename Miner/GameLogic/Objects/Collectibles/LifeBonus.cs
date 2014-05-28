@@ -9,6 +9,9 @@ using Miner.GameCore;
 
 namespace Miner.GameLogic.Objects.Collectibles
 {
+	/// <summary>
+	/// Zwiększa liczbę żyć gracza o 1
+	/// </summary>
 	public class LifeBonus : Collectible
 	{
 		public LifeBonus(MinerGame game)

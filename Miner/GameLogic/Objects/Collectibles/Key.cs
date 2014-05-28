@@ -6,6 +6,9 @@ using Miner.GameCore;
 
 namespace Miner.GameLogic.Objects.Collectibles
 {
+	/// <summary>
+	/// Klucz - umożliwia opuszczenie poziomu
+	/// </summary>
 	public class Key : Collectible
 	{
 		public Key(MinerGame game) : base(game)

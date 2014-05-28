@@ -5,9 +5,12 @@ using Miner.GameLogic.Objects;
 
 namespace Miner.GameLogic.Components
 {
-	public class SimpleMoveWorldCollisionComponent : WorldCollisionComponent
+	/// <summary>
+	/// Rozszerza klasę WorldCollisionComponent o zmianę kierunków
+	/// </summary>
+	public class SimpleEnemyWorldCollisionComponent : WorldCollisionComponent
 	{
-		public SimpleMoveWorldCollisionComponent(GameObject parentObject, Level level) : base(parentObject, level)
+		public SimpleEnemyWorldCollisionComponent(GameObject parentObject, Level level) : base(parentObject, level)
 		{
 		}
 

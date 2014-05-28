@@ -14,9 +14,21 @@ namespace Miner.GameLogic.Components
 	/// </summary>
 	public abstract class HudComponent : DrawableGameObjectComponent
 	{
+		/// <summary>
+		/// Pozycja na ekranie
+		/// </summary>
 		public Vector2 Position { get; set; }
+		/// <summary>
+		/// Właściwość obiektu, której odpowiada ten element
+		/// </summary>
 		public string PropertyToTrack { get; set; }
 
+		/// <summary>
+		/// Konstruktor tworzący element HUD.
+		/// </summary>
+		/// <param name="parentObject">Obiekt do śledzenia</param>
+		/// <param name="position">Pozycja na ekranie</param>
+		/// <param name="propertyToTrack">Właściwość obiektu, której będzie odpowiadał ten element</param>
 		public HudComponent(GameObject parentObject,Vector2 position, string propertyToTrack) : base(parentObject)
 		{
 			Position = position;

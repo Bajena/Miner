@@ -6,6 +6,9 @@ using Miner.GameLogic.Serializable;
 
 namespace Miner.GameLogic.Serializable
 {
+	/// <summary>
+	/// Serializowalna klasa reprezentująca obiekt gracza na planszy
+	/// </summary>
 	[Serializable]
 	public class PlayerData : GameObjectData
 	{

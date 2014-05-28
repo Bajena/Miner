@@ -6,17 +6,46 @@ using Miner.GameInterface.GameScreens;
 
 namespace Miner.GameInterface.MenuEntries
 {
+	/// <summary>
+	/// Informuje o tym, czy tekst przechwytywany przez TextInputMenuEntry ma mieć stałą wielkość liter 
+	/// </summary>
 	public enum CaseKeeping
 	{
+		/// <summary>
+		/// Dowolna wielkość liter
+		/// </summary>
 		None,
+		/// <summary>
+		/// Tylko wielkie litery
+		/// </summary>
 		Upper,
+		/// <summary>
+		/// Tylko małe litery
+		/// </summary>
 		Lower
 	}
+
+	/// <summary>
+	/// Klasa rozszerzająca podstawową opcję Menu o możliwość wpisywania tekstu
+	/// </summary>
 	public class TextInputMenuEntry : UserInputMenuEntry
 	{
+		/// <summary>
+		/// Stały tekst z opisem pola tekstowego
+		/// </summary>
 		public string PromptText { get; set; }
+		/// <summary>
+		/// Tekst zmieniany przez użytkownika
+		/// </summary>
 		public string InputText { get; set; }
+		/// <summary>
+		/// Czy wpisywanie tekstu jest aktywne?
+		/// </summary>
 		public bool Enabled { get; set; }
+
+		/// <summary>
+		/// Czy wielkość liter ma być stała?
+		/// </summary>
 		public CaseKeeping CaseKeeping { get; set; }
 
 		protected internal override void OnSelected()

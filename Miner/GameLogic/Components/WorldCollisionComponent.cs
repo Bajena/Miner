@@ -11,8 +11,14 @@ using Miner.Helpers;
 
 namespace Miner.GameLogic.Components
 {
+	/// <summary>
+	/// Komponent odpowiadający za reakcje obiektu na kolizje z kafelkami planszy
+	/// </summary>
 	public class WorldCollisionComponent : GameObjectComponent
 	{
+		/// <summary>
+		/// Lista kafelków, z którymi koliduje obiekt
+		/// </summary>
 		public List<Tile> CollidingTiles { get; private set; }
 
 		private Level _level;
@@ -72,6 +78,12 @@ namespace Miner.GameLogic.Components
 			return directionCollidingTiles;
 		}
 		
+		/// <summary>
+		/// Reakcja na kolizję z kafelkiem w danym kierunku
+		/// </summary>
+		/// <param name="tile">Kafelek</param>
+		/// <param name="direction">Kierun (Pion lub poziom)</param>
+		/// <param name="intersectionDepth">Głębokkość kolizji w pikselach</param>
 		public virtual void ReactToWorldCollision(Tile tile, EDirection direction, Vector2 intersectionDepth)
 		{
 			if (tile.CollisionType == ETileCollisionType.Impassable)
@@ -107,6 +119,9 @@ namespace Miner.GameLogic.Components
 			}
 		}
 
+		/// <summary>
+		/// Sprawdza czy obiekt jest w obrębie poziomu. Jeśli nie jest poprawia jego pozycję.
+		/// </summary>
 		private void KeepObjectInLevelBounds()
 		{
 			if (ParentObject.Position.X < 0)
@@ -115,10 +130,15 @@ namespace Miner.GameLogic.Components
 			}
 			else if (ParentObject.Position.X + ParentObject.BoundingBox.Width > _level.Size.X)
 			{
-				ParentObject.Position = new Vector2(_level.Size.X - ParentObject.BoundingBox.Width);
+				ParentObject.Position = new Vector2(_level.Size.X - ParentObject.BoundingBox.Width, ParentObject.Position.Y);
 			}
 		}
 
+		/// <summary>
+		/// Sprawdza czy obiekt porusza się w kierunku danego kafelka
+		/// </summary>
+		/// <param name="tile"></param>
+		/// <returns></returns>
 		protected bool IsHeadingTowardsTile(Tile tile)
 		{
 			var deltaX = tile.Position.X - ParentObject.Position.X;

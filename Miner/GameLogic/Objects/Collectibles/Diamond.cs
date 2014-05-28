@@ -9,6 +9,9 @@ using Miner.GameCore;
 
 namespace Miner.GameLogic.Objects.Collectibles
 {
+	/// <summary>
+	/// Diament - wysoko punktowany
+	/// </summary>
 	public class Diamond : Collectible
 	{
 		public Diamond(MinerGame game)

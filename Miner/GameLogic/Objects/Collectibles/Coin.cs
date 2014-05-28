@@ -9,6 +9,9 @@ using Miner.GameCore;
 
 namespace Miner.GameLogic.Objects.Collectibles
 {
+	/// <summary>
+	/// Moneta - nisko punktowana
+	/// </summary>
 	public class Coin : Collectible
 	{
 		public Coin(MinerGame game)

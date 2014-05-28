@@ -6,10 +6,16 @@ using Miner.Helpers;
 
 namespace Miner.GameLogic.Objects.Collectibles
 {
+	/// <summary>
+	/// Klasa bazowa dla obiektów zbieranych przez gracza
+	/// </summary>
 	public abstract class Collectible : GameObject
 	{
 		protected SoundEffect _collectedSound;
 
+		/// <summary>
+		/// Stan
+		/// </summary>
 		public ECollectibleState State {get;set;}
 
 		public Collectible(MinerGame game) : base(game)
@@ -18,9 +24,10 @@ namespace Miner.GameLogic.Objects.Collectibles
 			State = ECollectibleState.NotCollected;
 		}
 
-
-		protected abstract void SetupAnimations();
-
+		/// <summary>
+		/// Metoda wywoływana w momencie zebrania przez gracza przedmiotu
+		/// </summary>
+		/// <param name="player"></param>
 		public virtual void OnCollected(Player player)
 		{
 			if (_collectedSound != null)

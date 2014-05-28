@@ -9,6 +9,9 @@ using Miner.GameCore;
 
 namespace Miner.GameLogic.Objects.Collectibles
 {
+	/// <summary>
+	/// Losowy bonus. Dodaje życie, tlen lub punkty.
+	/// </summary>
 	public class RandomBonus : Collectible
 	{
 		Random rand = new Random();
@@ -47,7 +50,7 @@ namespace Miner.GameLogic.Objects.Collectibles
 			var randomBonus = rand.Next(3);
 			if (randomBonus==0) player.Points += 100;
 			else if (randomBonus == 1) player.Lives++;
-			else if (randomBonus == 2) player.Oxygen += 10;
+			else if (randomBonus == 2) player.Oxygen += 0.5f * SettingsManager.Instance.MaxOxygen; 
 		}
 	}
 }

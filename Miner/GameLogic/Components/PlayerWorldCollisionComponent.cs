@@ -8,6 +8,9 @@ using Miner.GameLogic.Objects;
 
 namespace Miner.GameLogic.Components
 {
+	/// <summary>
+	/// Rozszerza klasę WorldCollisionComponent o reakcje specyficzne dla obiektu gracza
+	/// </summary>
 	public class PlayerWorldCollisionComponent : WorldCollisionComponent
 	{
 		public PlayerWorldCollisionComponent(Player parentObject, Level level) : base(parentObject, level)

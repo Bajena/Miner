@@ -6,6 +6,9 @@ using Miner.GameCore;
 
 namespace Miner.GameLogic.Objects.Collectibles
 {
+	/// <summary>
+	/// Przywraca graczowi połowę maksymalnej ilości tlenu
+	/// </summary>
 	public class OxygenBottle : Collectible
 	{
 		public OxygenBottle(MinerGame game)

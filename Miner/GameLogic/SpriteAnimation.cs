@@ -7,34 +7,71 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Miner.GameLogic
 {
+	/// <summary>
+	/// Reprezentuje animację
+	/// </summary>
 	public class SpriteAnimation
 	{
-		// Attributes
+		/// <summary>
+		/// Nazwa animacji
+		/// </summary>
 		public String Name { get; set; }
+		/// <summary>
+		/// Tekstura z klatkami animacji
+		/// </summary>
 		public Texture2D SpriteSheet { get; set; }
+		/// <summary>
+		/// Lista klatek
+		/// </summary>
 		public List<Rectangle> Frames { get; set; }
+		/// <summary>
+		/// Prostokąt reprezentujący aktualną klatkę
+		/// </summary>
 		public Rectangle CurrentFrame { get; set; }
+		/// <summary>
+		/// Długość animacji
+		/// </summary>
 		public double AnimationDuration { get; set; }
+		/// <summary>
+		/// Moment rozpoczęcia animacji
+		/// </summary>
 		public double StartTime { get; set; }
-		// Flags
-		public bool Loop { get; set; }
-		public bool PlayBack { get; set; }
-		public bool HasStarted { get; set; }
-		public bool HasFinished { get; set; }
-		public bool HasToFinish { get; set; }
-		public bool StopsMovement { get; set; }
 
-		// Constructor
+		/// <summary>
+		/// Czy animacja ma odtwarzać się w pętli?
+		/// </summary>
+		public bool Loop { get; set; }
+		/// <summary>
+		/// Czy po zakończeniu ma się odtwarzać z powrotem?
+		/// </summary>
+		public bool PlayBack { get; set; }
+		/// <summary>
+		/// Czy animacja się już zaczęła?
+		/// </summary>
+		public bool HasStarted { get; set; }
+
+		/// <summary>
+		/// Czy animacja się już skończyła?
+		/// </summary>
+		public bool HasFinished { get; set; }
+
+		/// <summary>
+		/// Czy żeby można było zmienic animację z tej na inną ta animacja musi się najpierw skończyć?
+		/// </summary>
+		public bool HasToFinish { get; set; }
+
+		/// <summary>
+		/// Konstruktor
+		/// </summary>
 		public SpriteAnimation()
 		{
 			Frames = new List<Rectangle>();
 		}
 
+		
 		/// <summary>
-		/// Finds current frame in the animation sequence based on duration settings
-		/// and how long the animation has been playing.
+		/// Zmienia klatkę na kolejną lub kończy animację
 		/// </summary>
-		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		public void Update(GameTime gameTime)
 		{
 			// Get elapsed time since the animation started
@@ -70,9 +107,8 @@ namespace Miner.GameLogic
 		}
 
 		/// <summary>
-		/// Start the animation.
+		/// Zaczyna animację
 		/// </summary>
-		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		public void StartAnimation(GameTime gameTime)
 		{
 			StartTime = gameTime.TotalGameTime.TotalSeconds;

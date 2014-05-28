@@ -7,6 +7,9 @@ using Miner.GameLogic.Components;
 
 namespace Miner.GameLogic.Objects.Explosives
 {
+	/// <summary>
+	/// Dynamit - podkładany przz gracza. Wybucha po pewnym czasie od położenia.
+	/// </summary>
 	public class Dynamite : Explosive
 	{
 		private readonly TimeSpan _timeToExplosion;
@@ -35,11 +38,6 @@ namespace Miner.GameLogic.Objects.Explosives
 			Components.Add("ExplosionWaitTimer", explosionWaitTimer);
 		}
 
-		void WaitForExplosionFinished(object sender, GameTimeEventArgs e)
-		{
-			base.Explode(e.GameTime);
-		}
-
 		protected override void SetupAnimations()
 		{
 			base.SetupAnimations();
@@ -59,5 +57,11 @@ namespace Miner.GameLogic.Objects.Explosives
 			});
 			AnimationComponent.SetActiveAnimation("Idle");
 		}
+
+		void WaitForExplosionFinished(object sender, GameTimeEventArgs e)
+		{
+			base.Explode(e.GameTime);
+		}
+
 	}
 }

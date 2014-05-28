@@ -9,11 +9,20 @@ using Miner.GameLogic.Objects.Explosives;
 
 namespace Miner.GameLogic.Objects
 {
+	/// <summary>
+	/// Klasa bazowa dla maszyny
+	/// </summary>
 	public abstract class Machine : GameObject
 	{
 		protected int _pointsForKill;
 
+		/// <summary>
+		/// Czy można zniszczyć tę maszynę?
+		/// </summary>
 		public bool IsDestructable { get; set; }
+		/// <summary>
+		/// Stan maszyny
+		/// </summary>
 		public EMachineState State { get; set; }
 
 		public Machine(MinerGame game)
@@ -23,10 +32,11 @@ namespace Miner.GameLogic.Objects
 			State = EMachineState.Normal;
 			_pointsForKill = 0;
 		}
-
-
-		protected abstract void SetupAnimations();
-
+		
+		/// <summary>
+		/// Akcje wywoływane podczas kolizji z wybuchającym obiektem
+		/// </summary>
+		/// <param name="explosive">Materiał wybuchowy</param>
 		public virtual void HandleCollisionWithExplosive(Explosive explosive)
 		{
 			if (IsDestructable && State == EMachineState.Normal)

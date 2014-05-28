@@ -11,11 +11,14 @@ using Miner.GameLogic.Objects.Explosives;
 
 namespace Miner.GameLogic.Objects.Machines
 {
+	/// <summary>
+	/// Buldożer - można go zniszczyć. Co jakiś czas zmienia kierunek ruchu.
+	/// </summary>
 	public class Bulldozer : EnemyMachine
 	{
 
 		public PhysicsComponent PhysicsComponent { get { return (PhysicsComponent)Components["Physics"]; } }
-		public SimpleMoveWorldCollisionComponent WorldCollisionComponent { get { return (SimpleMoveWorldCollisionComponent)Components["WorldCollision"]; } }
+		public SimpleEnemyWorldCollisionComponent WorldCollisionComponent { get { return (SimpleEnemyWorldCollisionComponent)Components["WorldCollision"]; } }
 
 		public Bulldozer(MinerGame game)
 			: base(game)
@@ -26,7 +29,7 @@ namespace Miner.GameLogic.Objects.Machines
 			{
 				HasGravity = true
 			});
-			Components.Add("WorldCollision", new SimpleMoveWorldCollisionComponent(this, game.CurrentLevel));
+			Components.Add("WorldCollision", new SimpleEnemyWorldCollisionComponent(this, game.CurrentLevel));
 
 			Velocity = new Vector2(100f,0);
 

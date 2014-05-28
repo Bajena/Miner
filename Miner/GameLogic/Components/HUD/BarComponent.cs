@@ -8,6 +8,9 @@ using Miner.GameLogic.Objects;
 
 namespace Miner.GameLogic.Components
 {
+	/// <summary>
+	/// Komponent HUD służący do wyświetlania pionowego paska 
+	/// </summary>
 	class BarComponent : HudComponent
 	{
 		private readonly float _maxValue;

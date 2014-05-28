@@ -6,11 +6,17 @@ using Miner.GameInterface.GameScreens;
 
 namespace Miner.GameInterface.MenuEntries
 {
+	/// <summary>
+	/// Reprezentuje opcjê w menu gry.
+	/// </summary>
     public class MenuEntry
     {
 	    float _selectionFade;
 	    private bool _isSelected;
 
+		/// <summary>
+		/// Czy opcja jest wybrana?
+		/// </summary>
 	    public bool IsSelected
 	    {
 		    get { return _isSelected; }
@@ -26,18 +32,23 @@ namespace Miner.GameInterface.MenuEntries
 		    } 
 	    }
 
-
+		/// <summary>
+		/// Tekst opcji
+		/// </summary>
 	    public string Text { get; set; }
 
+		/// <summary>
+		/// Pozycja na ekranie
+		/// </summary>
 	    public Vector2 Position { get; set; }
 
 	    /// <summary>
-        /// Event raised when the menu entry is selected.
+        /// Zdarzenie wywo³ywane, kiedy u¿ytkownik uruchomi tê opcjê
         /// </summary>
         public event EventHandler Entered;
 
         /// <summary>
-        /// Method for raising the Selected event.
+        /// Metoda wywo³uj¹ca zdarzenie Entered
         /// </summary>
         protected internal virtual void OnEnter()
         {
@@ -46,12 +57,12 @@ namespace Miner.GameInterface.MenuEntries
         }
 
 		/// <summary>
-		/// Event raised when the menu entry is selected.
+		/// Zdarzenie wywo³ywane, gdy ta opcja staje siê aktywna
 		/// </summary>
 		public event EventHandler Selected;
 
 		/// <summary>
-		/// Method for raising the Selected event.
+		/// Metoda wywo³uj¹ca zdarzenie Selected
 		/// </summary>
 		protected internal virtual void OnSelected()
 		{
@@ -60,12 +71,12 @@ namespace Miner.GameInterface.MenuEntries
 		}
 
 		/// <summary>
-		/// Event raised when the menu entry is selected.
+		/// Zdarzenie wywo³ywane, gdy ta opcja przestaje byæ aktywna
 		/// </summary>
 		public event EventHandler Deselected;
 
 		/// <summary>
-		/// Method for raising the Selected event.
+		/// Metoda wywo³uj¹ca zdarzenie Deselected
 		/// </summary>
 		protected internal virtual void OnDeselected()
 		{

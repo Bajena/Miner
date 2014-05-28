@@ -7,6 +7,9 @@ using System.Xml.Serialization;
 
 namespace Miner.GameLogic.Serializable
 {
+	/// <summary>
+	/// Serializowalna klasa reprezentująca zapisaną grę
+	/// </summary>
 	[Serializable]
 	public class SaveData
 	{
@@ -15,12 +18,28 @@ namespace Miner.GameLogic.Serializable
 			GameObjects = new List<GameObjectData>();
 		}
 
+		/// <summary>
+		/// Nazwa poziomu
+		/// </summary>
 		public string LevelName { get; set; }
+		/// <summary>
+		/// Czy zebrano klucz?
+		/// </summary>
 		public bool KeyCollected { get; set; }
+		/// <summary>
+		/// Dane gracza
+		/// </summary>
 		public PlayerData Player { get; set; }
+		/// <summary>
+		/// Lista obiektów gry
+		/// </summary>
 		public List<GameObjectData> GameObjects { get; set; }
 
 
+		/// <summary>
+		/// Zapisuje do pliku o podanej ścieżce
+		/// </summary>
+		/// <param name="filePath">Ścieżka do pliku</param>
 		public void Serialize(string filePath)
 		{
 			var xmlSerializer = new XmlSerializer(typeof(SaveData));
@@ -29,6 +48,11 @@ namespace Miner.GameLogic.Serializable
 			fileWriter.Close();
 		}
 
+		/// <summary>
+		/// Ładuje dane z pliku o podanej ścieżce
+		/// </summary>
+		/// <param name="filePath">Ścieżka do pliku</param>
+		/// <returns></returns>
 		public static SaveData Deserialize(string filePath)
 		{
 			var xmlSerializer = new XmlSerializer(typeof(SaveData));

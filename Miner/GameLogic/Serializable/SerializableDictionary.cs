@@ -6,6 +6,11 @@ using System.Xml.Serialization;
 
 namespace Miner.GameLogic.Serializable
 {
+	/// <summary>
+	/// Klasa umożliwiająca serializowanie danych słownikowych
+	/// </summary>
+	/// <typeparam name="TKey"></typeparam>
+	/// <typeparam name="TValue"></typeparam>
 	[XmlRoot("dictionary")]
 	public class SerializableDictionary<TKey, TValue>
 		: Dictionary<TKey, TValue>, IXmlSerializable

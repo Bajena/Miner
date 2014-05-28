@@ -8,21 +8,34 @@ using Miner.GameInterface.GameScreens;
 
 namespace Miner.GameInterface.MenuEntries
 {
+	/// <summary>
+	/// Klasa rozszerzająca podstawową opcję menu o możliwość przypisania klawisza. Służy do zmiany ustawień sterowania.
+	/// </summary>
 	public class KeySelectMenuEntry : UserInputMenuEntry
 	{
 		private string _actionName;
+		/// <summary>
+		/// Akcja, którą reprezentuje ta opcja w menu
+		/// </summary>
 		public EAction Action { get; private set; }
+		/// <summary>
+		/// Klawisz przypisany do akcji
+		/// </summary>
 		public Keys Key { get; set; }
+
+		/// <summary>
+		/// Oczekiwanie na wciśniecie klawisza?
+		/// </summary>
 		public bool WaitingForKey { get; set; }
 
 
 		/// <summary>
-		/// Event raised when the key is selected.
+		/// Zdarzenie wywoływane, gdy klawisz został wybrany
 		/// </summary>
 		public event EventHandler KeySelectionFinished;
 
 		/// <summary>
-		/// Method for raising the OnKeySelectionFinished event.
+		/// Metoda wywołująca zdarzenie KeySelectionFinished
 		/// </summary>
 		protected internal virtual void OnKeySelectionFinished()
 		{

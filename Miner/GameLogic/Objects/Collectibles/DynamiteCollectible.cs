@@ -9,6 +9,9 @@ using Miner.GameCore;
 
 namespace Miner.GameLogic.Objects.Collectibles
 {
+	/// <summary>
+	/// Dynamit - dodaje graczowi 1 laskę dynamitu
+	/// </summary>
 	public class DynamiteCollectible : Collectible
 	{
 		public DynamiteCollectible(MinerGame game)

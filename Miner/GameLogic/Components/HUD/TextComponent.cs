@@ -10,6 +10,10 @@ using Miner.GameLogic.Objects;
 
 namespace Miner.GameLogic.Components
 {
+	/// <summary>
+	/// Element HUD wyświetlający tekst z informacją o stanie obiektu
+	/// </summary>
+	/// <typeparam name="T">Typ śledzonej właściwości</typeparam>
 	class TextComponent<T> : HudComponent
 	{
 		private readonly SpriteFont _font;

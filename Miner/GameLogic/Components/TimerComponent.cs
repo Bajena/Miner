@@ -16,6 +16,10 @@ namespace Miner.GameLogic.Components
 			GameTime = gameTime;
 		}
 	}
+
+	/// <summary>
+	/// Komponent odliczający czas
+	/// </summary>
 	public class TimerComponent : GameObjectComponent
 	{
 		private readonly TimeSpan _interval;
@@ -23,8 +27,11 @@ namespace Miner.GameLogic.Components
 
 		private TimeSpan _lastIntervalStart;
 
-
+		/// <summary>
+		/// Zdarzenie wywoływane, gdy minie zadany czas
+		/// </summary>
 		public event EventHandler<GameTimeEventArgs> Tick;
+
 
 		public TimerComponent(GameObject parentObject, TimeSpan interval, bool repeat) : base(parentObject)
 		{
@@ -35,11 +42,17 @@ namespace Miner.GameLogic.Components
 			Active = false;
 		}
 
+		/// <summary>
+		/// Włącza odliczanie
+		/// </summary>
 		public void Start()
 		{
 			Active = true;
 		}
 
+		/// <summary>
+		/// Zeruje odliczanie
+		/// </summary>
 		public void Stop()
 		{
 			_lastIntervalStart = TimeSpan.Zero;

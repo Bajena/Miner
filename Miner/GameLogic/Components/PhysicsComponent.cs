@@ -8,58 +8,29 @@ using Miner.GameLogic.Objects;
 
 namespace Miner.GameLogic.Components
 {
+	/// <summary>
+	/// Komponent implementujący fizykę.
+	/// </summary>
 	public class PhysicsComponent : GameObjectComponent
 	{
-
-		public Vector2 Position
-		{
-			get
-			{
-				return ParentObject.Properties.GetProperty<Vector2>("Position");
-			}
-			set
-			{
-				ParentObject.Properties.UpdateProperty("Position", value);
-			}
-		}
-
-		public Vector2 LastMove
-		{
-			get
-			{
-				return ParentObject.Properties.GetProperty<Vector2>("Position") - _previousPosition;
-			}
-		}
-
-		public Vector2 Velocity
-		{
-			get
-			{
-				return ParentObject.Properties.GetProperty<Vector2>("Velocity");
-			}
-			set
-			{
-				ParentObject.Properties.UpdateProperty("Velocity", value);
-			}
-		}
-
-		public Vector2 Acceleration
-		{
-			get
-			{
-				return (Vector2)ParentObject.Properties.GetProperty<Vector2>("Acceleration");
-			}
-
-			set
-			{
-				ParentObject.Properties.UpdateProperty("Acceleration", value);
-			}
-		}
-
+		/// <summary>
+		/// Maksymalna prędkość obiektu
+		/// </summary>
 		public float MaxVelocity { get; set; }
+
+		/// <summary>
+		/// Spowolnienie obiektu
+		/// </summary>
 		public float Drag { get; set; }
 		private readonly Vector2 _gravity;
+
+		/// <summary>
+		/// Czy obiekt ma spowalniać?
+		/// </summary>
 		public bool HasDrag { get; set; }
+		/// <summary>
+		/// Czy grawitacja jest aktywna?
+		/// </summary>
 		public bool HasGravity { get; set; }
 		
 		private Vector2 _previousPosition, position, velocity, acceleration;
@@ -73,11 +44,13 @@ namespace Miner.GameLogic.Components
 			_gravity = new Vector2(0, 600);
 			MaxVelocity = 5000;
 			
-			Velocity = Vector2.Zero;
-			Acceleration = Vector2.Zero;
 			ParentObject.Properties.UpdateProperty("IsPhysicsActive", true);
 		}
 
+		/// <summary>
+		/// Zmienia prędkość, przyspieszenie i liczy nową pozycję obiektu
+		/// </summary>
+		/// <param name="gameTime"></param>
 		public override void Update(GameTime gameTime)
 		{
 			Active = ParentObject.Properties.GetProperty<bool>("IsPhysicsActive");

@@ -5,27 +5,27 @@ using System.Text;
 
 namespace Miner.GameLogic
 {
+	/// <summary>
+	/// Klasa zawierająca właściwości danego obiektu
+	/// </summary>
 	public class PropertyContainer
 	{
 		/// <summary>
-		/// Dictionary containing properties of any data type.
+		/// Słownik właściwości
 		/// </summary>
 		protected Dictionary<String, object> _properties;
 
-		/// <summary>
-		/// Constructor.
-		/// </summary>
 		public PropertyContainer()
 		{
 			_properties = new Dictionary<String, object>();
 		}
 
 		/// <summary>
-		/// Updates value of property if it already exists, otherwise add it to the dictionary.
+		/// Aktualizuje właściwość lub jeśli nie ma jej w słowniku - dodaje.
 		/// </summary>
-		/// <typeparam name="T">Data type of property to update.</typeparam>
-		/// <param name="name">Name of property.</param>
-		/// <param name="obj">Object value to store.</param>
+		/// <typeparam name="T">Typ właściwości</typeparam>
+		/// <param name="name">Nazwa właściwości</param>
+		/// <param name="obj">Wartość</param>
 		public void UpdateProperty<T>(String name, T obj)
 		{
 			if (_properties.ContainsKey(name))
@@ -35,12 +35,11 @@ namespace Miner.GameLogic
 		}
 
 		/// <summary>
-		/// Returns a property by name.
-		/// If given key was not found, returns a default value of given data type.
+		/// Zwraca właściwość lub domyślną wartość jeśli właściwości nie ma w słowniku
 		/// </summary>
-		/// <typeparam name="T">Data type of property to retrieve.</typeparam>
-		/// <param name="name">Name of property.</param>
-		/// <returns>Value of property.</returns>
+		/// <typeparam name="T">Typ właściwości</typeparam>
+		/// <param name="name">Nazwa właściwości</param>
+		/// <returns>Zwraca wWartość właściwości lub domyślną wartość</returns>
 		public T GetProperty<T>(String name)
 		{
 			if (_properties.ContainsKey(name))

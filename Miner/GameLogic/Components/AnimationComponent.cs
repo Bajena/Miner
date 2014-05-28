@@ -9,18 +9,42 @@ using Miner.Helpers;
 
 namespace Miner.GameLogic.Components
 {
+	/// <summary>
+	/// Strona, w którą skierowana jest postać
+	/// </summary>
 	public enum EFacingDirection { Right, Left }
 
 	public class AnimationComponent : DrawableGameObjectComponent
 	{
+		/// <summary>
+		/// Słownik tekstur zawierających klatki animacji
+		/// </summary>
 		public Dictionary<String, Texture2D> SpriteSheets { get; set; }
+		/// <summary>
+		/// Słownik animacji
+		/// </summary>
 		public Dictionary<String, SpriteAnimation> Animations { get; set; }
+		/// <summary>
+		/// Nazwa aktualnie odtwarzanej animacji
+		/// </summary>
 		public string CurrentAnimationName { get { return _currentAnimation.Name; } }
+		/// <summary>
+		/// Obiekt z aktualną animacją
+		/// </summary>
 		public SpriteAnimation CurrentAnimation { get { return _currentAnimation; } }
+		/// <summary>
+		/// Wycinek klatki służący do wykrywania kolziji
+		/// </summary>
 		public Rectangle CollisionBox { get; set; }
+
+		/// <summary>
+		/// Strona, w którą skierowana jest postać
+		/// </summary>
 		public EFacingDirection Facing { get; set; }
+		/// <summary>
+		/// Skala w jakiej rysowana jest animacja
+		/// </summary>
 		public float Scale { get; set; }
-		public bool RotatesByVelocity { get; set; }
 
 		private SpriteAnimation _currentAnimation;
 		private SpriteEffects _spriteEffect;
@@ -37,12 +61,15 @@ namespace Miner.GameLogic.Components
 			_rotation = 0.0f;
 			Facing = EFacingDirection.Left;
 			_spriteEffect = SpriteEffects.None;
-			RotatesByVelocity = false;
 
 			ParentObject.Properties.UpdateProperty("BoundingBox", BoundingRect.Empty);
 			ParentObject.Properties.UpdateProperty("IsPhysicsActive", true);
 		}
 
+		/// <summary>
+		/// Zmienia aktualnie odtwarzaną animację
+		/// </summary>
+		/// <param name="animationName">Nazwa nowej animacji</param>
 		public virtual void SetActiveAnimation(String animationName)
 		{
 			if (Animations.ContainsKey(animationName))
@@ -53,8 +80,9 @@ namespace Miner.GameLogic.Components
 				{
 					var newAnimation = Animations[animationName];
 
-
+					//Przesuń obiekt tak, żeby nowa animacja miała środek tam gdzie stara animacja
 					ParentObject.Position = ParentObject.Position - new Vector2((newAnimation.Frames[0].Width - _currentAnimation.CurrentFrame.Width)/2,(newAnimation.Frames[0].Height - _currentAnimation.CurrentFrame.Height)/2);
+					
 					_currentAnimation = newAnimation;
 					_currentAnimation.HasStarted = false;
 					_currentAnimation.HasFinished = false;
@@ -91,8 +119,6 @@ namespace Miner.GameLogic.Components
 			}
 
 			ParentObject.BoundingBox = boundingBox;
-
-			ParentObject.Properties.UpdateProperty("IsPhysicsActive", !_currentAnimation.StopsMovement);
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
@@ -102,13 +128,14 @@ namespace Miner.GameLogic.Components
 
 			var boundingBox = new BoundingRect(_position.X-CollisionBox.X, _position.Y-CollisionBox.Y, _currentAnimation.CurrentFrame.Width * Scale, _currentAnimation.CurrentFrame.Height * Scale);
 
-			if (RotatesByVelocity)
-				_rotation = (float)Math.Atan2(_velocity.Y, _velocity.X);
-
 			spriteBatch.Draw(_currentAnimation.SpriteSheet, new Vector2(boundingBox.Left + boundingBox.Width / 2, boundingBox.Top + boundingBox.Height / 2),
 					_currentAnimation.CurrentFrame, Color.White, _rotation, new Vector2(boundingBox.Width / 2, boundingBox.Height / 2), Scale, _spriteEffect, 0);
 		}
 
+		/// <summary>
+		/// Dodaje efekt do animacji
+		/// </summary>
+		/// <param name="effect"></param>
 		public void AddEffect(SpriteEffects effect)
 		{
 			this._spriteEffect |= effect;

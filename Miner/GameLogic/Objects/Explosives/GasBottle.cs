@@ -11,6 +11,9 @@ using Miner.GameLogic.Components;
 
 namespace Miner.GameLogic.Objects.Explosives
 {
+	/// <summary>
+	/// Butla z gazem. Wybucha po pewnym czasie od zbliżenia się gracza
+	/// </summary>
 	public class GasBottle : Explosive
 	{
 		private float _activationDistance = 100f;
@@ -24,8 +27,8 @@ namespace Miner.GameLogic.Objects.Explosives
 		{
 			Type = "GasBottle";
 
-			var randTime = new Random().Next(1, 4);
-			var explosionWaitTimer = new TimerComponent(this,TimeSpan.FromSeconds(randTime), false);
+			var randTime = new Random().Next(500, 1500);
+			var explosionWaitTimer = new TimerComponent(this,TimeSpan.FromMilliseconds(randTime), false);
 			explosionWaitTimer.Tick += WaitForExplosionFinished;
 			Components.Add("ExplosionWaitTimer", explosionWaitTimer);
 		}
@@ -47,19 +50,6 @@ namespace Miner.GameLogic.Objects.Explosives
 			{
 				Activate();
 			}
-		}
-
-		private void Activate()
-		{
-			State = EExplosiveState.Activated;
-			AnimationComponent.SetActiveAnimation("Activated");
-			ExplosionWaitTimer.Start();
-		}
-
-		private bool ShouldActivate()
-		{
-			var distance = Game.CurrentLevel.Player.BoundingBox.Center.Distance(this.BoundingBox.Center);
-			return (State < EExplosiveState.Activated && distance <= _activationDistance);
 		}
 
 		protected override void SetupAnimations()
@@ -95,5 +85,26 @@ namespace Miner.GameLogic.Objects.Explosives
 
 			AnimationComponent.SetActiveAnimation("Idle");
 		}
+
+		/// <summary>
+		/// Zaczyna odliczanie przed wybuchem
+		/// </summary>
+		private void Activate()
+		{
+			State = EExplosiveState.Activated;
+			AnimationComponent.SetActiveAnimation("Activated");
+			ExplosionWaitTimer.Start();
+		}
+
+		/// <summary>
+		/// Sprawdza, czy gracz jest na tyle blisko żeby aktywować butlę
+		/// </summary>
+		/// <returns></returns>
+		private bool ShouldActivate()
+		{
+			var distance = Game.CurrentLevel.Player.BoundingBox.Center.Distance(this.BoundingBox.Center);
+			return (State < EExplosiveState.Activated && distance <= _activationDistance);
+		}
+
 	}
 }

@@ -6,9 +6,13 @@ using Microsoft.Xna.Framework;
 
 namespace Miner.GameInterface.MenuEntries
 {
+	/// <summary>
+	/// Klasa bazowa dla opcji w menu umożliwiających reagowanie na zdarzenia klawiatury
+	/// </summary>
 	public abstract class UserInputMenuEntry : MenuEntry
 	{
-		public UserInputMenuEntry(string text) : base(text)
+		public UserInputMenuEntry(string text)
+			: base(text)
 		{
 		}
 

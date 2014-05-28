@@ -6,6 +6,9 @@ using Microsoft.Xna.Framework;
 
 namespace Miner.Helpers
 {
+	/// <summary>
+	/// Struktura odpowiadająca Rectangle z XNA, jednak umożliwiająca wykonywanie operacji zmiennoprzecinkowych
+	/// </summary>
 	public struct BoundingRect
 	{
 		public Vector2 Min;

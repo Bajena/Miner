@@ -4,23 +4,23 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Miner.GameInterface
 {
+	/// <summary>
+	/// Reprezentuje akcję użytkownika
+	/// </summary>
 	[Serializable]
     public class InputAction
     {
+		/// <summary>
+		/// Klawisze wywołujące tę akcję
+		/// </summary>
         public Keys[] Keys { get; set; }
 
-		public bool NewPressOnly
-		{
-			get
-			{
-				return _newPressOnly;
-			}
-			set { _newPressOnly = value; }
-		}
+		/// <summary>
+		/// True, jeżeli żeby wywołać tę akcję ponownie należy nacisnąć odpowiadający jej klawisz ponownie.
+		/// </summary>
+		public bool NewPressOnly { get; set; }
 
-		private bool _newPressOnly;
-
-        private delegate bool KeyPress(Keys key);
+		private delegate bool KeyPress(Keys key);
 
 	    public InputAction()
 	    {
@@ -31,18 +31,18 @@ namespace Miner.GameInterface
         {
             Keys = keys != null ? keys.Clone() as Keys[] : new Keys[0];
 
-            _newPressOnly = newPressOnly;
+            NewPressOnly = newPressOnly;
         }
 
 		/// <summary>
-		/// Returns true if given input state is active
+		/// Sprawdza czy wybrano tę akcję
 		/// </summary>
-		/// <param name="state">state to check</param>
-		/// <returns></returns>
+		/// <param name="state">Aktualny stan klawiszy</param>
+		/// <returns>Zwraca true, jeżeli wywołano tę akcję</returns>
         public bool IsCalled(InputState state)
         {
             KeyPress keyTest;
-            if (_newPressOnly)
+            if (NewPressOnly)
             {
                 keyTest = state.IsNewKey;
             }
