@@ -8,6 +8,9 @@ using Miner.GameInterface.MenuEntries;
 
 namespace Miner.GameInterface.GameScreens
 {
+	/// <summary>
+	/// Ekran zapisywania gry
+	/// </summary>
 	class SaveGameMenuScreen : MenuScreen
 	{
 		private TextInputMenuEntry _saveNameEntry;
@@ -20,14 +23,12 @@ namespace Miner.GameInterface.GameScreens
 		{
 			base.Activate();
 			_saveNameEntry = new TextInputMenuEntry("Save name: ");
-			var okMenuEntry = new MenuEntry("OK");
 			var backMenuEntry = new MenuEntry("Back");
 
-			okMenuEntry.Entered+=OkMenuEntryEntered;
+			_saveNameEntry.Entered+=OkMenuEntryEntered;
 			backMenuEntry.Entered += OnCancel;
 
 			MenuEntries.Add(_saveNameEntry);
-			MenuEntries.Add(okMenuEntry);
 			MenuEntries.Add(backMenuEntry);
 		}
 

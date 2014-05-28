@@ -8,6 +8,9 @@ using Miner.GameInterface.MenuEntries;
 
 namespace Miner.GameInterface.GameScreens
 {
+	/// <summary>
+	/// Ekran ładowania gry
+	/// </summary>
 	class LoadGameMenuScreen : MenuScreen
 	{
 		public LoadGameMenuScreen()

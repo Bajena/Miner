@@ -5,6 +5,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Miner.GameInterface.GameScreens
 {
+	/// <summary>
+	/// Ekran odpowiadaj¹cy za rysowanie t³a w menu
+	/// </summary>
 	class BackgroundScreen : GameScreen
 	{
 		ContentManager _content;

@@ -16,10 +16,6 @@ namespace Miner.GameLogic.Components
 
 		public override void ReactToWorldCollision(Tile tile, EDirection direction, Vector2 intersectionDepth)
 		{
-			//if (tile.CollisionType==ETileCollisionType.LadderBottom && IsHeadingTowardsTile(tile) && Math.Abs(intersectionDepth.X) > tile.Dimensions.X / 2)
-			//{
-				
-			//}
 			var player = (ParentObject as Player);
 
 			player.IsCollidingWithLadder = false;

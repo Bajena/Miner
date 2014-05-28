@@ -6,6 +6,9 @@ using Miner.GameInterface.MenuEntries;
 
 namespace Miner.GameInterface.GameScreens
 {
+	/// <summary>
+	/// Ekran pozwalający zmieniać ustawienia sterowania
+	/// </summary>
 	public class ControlsOptionsMenuScreen : MenuScreen
 	{
 		private KeySelectMenuEntry _activeMenuEntry;

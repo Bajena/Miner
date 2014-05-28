@@ -104,11 +104,6 @@ namespace Miner.GameLogic.Components
 					ParentObject.Velocity = velocity;
 					ParentObject.Properties.UpdateProperty("IsOnGround", true);
 				}
-				else if (direction == EDirection.Vertical &&
-				         CollisionHelper.GetCollisionOrigin(intersectionDepth, direction) == ESide.Bottom)
-				{
-					
-				}
 			}
 		}
 

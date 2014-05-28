@@ -6,6 +6,9 @@ using Miner.GameInterface.MenuEntries;
 
 namespace Miner.GameInterface.GameScreens
 {
+	/// <summary>
+	/// Ekran pytający użytkownika o imię
+	/// </summary>
 	public class NamePromptMenuScreen : MenuScreen
 	{
 		private TextInputMenuEntry nameMenuEntry = new TextInputMenuEntry("Name: ");
@@ -67,10 +70,6 @@ namespace Miner.GameInterface.GameScreens
 			base.HandleInput(gameTime,input);
 		}
 
-        /// <summary>
-        /// Event handler for when the user selects ok on the "are you sure
-        /// you want to exit" message box.
-        /// </summary>
         void ConfirmExitMessageBoxAccepted(object sender, EventArgs e)
         {
             ScreenManager.Game.Exit();

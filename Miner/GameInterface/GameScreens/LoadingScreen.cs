@@ -6,6 +6,9 @@ using Miner.GameCore;
 
 namespace Miner.GameInterface.GameScreens
 {
+	/// <summary>
+	/// Ekran ³adowania. Umo¿liwia przechodzenie miêdzy jednym ekranem a drugim.
+	/// </summary>
     class LoadingScreen : GameScreen
     {
 	    readonly bool _loadingIsSlow;
@@ -22,6 +25,9 @@ namespace Miner.GameInterface.GameScreens
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
         }
 
+		/// <summary>
+		/// Metoda statyczna. Wy³¹cza wszystkie aktywne ekrany, pokazuje ekran ³adowania i inicjalizuje podane w parametrze screensToLoad ekrany
+		/// </summary>
         public static void Load(ScreenManager screenManager, bool loadingIsSlow,bool exitOtherScreens, params GameScreen[] screensToLoad)
         {
 			if (exitOtherScreens)

@@ -10,6 +10,9 @@ using Miner.GameInterface.MenuEntries;
 
 namespace Miner.GameInterface.GameScreens
 {
+	/// <summary>
+	/// Ekran pomocy
+	/// </summary>
 	public class HelpScreen : MenuScreen
 	{
 		private ContentManager _content;

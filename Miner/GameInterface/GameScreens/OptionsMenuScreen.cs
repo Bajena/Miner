@@ -6,6 +6,9 @@ using Miner.GameInterface.MenuEntries;
 
 namespace Miner.GameInterface.GameScreens
 {
+	/// <summary>
+	/// Ekran menu umo¿liwiaj¹cy zmianê opcji gry
+	/// </summary>
     class OptionsMenuScreen : MenuScreen
     {
 	    readonly MenuEntry _soundMenuEntry;

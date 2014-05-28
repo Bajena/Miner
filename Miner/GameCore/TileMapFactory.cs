@@ -15,18 +15,25 @@ using Miner.GameLogic.Serializable;
 
 namespace Miner.GameCore
 {
+	/// <summary>
+	/// Klasa odpowiedzialna za przetwarzanie ciągu liczb podanych w levelData w polu Tiles na dwuwymiarową tablicę typu Tile
+	/// </summary>
 	public class TileMapFactory
 	{
+		/// <summary>
+		/// Buduje mapę kafelków na podstawie danych zawartych w levelData oraz tekstury tileset
+		/// </summary>
+		/// <param name="levelData">Dane poziomu</param>
+		/// <param name="tileset">Tekstura zawierająca kafelki</param>
+		/// <returns>Dwuwymiarowa tablica kafelków mapy</returns>
 		public Tile[,] BuildTileMap(LevelData levelData, Texture2D tileset)
 		{
 			var mapDimensions = levelData.Dimensions;
 			var tilesArray = new Tile[(int) mapDimensions.X, (int) mapDimensions.Y];
 
-			var trimmedAnd = levelData.Tiles.Trim().Replace("\n", "");
-			trimmedAnd = Regex.Replace(trimmedAnd, @"\s+", "");
-			var tileCodes = trimmedAnd.Split(',');
-
-			//var comaSeparated = string.Join(", ", tileCodes);
+			var trimmedAndRemovedNewLines = levelData.Tiles.Trim().Replace("\n", "");
+			trimmedAndRemovedNewLines = Regex.Replace(trimmedAndRemovedNewLines, @"\s+", "");
+			var tileCodes = trimmedAndRemovedNewLines.Split(',');
 
 			int i = 0;
 			for (int y = 0; y < tilesArray.GetLength(1); y++)
@@ -39,6 +46,14 @@ namespace Miner.GameCore
 			return tilesArray;
 		}
 
+		/// <summary>
+		/// Buduje obiekt kafelka na podstawie podanych informacji
+		/// </summary>
+		/// <param name="tileCode">Kod kafelka</param>
+		/// <param name="tilePosition">Pozycja kafelka we współrzędnych, w których jednostką są wymiary kafelka</param>
+		/// <param name="levelData">Dane poziomu</param>
+		/// <param name="tileset">Tekstura zawierająca kafelki</param>
+		/// <returns></returns>
 		public Tile GetTile(string tileCode, Vector2 tilePosition, LevelData levelData,Texture2D tileset)
 		{
 			var tilesetOffset = CalculateTilesetOffset(tileCode, tileset, levelData.TileDimensions);
@@ -88,6 +103,13 @@ namespace Miner.GameCore
 			return tile;
 		}
 
+		/// <summary>
+		/// Liczy współrzędne na teksturze tileset, od których zaczyna się rysowanie danego kafelka
+		/// </summary>
+		/// <param name="tileCode"></param>
+		/// <param name="tileset"></param>
+		/// <param name="tileDimensions"></param>
+		/// <returns></returns>
 		private Vector2 CalculateTilesetOffset(string tileCode, Texture2D tileset, Vector2 tileDimensions)
 		{
 			int code;

@@ -135,7 +135,7 @@ namespace Miner.GameLogic.Components
 			if (worldCollisionComponent != null && worldCollisionComponent.Active)
 			{
 				worldCollisionComponent.CollidingTiles.Clear();
-
+				
 				if (moveVector.X != 0)
 				{
 					ParentObject.Position += Vector2.UnitX * moveVector;

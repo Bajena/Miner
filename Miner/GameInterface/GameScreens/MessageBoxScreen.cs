@@ -6,12 +6,24 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Miner.GameInterface.GameScreens
 {
+	/// <summary>
+	/// Typ okna
+	/// </summary>
 	public enum MessageBoxType
 	{
+		/// <summary>
+		/// Informacyjne
+		/// </summary>
 		Info,
+		/// <summary>
+		/// Umo¿liwiaj¹ce wybór
+		/// </summary>
 		YesNo
 	}
 
+	/// <summary>
+	/// Ekran wyœwietlaj¹cy informacjê
+	/// </summary>
 	public class MessageBoxScreen : GameScreen
     {
 	    public string Message { get; set; }

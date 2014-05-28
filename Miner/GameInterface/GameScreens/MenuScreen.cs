@@ -8,19 +8,47 @@ using Miner.GameInterface.MenuEntries;
 
 namespace Miner.GameInterface.GameScreens
 {
+	/// <summary>
+	/// Klasa bazowa dla wszystkich ekranów w menu
+	/// </summary>
     public abstract class MenuScreen : GameScreen
     {
 	    int _selectedEntry = 0;
 
+		/// <summary>
+		/// Lista klawiszy odpowiedzialnych za zmianê opcji na wy¿sz¹
+		/// </summary>
 		protected InputAction MenuUp;
+		/// <summary>
+		/// Lista klawiszy odpowiedzialnych za zmianê opcji na ni¿sz¹
+		/// </summary>
 		protected InputAction MenuDown;
+
+		/// <summary>
+		/// Lista klawiszy odpowiedzialnych za wybranie opcji
+		/// </summary>
 		protected InputAction MenuSelect;
+		/// <summary>
+		/// Lista klawiszy odpowiedzialnych za wyjœcie z ekranu
+		/// </summary>
 		protected InputAction MenuCancel;
+		/// <summary>
+		/// Wysokoœæ na której jest narysowany tytu³ ekranu
+		/// </summary>
 		protected float TitlePositionY { get; set; }
+		/// <summary>
+		/// Wysokoœæ, na której zaczyna siê rysowanie opcji menu
+		/// </summary>
 		protected float MenuEntriesPositionY { get; set; }
 
+		/// <summary>
+		/// Tytu³ ekranu
+		/// </summary>
 	    public string MenuTitle { get; set; }
 	    
+		/// <summary>
+		/// Opcje w menu
+		/// </summary>
 		protected List<MenuEntry> MenuEntries { get; private set; }
 
         public MenuScreen(string menuTitle)
@@ -76,11 +104,18 @@ namespace Miner.GameInterface.GameScreens
             }
         }
 
+		/// <summary>
+		/// Co ma siê staæ po wybraniu opcji?
+		/// </summary>
+		/// <param name="entryIndex">numer opcji</param>
         protected virtual void OnSelectEntry(int entryIndex)
         {
             MenuEntries[entryIndex].OnEnter();
         }
 
+		/// <summary>
+		/// Akcje wykonywane podczas anulowania ekranu
+		/// </summary>
         protected virtual void OnCancel()
         {
             ExitScreen();
@@ -91,6 +126,9 @@ namespace Miner.GameInterface.GameScreens
             OnCancel();
         }
 
+		/// <summary>
+		/// Aktualizuje pozycje opcji podczas pojawiania siê/znikania ekranu
+		/// </summary>
         protected virtual void UpdateMenuEntryLocations()
         {
             var transitionOffset = (float)Math.Pow(TransitionPosition, 2);

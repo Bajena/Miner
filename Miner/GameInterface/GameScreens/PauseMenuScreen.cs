@@ -3,6 +3,9 @@ using Miner.GameInterface.MenuEntries;
 
 namespace Miner.GameInterface.GameScreens
 {
+	/// <summary>
+	/// Ekran pauzy
+	/// </summary>
     class PauseMenuScreen : MenuScreen
     {
         public PauseMenuScreen()

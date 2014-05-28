@@ -7,6 +7,9 @@ using Miner.GameInterface.MenuEntries;
 
 namespace Miner.GameInterface.GameScreens
 {
+	/// <summary>
+	/// Ekran najlepszych wyników
+	/// </summary>
 	public class HighScoresMenuScreen : MenuScreen
 	{
 		public HighScoresMenuScreen() : base("High Scores")

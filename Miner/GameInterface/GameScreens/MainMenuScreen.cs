@@ -5,7 +5,10 @@ using Miner.GameInterface.MenuEntries;
 
 namespace Miner.GameInterface.GameScreens
 {
-    class MainMenuScreen : MenuScreen
+	/// <summary>
+	/// Ekran g³ównego menu
+	/// </summary>
+    public class MainMenuScreen : MenuScreen
     {
         public MainMenuScreen()
             : base("")
