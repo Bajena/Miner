@@ -32,8 +32,14 @@ namespace Miner.GameLogic.Components
 		/// Czy grawitacja jest aktywna?
 		/// </summary>
 		public bool HasGravity { get; set; }
-		
-		private Vector2 _previousPosition, position, velocity, acceleration;
+
+		public Vector2 PreviousPosition
+		{
+			get { return _previousPosition; }
+		}
+
+		private Vector2 _previousPosition;
+		private Vector2 position, velocity, acceleration;
 
 		public PhysicsComponent(GameObject gameObject)
 			: base(gameObject)
@@ -107,20 +113,7 @@ namespace Miner.GameLogic.Components
 			
 			if (worldCollisionComponent != null && worldCollisionComponent.Active)
 			{
-				worldCollisionComponent.CollidingTiles.Clear();
-				
-				if (moveVector.X != 0)
-				{
-					ParentObject.Position += Vector2.UnitX * moveVector;
-					ParentObject.Position = new Vector2((float)Math.Round(ParentObject.Position.X), ParentObject.Position.Y);
-					worldCollisionComponent.HandleWorldCollision(EDirection.Horizontal);
-				}
-				if (moveVector.Y != 0)
-				{
-					ParentObject.Position += Vector2.UnitY * moveVector;
-					ParentObject.Position = new Vector2(ParentObject.Position.X, (float)Math.Round(ParentObject.Position.Y));
-					worldCollisionComponent.HandleWorldCollision(EDirection.Vertical);
-				}
+				worldCollisionComponent.PerformMove(moveVector);
 			}
 			else ParentObject.Position += moveVector;
 		}

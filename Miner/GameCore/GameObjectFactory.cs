@@ -122,6 +122,12 @@ namespace Miner.GameCore
 							Position = screenPosition
 						});
 						break;
+					case "Cart":
+						machines.Add(new Cart(_game)
+						{
+							Position = screenPosition
+						});
+						break;
 				}
 			}
 

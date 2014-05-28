@@ -75,14 +75,20 @@ namespace Miner.GameLogic.Components
 			if (Animations.ContainsKey(animationName))
 			{
 				if (_currentAnimation == null)
+				{
 					_currentAnimation = Animations[animationName];
+					_currentAnimation.CurrentFrame = _currentAnimation.Frames[0];
+					UpdateBoundingBox();
+				}
 				else if (_currentAnimation.Name != animationName && (!_currentAnimation.HasToFinish || _currentAnimation.HasFinished))
 				{
 					var newAnimation = Animations[animationName];
 
 					//Przesuń obiekt tak, żeby nowa animacja miała środek tam gdzie stara animacja
-					ParentObject.Position = ParentObject.Position - new Vector2((newAnimation.Frames[0].Width - _currentAnimation.CurrentFrame.Width)/2,(newAnimation.Frames[0].Height - _currentAnimation.CurrentFrame.Height)/2);
-					
+					ParentObject.Position = ParentObject.Position -
+					                        new Vector2((newAnimation.Frames[0].Width - _currentAnimation.CurrentFrame.Width)/2,
+						                        (newAnimation.Frames[0].Height - _currentAnimation.CurrentFrame.Height)/2);
+
 					_currentAnimation = newAnimation;
 					_currentAnimation.HasStarted = false;
 					_currentAnimation.HasFinished = false;
@@ -90,23 +96,31 @@ namespace Miner.GameLogic.Components
 			}
 		}
 
+		private void UpdateBoundingBox()
+		{
+			var boundingBox = ParentObject.BoundingBox;
+
+			if (CollisionBox != Rectangle.Empty)
+				boundingBox = new BoundingRect(_position.X, _position.Y, CollisionBox.Width * Scale, CollisionBox.Height * Scale);
+			else
+			{
+				boundingBox = new BoundingRect(_position.X, _position.Y, _currentAnimation.CurrentFrame.Width * Scale, _currentAnimation.CurrentFrame.Height * Scale);
+			}
+			ParentObject.BoundingBox = boundingBox;
+		}
+
 		public override void Update(GameTime gameTime)
 		{
 			_position = ParentObject.Position;
 			_velocity = ParentObject.Velocity;
-			var boundingBox = ParentObject.BoundingBox;
 
 			if (!_currentAnimation.HasStarted)
 				_currentAnimation.StartAnimation(gameTime);
 
 			_currentAnimation.Update(gameTime);
 
-			if (CollisionBox!=Rectangle.Empty)
-				boundingBox = new BoundingRect(_position.X, _position.Y, CollisionBox.Width * Scale, CollisionBox.Height * Scale);
-			else
-			{
-				boundingBox = new  BoundingRect(_position.X, _position.Y, _currentAnimation.CurrentFrame.Width * Scale, _currentAnimation.CurrentFrame.Height * Scale);
-			}
+			UpdateBoundingBox();
+			
 			if (_velocity.X > 0.1)
 			{
 				Facing = EFacingDirection.Right;
@@ -118,7 +132,6 @@ namespace Miner.GameLogic.Components
 				_spriteEffect = SpriteEffects.None;
 			}
 
-			ParentObject.BoundingBox = boundingBox;
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Miner.Enums;
+using Miner.GameCore;
 using Miner.GameLogic.Objects;
 
 namespace Miner.GameLogic.Components
@@ -13,11 +15,11 @@ namespace Miner.GameLogic.Components
 	/// </summary>
 	public class PlayerWorldCollisionComponent : WorldCollisionComponent
 	{
-		public PlayerWorldCollisionComponent(Player parentObject, Level level) : base(parentObject, level)
+		public PlayerWorldCollisionComponent(MinerGame game,Player parentObject) : base(game, parentObject)
 		{
 		}
 
-		public override void ReactToWorldCollision(Tile tile, EDirection direction, Vector2 intersectionDepth)
+		protected override void ReactToTileCollision(Tile tile, EDirection direction, Vector2 intersectionDepth)
 		{
 			var player = (ParentObject as Player);
 
@@ -26,7 +28,15 @@ namespace Miner.GameLogic.Components
 			{
 				player.IsCollidingWithLadder = true;
 			}
-			base.ReactToWorldCollision(tile, direction, intersectionDepth);
+
+
+			if ((tile.TileType == ETileType.LadderTop && player.IsClimbing))
+			{
+				return;
+			}
+			
+
+			base.ReactToTileCollision(tile, direction, intersectionDepth);
 		}
 
 	}

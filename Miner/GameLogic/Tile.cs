@@ -31,6 +31,10 @@ namespace Miner.GameLogic
 		/// Czy jest widoczny?
 		/// </summary>
 		public bool Visible { get; set; }
+		/// <summary>
+		/// Offset na teksturze z kafelkami
+		/// </summary>
+		public Vector2 TilesetOffset { get; set; }
 
 		/// <summary>
 		/// Prostokąt reprezentujący kafelek na planszy
@@ -49,12 +53,11 @@ namespace Miner.GameLogic
 		public string Code { get; set; }
 
 		private readonly Texture2D _tileset;
-		private Vector2 _tilesetOffset;
 
 		public Tile(Texture2D tileset, Vector2 tilesetOffset)
 		{
 			_tileset = tileset;
-			_tilesetOffset = tilesetOffset;
+			TilesetOffset = tilesetOffset;
 			Visible = true;
 		}
 		
@@ -67,7 +70,7 @@ namespace Miner.GameLogic
 			if (Visible)
 			{
 				spriteBatch.Draw(_tileset, new Rectangle((int)Position.X, (int)Position.Y, (int)Dimensions.X, (int)Dimensions.Y),
-					new Rectangle((int) _tilesetOffset.X, (int) _tilesetOffset.Y, (int) Dimensions.X, (int) Dimensions.Y), Color.White);
+					new Rectangle((int) TilesetOffset.X, (int) TilesetOffset.Y, (int) Dimensions.X, (int) Dimensions.Y), Color.White);
 			}
 		}
 		

@@ -97,6 +97,24 @@ namespace Miner.GameCore
 						tile.CollisionType = ETileCollisionType.Platform;
 						tile.TileType=ETileType.LadderTop;
 						break;
+					case "27"://tunel
+					case "28"://tunel
+					case "29"://tunel
+					case "30"://tunel
+					case "31"://tunel środek
+					case "32"://tunel
+						tile.CollisionType = ETileCollisionType.Passable;
+						break;
+					case "33"://tunel start
+						tile.CollisionType = ETileCollisionType.Passable;
+						tile.TileType = ETileType.TunnelStart;
+			            tile.TilesetOffset = CalculateTilesetOffset("31", tileset, levelData.TileDimensions);
+						break;
+					case "34"://tunel end
+						tile.CollisionType = ETileCollisionType.Passable;
+						tile.TileType = ETileType.TunnelEnd;
+			            tile.TilesetOffset = CalculateTilesetOffset("31", tileset, levelData.TileDimensions);
+						break;
 				}
 			}
 

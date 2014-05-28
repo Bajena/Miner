@@ -105,7 +105,9 @@
     <Compile Include="GameInterface\MenuEntries\UserInputMenuEntry.cs" />
     <Compile Include="GameInterface\MinerHud.cs" />
     <Compile Include="GameLogic\Camera.cs" />
+    <Compile Include="GameLogic\CartGenerator.cs" />
     <Compile Include="GameLogic\Components\AnimationComponent.cs" />
+    <Compile Include="GameLogic\Components\CartWorldCollisionComponent.cs" />
     <Compile Include="GameLogic\Components\HUD\TextComponent.cs" />
     <Compile Include="GameLogic\Components\PlayerWorldCollisionComponent.cs" />
     <Compile Include="GameLogic\Components\TimerComponent.cs" />
@@ -145,6 +147,7 @@
     <Compile Include="GameLogic\PropertyContainer.cs" />
     <Compile Include="GameLogic\Serializable\LevelData.cs" />
     <Compile Include="GameLogic\SpriteAnimation.cs" />
+    <Compile Include="GameLogic\GameTimer.cs" />
     <Compile Include="Helpers\BoundingRect.cs" />
     <Compile Include="Helpers\CollisionHelper.cs" />
     <Compile Include="Helpers\SoundHelper.cs" />

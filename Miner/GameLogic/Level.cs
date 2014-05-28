@@ -65,6 +65,7 @@ namespace Miner.GameLogic
 		private MinerGame _game;
 		private readonly SaveData _saveData; //Potrzebne tylko do inicjalizacji
 		private bool _levelComplete;
+		private CartGenerator _cartGenerator;
 
 		/// <summary>
 		/// Konstruktor. Poziom jest ładowany z pliku xml o tej samej nazwie co parametr name.
@@ -88,7 +89,11 @@ namespace Miner.GameLogic
 		{
 			_game = game;
 			Name = name;
-			Player = player;
+
+			Player = new Player(game)
+			{
+				Points = player.Points
+			};
 		}
 
 		/// <summary>
@@ -135,6 +140,7 @@ namespace Miner.GameLogic
 			InitializeGameObjects(levelData , _saveData!=null);
 			InitializeTileMap(levelData);
 
+			_cartGenerator = new CartGenerator(_game, this);
 			Camera = new Camera(_game.GraphicsDevice.Viewport, this, Player);
 			Size = new Vector2(Tiles.GetLength(0) * _tileDimensions.X, Tiles.GetLength(1) * _tileDimensions.Y);
 		}
@@ -150,6 +156,7 @@ namespace Miner.GameLogic
 			if (Player == null)
 			{
 				Player = new Player(_game);
+				Player.Respawn(PlayerStartPosition);
 			}
 
 			Player.Died += PlayerDied;
@@ -248,7 +255,11 @@ namespace Miner.GameLogic
 			if (_levelComplete)
 				return;
 
+			_cartGenerator.Update(gameTime);
+			_machines.AddRange(_cartGenerator.GetCreatedCarts());
+
 			Player.Update(gameTime);
+
 			foreach (var explosive in _explosives)
 			{
 				explosive.Update(gameTime);
@@ -264,8 +275,6 @@ namespace Miner.GameLogic
 			CleanupObjects();
 			HandleCollisions();
 			Camera.Update(gameTime);
-
-
 		}
 
 		private void CleanupObjects()

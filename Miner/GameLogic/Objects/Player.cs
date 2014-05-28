@@ -137,7 +137,7 @@ namespace Miner.GameLogic.Objects
 			{
 				HasGravity = true
 			});
-			Components.Add("WorldCollision", new PlayerWorldCollisionComponent(this, game.CurrentLevel));
+			Components.Add("WorldCollision", new PlayerWorldCollisionComponent(game,this));
 			SetupAnimations();
 		}
 
@@ -201,7 +201,6 @@ namespace Miner.GameLogic.Objects
 				throw new ArgumentNullException("input");
 
 
-			Velocity = new Vector2(0, Velocity.Y);
 
 			//kody
 			if (SettingsManager.Instance.Debug)
@@ -226,18 +225,18 @@ namespace Miner.GameLogic.Objects
 			if (SettingsManager.Instance.Controls[EAction.MoveRight].IsCalled(input))
 			{
 				Velocity = new Vector2(_sideMoveSpeed, Velocity.Y);
-				if (IsOnGround && AnimationComponent.CurrentAnimationName != "Run") AnimationComponent.SetActiveAnimation("Run");
-				if (IsClimbing)
-					EndClimb();
-				//Position = new Vector2(Position.Left+1,Position.Y);
+				if (IsOnGround && AnimationComponent.CurrentAnimationName != "Run") 
+					AnimationComponent.SetActiveAnimation("Run");
+				//if (IsClimbing)
+				//	EndClimb();
 			}
 			if (SettingsManager.Instance.Controls[EAction.MoveLeft].IsCalled(input))
 			{
 				Velocity = new Vector2(-_sideMoveSpeed, Velocity.Y);
-				if (IsOnGround && AnimationComponent.CurrentAnimationName != "Run") AnimationComponent.SetActiveAnimation("Run");
-				if (IsClimbing)
-					EndClimb();
-				//Position = new Vector2(Position.Left+1,Position.Y);
+				if (IsOnGround && AnimationComponent.CurrentAnimationName != "Run") 
+					AnimationComponent.SetActiveAnimation("Run");
+				//if (IsClimbing)
+				//	EndClimb();
 			}
 			if (SettingsManager.Instance.Controls[EAction.Jump].IsCalled(input) && IsOnGround)
 			{
@@ -245,14 +244,12 @@ namespace Miner.GameLogic.Objects
 			}
 			else if (SettingsManager.Instance.Controls[EAction.Jump].IsCalled(input) && IsCollidingWithLadder)
 			{
-				Climb();
-				Velocity = new Vector2(Velocity.X,-_climbingSpeed);
+				Climb(-1);
 			}
 
 			if (SettingsManager.Instance.Controls[EAction.MoveDown].IsCalled(input) && IsCollidingWithLadder)
 			{
-				Climb();
-				Velocity = new Vector2(Velocity.X, _climbingSpeed);
+				Climb(1);
 			}
 
 			
@@ -265,15 +262,17 @@ namespace Miner.GameLogic.Objects
 				AnimationComponent.SetActiveAnimation("Idle");
 		}
 
-		private void Climb()
+		private void Climb(int directionModifier)
 		{
 
 			AnimationComponent.SetActiveAnimation("Idle");
 			IsClimbing = true;
 			PhysicsComponent.HasGravity = false;
+			Velocity = new Vector2(Velocity.X, directionModifier * _climbingSpeed);
 		}
 		private void EndClimb()
 		{
+			Velocity = new Vector2(Velocity.X, 0);
 			IsClimbing = false;
 			PhysicsComponent.HasGravity = true;
 		}
@@ -305,17 +304,22 @@ namespace Miner.GameLogic.Objects
 			Acceleration = Vector2.Zero;
 			Velocity = Vector2.Zero;
 			IsCollidingWithLadder = false;
-			IsClimbing = false;
+			EndClimb();
 			Oxygen = SettingsManager.Instance.MaxOxygen;
 		}
 
 		public override void Update(GameTime gameTime)
 		{
 			base.Update(gameTime);
+			if (!IsCollidingWithLadder && IsClimbing)
+			{
+				EndClimb();
+			}
 			if (IsClimbing)
 			{
 				Velocity = new Vector2(Velocity.X,0);
 			}
+			Velocity = new Vector2(0, Velocity.Y);
 		}
 
 		public List<Tile> GetCollidedTiles()

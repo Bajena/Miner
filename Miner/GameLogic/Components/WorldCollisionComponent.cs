@@ -16,16 +16,21 @@ namespace Miner.GameLogic.Components
 	/// </summary>
 	public class WorldCollisionComponent : GameObjectComponent
 	{
+		private readonly MinerGame _game;
+
+		protected Level CurrentLevel
+		{
+			get { return _game.CurrentLevel; }
+		}
+
 		/// <summary>
 		/// Lista kafelków, z którymi koliduje obiekt
 		/// </summary>
 		public List<Tile> CollidingTiles { get; private set; }
-
-		private Level _level;
-
-		public WorldCollisionComponent(GameObject parentObject, Level level) : base(parentObject)
+		
+		public WorldCollisionComponent(MinerGame game,GameObject parentObject) : base(parentObject)
 		{
-			_level = level;
+			_game = game;
 			CollidingTiles = new List<Tile>();
 		}
 
@@ -33,20 +38,46 @@ namespace Miner.GameLogic.Components
 		{
 		}
 
+		public void PerformMove(Vector2 moveVector)
+		{
+			CollidingTiles.Clear();
+
+			if (moveVector.X != 0)
+			{
+				ParentObject.Position += Vector2.UnitX * moveVector;
+				ParentObject.Position = new Vector2((float)Math.Round(ParentObject.Position.X), ParentObject.Position.Y);
+				HandleWorldCollision(EDirection.Horizontal);
+			}
+			if (moveVector.Y != 0)
+			{
+				ParentObject.Position += Vector2.UnitY * moveVector;
+				ParentObject.Position = new Vector2(ParentObject.Position.X, (float)Math.Round(ParentObject.Position.Y));
+				HandleWorldCollision(EDirection.Vertical);
+			}
+
+			//ParentObject.Properties.UpdateProperty("IsCollidingWithLadder",
+			//	CollidingTiles.Exists(t => t.TileType == ETileType.LadderMiddle || t.TileType == ETileType.LadderTop));
+
+			//Czy obiekt nie wychodzi poza poziom
+			KeepObjectInLevelBounds();
+		}
+
 		/// <summary>
 		/// Zwraca listę kafelków blokujących ruch w danym kierunku
 		/// </summary>
 		/// <param name="direction"></param>
 		/// <returns>Zwraca listę kafelków kolidujących w danym kierunku</returns>
-		public List<Tile> HandleWorldCollision(EDirection direction)
+		protected List<Tile> HandleWorldCollision(EDirection direction)
 		{
 			var directionCollidingTiles = new List<Tile>();
 
-			if (_level != null)
+			var currentLevel = _game.CurrentLevel;
+
+			if (currentLevel != null)
 			{
 				//Kafelki
 				var objectBounds = ParentObject.BoundingBox;
-				var tilesToCheck = _level.GetSurroundingTiles(objectBounds);
+				var tilesToCheck = currentLevel.GetSurroundingTiles(objectBounds);
 
 				foreach (var tile in tilesToCheck)
 				{
@@ -55,7 +86,7 @@ namespace Miner.GameLogic.Components
 
 					if (objectBounds.Intersects(tile.BoundingBox, direction, out intersectionDepth))
 					{
-						ReactToWorldCollision(tile, direction, intersectionDepth);
+						ReactToTileCollision(tile, direction, intersectionDepth);
 						
 						//Dodaj kafelek do listy wszystkich kolidujących kafelków
 						if (!CollidingTiles.Contains(tile))
@@ -70,8 +101,6 @@ namespace Miner.GameLogic.Components
 					}
 				}
 
-				//Czy obiekt nie wychodzi poza poziom
-				KeepObjectInLevelBounds();
 			}
 
 
@@ -84,7 +113,7 @@ namespace Miner.GameLogic.Components
 		/// <param name="tile">Kafelek</param>
 		/// <param name="direction">Kierun (Pion lub poziom)</param>
 		/// <param name="intersectionDepth">Głębokkość kolizji w pikselach</param>
-		public virtual void ReactToWorldCollision(Tile tile, EDirection direction, Vector2 intersectionDepth)
+		protected virtual void ReactToTileCollision(Tile tile, EDirection direction, Vector2 intersectionDepth)
 		{
 			if (tile.CollisionType == ETileCollisionType.Impassable)
 			{
@@ -109,9 +138,10 @@ namespace Miner.GameLogic.Components
 			else if (tile.CollisionType == ETileCollisionType.Platform)
 			{
 				var velocity = ParentObject.Velocity;
-				var previousBottomY = ParentObject.Position.Y - velocity.Y + ParentObject.BoundingBox.Height;
-				if (direction == EDirection.Vertical &&  previousBottomY <= tile.BoundingBox.Top)
+				var previousBottomY = (ParentObject.Components["Physics"] as PhysicsComponent).PreviousPosition.Y + ParentObject.BoundingBox.Height;
+				if (direction == EDirection.Vertical && previousBottomY <= tile.BoundingBox.Top)
 				{
+					ParentObject.Position += intersectionDepth;
 					velocity = new Vector2(velocity.X, 0);
 					ParentObject.Velocity = velocity;
 					ParentObject.Properties.UpdateProperty("IsOnGround", true);
@@ -128,9 +158,9 @@ namespace Miner.GameLogic.Components
 			{
 				ParentObject.Position = new Vector2(0,ParentObject.Position.Y);
 			}
-			else if (ParentObject.Position.X + ParentObject.BoundingBox.Width > _level.Size.X)
+			else if (ParentObject.Position.X + ParentObject.BoundingBox.Width > CurrentLevel.Size.X)
 			{
-				ParentObject.Position = new Vector2(_level.Size.X - ParentObject.BoundingBox.Width, ParentObject.Position.Y);
+				ParentObject.Position = new Vector2(CurrentLevel.Size.X - ParentObject.BoundingBox.Width, ParentObject.Position.Y);
 			}
 		}
 
@@ -144,5 +174,7 @@ namespace Miner.GameLogic.Components
 			var deltaX = tile.Position.X - ParentObject.Position.X;
 			return deltaX * ParentObject.Velocity.X > 0;
 		}
+
+		
 	}
 }

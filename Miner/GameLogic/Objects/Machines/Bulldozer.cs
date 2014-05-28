@@ -29,7 +29,7 @@ namespace Miner.GameLogic.Objects.Machines
 			{
 				HasGravity = true
 			});
-			Components.Add("WorldCollision", new SimpleEnemyWorldCollisionComponent(this, game.CurrentLevel));
+			Components.Add("WorldCollision", new SimpleEnemyWorldCollisionComponent(game,this));
 
 			Velocity = new Vector2(100f,0);
 
@@ -60,7 +60,6 @@ namespace Miner.GameLogic.Objects.Machines
 
 		public override void Update(GameTime gameTime)
 		{
-			WorldCollisionComponent.CollidingTiles.Clear();
 			base.Update(gameTime);
 		}
 

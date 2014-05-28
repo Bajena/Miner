@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Miner.Enums;
+using Miner.GameCore;
 using Miner.GameLogic.Objects;
 
 namespace Miner.GameLogic.Components
@@ -10,17 +11,17 @@ namespace Miner.GameLogic.Components
 	/// </summary>
 	public class SimpleEnemyWorldCollisionComponent : WorldCollisionComponent
 	{
-		public SimpleEnemyWorldCollisionComponent(GameObject parentObject, Level level) : base(parentObject, level)
+		public SimpleEnemyWorldCollisionComponent(MinerGame game, GameObject parentObject) : base(game, parentObject)
 		{
 		}
 
-		public override void ReactToWorldCollision(Tile tile, EDirection direction, Vector2 intersectionDepth)
+		protected override void ReactToTileCollision(Tile tile, EDirection direction, Vector2 intersectionDepth)
 		{
 			if (tile.TileType == ETileType.SwitchMoveDirection && IsHeadingTowardsTile(tile) && Math.Abs(intersectionDepth.X) > tile.Dimensions.X/2)
 			{
 					ParentObject.Velocity = new Vector2(-ParentObject.Velocity.X, ParentObject.Velocity.Y);
 			}
-			base.ReactToWorldCollision(tile, direction, intersectionDepth);
+			base.ReactToTileCollision(tile, direction, intersectionDepth);
 		}
 
 	}

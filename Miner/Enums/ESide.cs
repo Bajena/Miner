@@ -8,6 +8,7 @@ namespace Miner.Enums
 	/// <summary>
 	/// Reprezentuje kierunek. Używane w celu określania strony, z której pochodzi kolizja.
 	/// </summary>
+	[Flags]
 	public enum ESide
 	{
 		/// <summary>

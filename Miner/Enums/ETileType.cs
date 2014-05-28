@@ -19,17 +19,9 @@ namespace Miner.Enums
 		/// </summary>
 		Exit,
 		/// <summary>
-		/// Tunel
-		/// </summary>
-		Tunnel,
-		/// <summary>
 		/// Powoduje odwrócenie kierunku poruszania się obiektu
 		/// </summary>
 		SwitchMoveDirection,
-		/// <summary>
-		/// Dół drabiny
-		/// </summary>
-		LadderBottom,
 		/// <summary>
 		/// Środek drabiny
 		/// </summary>
@@ -37,6 +29,14 @@ namespace Miner.Enums
 		/// <summary>
 		/// Góra drabiny
 		/// </summary>
-		LadderTop
+		LadderTop,
+		/// <summary>
+		/// Tunel - wejściowy
+		/// </summary>
+		TunnelStart,
+		/// <summary>
+		/// Tunel - wyjściowy
+		/// </summary>
+		TunnelEnd
 	}
 }
