@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
 using Miner.GameCore;
@@ -13,6 +14,11 @@ namespace Miner.Helpers
 	/// </summary>
 	public static class SoundHelper
 	{
+		private static bool WMPErrorMessageShown = false;
+
+		private static string WMPErrorMessage =
+			"Żeby odtwarzać muzykę w grze należy zainstalować/aktywować program Windows Media Player";
+
 		public static void SetSoundEnabled(bool enabled)
 		{
 			MediaPlayer.Volume = enabled ? 1.0f : 0.0f;
@@ -37,8 +43,19 @@ namespace Miner.Helpers
 		{
 			//if (SettingsManager.Instance.Sound)
 			//{
+			try
+			{
 				MediaPlayer.Play(song);
 				MediaPlayer.IsRepeating = repeat;
+			}
+			catch (InvalidOperationException xcp)
+			{
+				if (!WMPErrorMessageShown && SettingsManager.Instance.Sound)
+				{
+					MessageBox.Show(WMPErrorMessage);
+					WMPErrorMessageShown = true;
+				}
+			}
 			//}
 		}
 
@@ -48,7 +65,18 @@ namespace Miner.Helpers
 		public static void PauseMusic()
 		{
 			//if (SettingsManager.Instance.Sound)
+			try
+			{
 				MediaPlayer.Pause();
+			}
+			catch (InvalidOperationException xcp)
+			{
+				if (!WMPErrorMessageShown && SettingsManager.Instance.Sound)
+				{
+					MessageBox.Show(WMPErrorMessage);
+					WMPErrorMessageShown = true;
+				}
+			}
 		}
 		/// <summary>
 		/// Wznawia muzykę
@@ -56,7 +84,18 @@ namespace Miner.Helpers
 		public static void ResumeMusic()
 		{
 			//if (SettingsManager.Instance.Sound)
+			try
+			{
 				MediaPlayer.Resume();
+			}
+			catch (InvalidOperationException xcp)
+			{
+				if (!WMPErrorMessageShown && SettingsManager.Instance.Sound)
+				{
+					MessageBox.Show(WMPErrorMessage);
+					WMPErrorMessageShown = true;
+				}
+			}
 		}
 	}
 }

@@ -46,13 +46,6 @@
  </Tiles>
  <Objects>
 	<GameObjectData>
-      <Type>Key</Type>
-      <Position>
-        <X>3</X>
-        <Y>3</Y>
-      </Position>
-    </GameObjectData>
-	<GameObjectData>
       <Type>DynamiteCollectible</Type>
       <Position>
         <X>25</X>

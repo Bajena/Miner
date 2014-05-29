@@ -14,6 +14,9 @@ namespace Miner.GameLogic.Components
 	/// </summary>
 	public enum EFacingDirection { Right, Left }
 
+	/// <summary>
+	/// Komponent umożliwiający wyświetlanie animacji obiektu
+	/// </summary>
 	public class AnimationComponent : DrawableGameObjectComponent
 	{
 		/// <summary>

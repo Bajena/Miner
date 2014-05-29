@@ -42,6 +42,8 @@ namespace Miner.GameLogic.Components
 		{
 			CollidingTiles.Clear();
 
+			ParentObject.Properties.UpdateProperty("IsOnGround",false);
+
 			if (moveVector.X != 0)
 			{
 				ParentObject.Position += Vector2.UnitX * moveVector;
