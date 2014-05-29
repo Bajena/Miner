@@ -51,8 +51,9 @@ namespace Miner.GameInterface
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			//spriteBatch.DrawString(_gameFont, _game.CurrentLevel.Name, new Vector2(_game.GraphicsDevice.Viewport.Width/2, 0),Color.White, SpriteBatchExtensions.TextAlignment.Center,new Vector2(0.75f));
-			spriteBatch.DrawString(_gameFont, _game.CurrentLevel.Player.Velocity.ToString(), new Vector2(_game.GraphicsDevice.Viewport.Width / 2, 0), Color.White, SpriteBatchExtensions.TextAlignment.Center, new Vector2(0.75f));
+			spriteBatch.DrawString(_gameFont, _game.CurrentLevel.Name, new Vector2(_game.GraphicsDevice.Viewport.Width/2, 0),Color.White, SpriteBatchExtensions.TextAlignment.Center,new Vector2(0.75f));
+			if (SettingsManager.Instance.Debug)
+				spriteBatch.DrawString(_gameFont, _game.CurrentLevel.Player.Velocity.ToString(), new Vector2(_game.GraphicsDevice.Viewport.Width / 2, 50f), Color.White, SpriteBatchExtensions.TextAlignment.Center, new Vector2(0.75f));
 
 			foreach (var hudItem in HudItems)
 			{
