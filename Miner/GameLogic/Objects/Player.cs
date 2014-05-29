@@ -4,6 +4,7 @@ using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Miner.Enums;
@@ -98,6 +99,8 @@ namespace Miner.GameLogic.Objects
 		/// </summary>
 		private float _jumpSpeed = -400.0f;
 
+		private SoundEffect _deathSound;
+
 		/// <summary>
 		/// Zdarzenie wywoływane w momencie śmierci gracza
 		/// </summary>
@@ -109,6 +112,7 @@ namespace Miner.GameLogic.Objects
 		protected internal void OnDied()
 		{
 			Lives--;
+			SoundHelper.Play(_deathSound);
 			if (Died!= null)
 				Died(this, null);
 		}
@@ -125,9 +129,9 @@ namespace Miner.GameLogic.Objects
 
 
 			Oxygen = SettingsManager.Instance.MaxOxygen;
-			Lives = SettingsManager.Instance.DefaultLives;
+			Lives = SettingsManager.Instance.StartLives;
 			Points = 0;
-			Dynamite = SettingsManager.Instance.DefaultDynamite;
+			Dynamite = SettingsManager.Instance.StartDynamite;
 
 			var oxygenTimer = new TimerComponent(this, TimeSpan.FromSeconds(0.5), true);
 			oxygenTimer.Tick += DecreaseOxygen;
@@ -138,6 +142,7 @@ namespace Miner.GameLogic.Objects
 				HasGravity = true
 			});
 			Components.Add("WorldCollision", new PlayerWorldCollisionComponent(game,this));
+			_deathSound = game.Content.Load<SoundEffect>("Sounds/death");
 			SetupAnimations();
 		}
 

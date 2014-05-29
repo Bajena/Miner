@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 using Miner.Enums;
 using Miner.GameInterface;
 using Miner.GameLogic.Serializable;
+using Miner.Helpers;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace Miner.GameCore
@@ -88,7 +92,17 @@ namespace Miner.GameCore
 		/// <summary>
 		/// Czy dźwięk jest aktywny?
 		/// </summary>
-        public bool Sound { get; set; }
+        public bool Sound {
+			get
+			{
+				return _sound;
+			}
+			set
+			{
+				_sound = value;
+				SoundHelper.SetSoundEnabled(_sound);
+			} 
+		}
 
 		/// <summary>
 		/// Poziom trudnosci
@@ -123,13 +137,15 @@ namespace Miner.GameCore
 		/// Liczba żyć, z którymi zaczyna sie grę
 		/// </summary>
 		[XmlIgnore]
-		public int DefaultLives;
+		public int StartLives;
 
 		/// <summary>
 		/// Liczba dynamitów, z którymi zaczyna się grę
 		/// </summary>
 		[XmlIgnore]
-	    public int DefaultDynamite;
+	    public int StartDynamite;
+
+		private bool _sound;
 
 		public SettingsManager()
 		{
@@ -171,24 +187,43 @@ namespace Miner.GameCore
 		/// <param name="difficulty"></param>
 	    private void SetOptionsForDifficulty(EDifficulty difficulty)
 	    {
-		    switch (difficulty)
-		    {
-			    case EDifficulty.Easy:
-				    MaxOxygen = 200;
-				    DefaultLives = 5;
-				    DefaultDynamite = 10;
-				    break;
-				case EDifficulty.Medium:
-					MaxOxygen = 150;
-					DefaultLives = 3;
-					DefaultDynamite = 5;
-					break;
-				case EDifficulty.Hard:
-					MaxOxygen = 100;
-					DefaultLives = 1;
-					DefaultDynamite = 3;
-					break;
-		    }
+			var difficultyDefaultSettingsSection = ConfigurationManager.GetSection(DifficultyDefaultsDataSection.SectionName) as DifficultyDefaultsDataSection;
+			if (difficultyDefaultSettingsSection != null)
+			{
+
+				foreach (DifficultyLevelDefaultsElement levelDefaults in difficultyDefaultSettingsSection.DifficultyLevelDefaults)
+				{
+					if (difficulty.ToString() == levelDefaults.LevelName)
+					{
+						MaxOxygen = levelDefaults.MaxOxygen;
+						StartLives = levelDefaults.StartLives;
+						StartDynamite = levelDefaults.StartDynamite;
+
+						return;
+					}
+				}
+			}
+			else
+			{
+				switch (difficulty)
+				{
+					case EDifficulty.Easy:
+						MaxOxygen = 200;
+						StartLives = 5;
+						StartDynamite = 10;
+						break;
+					case EDifficulty.Medium:
+						MaxOxygen = 150;
+						StartLives = 3;
+						StartDynamite = 5;
+						break;
+					case EDifficulty.Hard:
+						MaxOxygen = 100;
+						StartLives = 1;
+						StartDynamite = 3;
+						break;
+				}
+			}
 	    }
 
 		/// <summary>

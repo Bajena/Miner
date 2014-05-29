@@ -67,6 +67,8 @@ namespace Miner.GameLogic
 		private readonly SaveData _saveData; //Potrzebne tylko do inicjalizacji
 		private bool _levelComplete;
 		private CartGenerator _cartGenerator;
+		private Song _levelMusic;
+		private Song _levelEndMusic;
 
 		/// <summary>
 		/// Konstruktor. Poziom jest ładowany z pliku xml o tej samej nazwie co parametr name.
@@ -131,9 +133,12 @@ namespace Miner.GameLogic
 			}
 
 			_backgroundTexture = !String.IsNullOrEmpty(levelData.Background) ? _game.Content.Load<Texture2D>("Backgrounds/" + levelData.Background) : null;
+			_levelMusic = _game.Content.Load<Song>("Sounds/music");
+			_levelEndMusic = _game.Content.Load<Song>("Sounds/level_end");
+			SoundHelper.Play(_levelMusic,true);
 
 			InitializePlayer(levelData);
-			InitializeGameObjects(levelData , _saveData!=null);
+			InitializeGameObjects(levelData, _saveData != null);
 			InitializeTileMap(levelData);
 
 			_cartGenerator = new CartGenerator(_game, this);
@@ -374,7 +379,7 @@ namespace Miner.GameLogic
 		/// </summary>
 		private void OnLevelComplete()
 		{
-			SoundHelper.Play(_game.Content.Load<Song>("Sounds/level_end"));
+			SoundHelper.Play(_levelEndMusic,false);
 			var levelEndPopup = new MessageBoxScreen("Level complete!", true, MessageBoxType.Info);
 			levelEndPopup.Accepted += NextLevelMessageAccepted;
 			levelEndPopup.Cancelled += NextLevelMessageAccepted;
@@ -437,7 +442,17 @@ namespace Miner.GameLogic
 			Matrix cameraTransform = Matrix.CreateTranslation(-Camera.Position.X, -Camera.Position.Y, 0.0f);
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise, null, cameraTransform);
 			DrawTiles(spriteBatch);
+			DrawObjects(spriteBatch);
+			spriteBatch.End();
 
+		}
+
+		/// <summary>
+		/// Rysuje postać gracza, maszyny, materiały wybuchowe i znajdźki
+		/// </summary>
+		/// <param name="spriteBatch"></param>
+		private void DrawObjects(SpriteBatch spriteBatch)
+		{
 			Player.Draw(spriteBatch);
 			foreach (var explosive in _explosives)
 			{
@@ -462,9 +477,6 @@ namespace Miner.GameLogic
 					machine.Draw(spriteBatch);
 				}
 			}
-
-			spriteBatch.End();
-
 		}
 
 		/// <summary>

@@ -33,7 +33,6 @@ namespace Miner.GameCore
 
 		float _pauseAlpha;
 		InputAction _pauseAction;
-		private Song _gameMusic;
 		private bool _gamePaused;
 		private MinerHud _gameHud;
 
@@ -56,18 +55,11 @@ namespace Miner.GameCore
 			if (!_gamePaused)
 			{
 				CurrentLevel.Initialize();
-				LoadResources();
-				SoundHelper.Play(_gameMusic);
+				_gameHud = new MinerHud(Game);
+				_gameHud.Initialize();
 			}
 		}
-
-		private void LoadResources()
-		{
-			_gameMusic = Game.Content.Load<Song>("Sounds/music");
-			_gameHud = new MinerHud(Game);
-			_gameHud.Initialize();
-		}
-
+		
 		/// <summary>
 		/// Aktualizuje ekran gry
 		/// </summary>
@@ -129,8 +121,6 @@ namespace Miner.GameCore
 		{
 			if (MediaPlayer.State==MediaState.Paused)
 				SoundHelper.ResumeMusic();
-			else if (MediaPlayer.State==MediaState.Stopped)
-				SoundHelper.Play(_gameMusic);
 
 			_gamePaused = false;
 		}

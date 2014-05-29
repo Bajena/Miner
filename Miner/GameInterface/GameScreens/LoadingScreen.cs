@@ -16,11 +16,18 @@ namespace Miner.GameInterface.GameScreens
 
 	    readonly GameScreen[] _screensToLoad;
 
+		/// <summary>
+		/// Tekst wyœwietlany na œrodku ekranu
+		/// </summary>
+		public string Message { get; set; }
+
         private LoadingScreen(ScreenManager screenManager, bool loadingIsSlow,
                               GameScreen[] screensToLoad)
         {
             _loadingIsSlow = loadingIsSlow;
             _screensToLoad = screensToLoad;
+
+			Message =  "Loading...";
 
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
         }
@@ -73,17 +80,16 @@ namespace Miner.GameInterface.GameScreens
                 SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
                 SpriteFont font = ScreenManager.Font;
 
-                const string message = "Loading...";
 
                 var viewport = ScreenManager.GraphicsDevice.Viewport;
                 var viewportSize = new Vector2(viewport.Width, viewport.Height);
-                var textSize = font.MeasureString(message);
+                var textSize = font.MeasureString(Message);
                 var textPosition = (viewportSize - textSize) / 2;
 
                 var color = Color.White * TransitionAlpha;
 
                 spriteBatch.Begin();
-                spriteBatch.DrawString(font, message, textPosition, color);
+                spriteBatch.DrawString(font, Message, textPosition, color);
                 spriteBatch.End();
             }
         }

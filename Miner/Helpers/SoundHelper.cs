@@ -13,13 +13,19 @@ namespace Miner.Helpers
 	/// </summary>
 	public static class SoundHelper
 	{
+		public static void SetSoundEnabled(bool enabled)
+		{
+			MediaPlayer.Volume = enabled ? 1.0f : 0.0f;
+			SoundEffect.MasterVolume = enabled ? 1.0f : 0.0f;
+		}
+
 		/// <summary>
 		/// Jeśli dźwięki są aktywne odtwarza odgłos
 		/// </summary>
 		/// <param name="soundEffect">Odgłos do odtorzenia</param>
 		public static void Play(SoundEffect soundEffect)
 		{
-			if (SettingsManager.Instance.Sound)
+			//if (SettingsManager.Instance.Sound)
 				soundEffect.Play();
 		}
 
@@ -27,10 +33,13 @@ namespace Miner.Helpers
 		/// Jeśli dźwięki są aktywne odtwarza piosenkę
 		/// </summary>
 		/// <param name="song">Piosenka do odtworzenia</param>
-		public static void Play(Song song)
+		public static void Play(Song song,bool repeat = false)
 		{
-			if (SettingsManager.Instance.Sound)
+			//if (SettingsManager.Instance.Sound)
+			//{
 				MediaPlayer.Play(song);
+				MediaPlayer.IsRepeating = repeat;
+			//}
 		}
 
 		/// <summary>
@@ -38,7 +47,7 @@ namespace Miner.Helpers
 		/// </summary>
 		public static void PauseMusic()
 		{
-			if (SettingsManager.Instance.Sound)
+			//if (SettingsManager.Instance.Sound)
 				MediaPlayer.Pause();
 		}
 		/// <summary>
@@ -46,7 +55,7 @@ namespace Miner.Helpers
 		/// </summary>
 		public static void ResumeMusic()
 		{
-			if (SettingsManager.Instance.Sound)
+			//if (SettingsManager.Instance.Sound)
 				MediaPlayer.Resume();
 		}
 	}

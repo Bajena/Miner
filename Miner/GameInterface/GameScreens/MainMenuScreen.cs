@@ -97,6 +97,7 @@ namespace Miner.GameInterface.GameScreens
 		    catch (Exception xcp)
 		    {
 			    MessageBox.Show(xcp.Message);
+			    throw;
 		    }
 	    }
 

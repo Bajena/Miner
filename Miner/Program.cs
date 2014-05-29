@@ -19,6 +19,7 @@ namespace Miner
 	        catch (Exception xcp)
 	        {
 		        MessageBox.Show(xcp.Message);
+		        throw;
 	        }
         }
     }
