@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using Miner.GameCore;
 
 namespace Miner
@@ -10,8 +11,15 @@ namespace Miner
     {
         static void Main(string[] args)
         {
-            using (var game = new MinerGame())
-                game.Run();
+	        try
+	        {
+		        using (var game = new MinerGame())
+			        game.Run();
+	        }
+	        catch (Exception xcp)
+	        {
+		        MessageBox.Show(xcp.Message);
+	        }
         }
     }
 }

@@ -86,10 +86,11 @@ namespace Miner.GameCore
 
 	    }
 
-	    /// <summary>
-	    /// Tworzy wymagane foldery i pliki
-	    /// </summary>
-	    private void CreateUsersFilesAndDirectories(string userName)
+		/// <summary>
+		/// Tworzy wymagane foldery dla u¿ytkownika
+		/// </summary>
+		/// <param name="userName">Nazwa u¿ytkownika</param>
+	    public void CreateUserDirectories(string userName)
 	    {
 			var directories = new List<string>()
 			{

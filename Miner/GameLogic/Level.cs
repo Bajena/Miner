@@ -10,6 +10,7 @@ using System.Text;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using Miner.Enums;
 using Miner.Extensions;
 using Miner.GameCore;
@@ -357,11 +358,7 @@ namespace Miner.GameLogic
 				{
 					if (_keyCollected)
 					{
-						var levelEndPopup = new MessageBoxScreen("Level complete!", true, MessageBoxType.Info);
-						levelEndPopup.Accepted += NextLevelMessageAccepted;
-						levelEndPopup.Cancelled += NextLevelMessageAccepted;
-						_game.ScreenManager.AddScreen(levelEndPopup);
-						_levelComplete = true;
+						OnLevelComplete();
 					}
 					else
 					{
@@ -369,6 +366,20 @@ namespace Miner.GameLogic
 					}
 				}
 			}
+		}
+
+
+		/// <summary>
+		/// Akcje wykonywane po ukończeniu poziomu przez gracza
+		/// </summary>
+		private void OnLevelComplete()
+		{
+			SoundHelper.Play(_game.Content.Load<Song>("Sounds/level_end"));
+			var levelEndPopup = new MessageBoxScreen("Level complete!", true, MessageBoxType.Info);
+			levelEndPopup.Accepted += NextLevelMessageAccepted;
+			levelEndPopup.Cancelled += NextLevelMessageAccepted;
+			_game.ScreenManager.AddScreen(levelEndPopup);
+			_levelComplete = true;
 		}
 
 		private void NextLevelMessageAccepted(object sender, EventArgs e)

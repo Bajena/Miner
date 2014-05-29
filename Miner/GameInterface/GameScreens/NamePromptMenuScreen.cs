@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Miner.GameCore;
 using Miner.GameInterface.MenuEntries;
@@ -18,12 +19,8 @@ namespace Miner.GameInterface.GameScreens
 		public NamePromptMenuScreen()
             : base("Hello, type your name")
         {
-			// Create our menu entries.
-
-            // Hook up menu event handlers.
 			nameMenuEntry.Entered += NameMenuEntryEntered;
 
-            // Add entries to the menu.
 			MenuEntries.Add(nameMenuEntry);
         }
 
@@ -42,17 +39,7 @@ namespace Miner.GameInterface.GameScreens
 		{
 			if (nameMenuEntry.InputText.Length > 0)
 			{
-				SettingsManager.Instance.PlayerName = nameMenuEntry.InputText;
-
-				if (!Directory.Exists(SettingsManager.GetPlayerDirectory(SettingsManager.Instance.PlayerName)))
-					Directory.CreateDirectory(SettingsManager.GetPlayerDirectory(SettingsManager.Instance.PlayerName));
-				
-				ScreenManager.AddScreen(new MainMenuScreen());
-				if (SettingsManager.PlayerSettingsExist(nameMenuEntry.InputText))
-				{
-					SettingsManager.LoadPlayerSettings(nameMenuEntry.InputText);
-					ScreenManager.ShowMessage("Settings for player " + nameMenuEntry.InputText + " loaded", TimeSpan.FromSeconds(1),false);
-				}
+				ProceedToMainMenu();
 			}
 			else
 			{
@@ -61,7 +48,21 @@ namespace Miner.GameInterface.GameScreens
 				ScreenManager.AddScreen(confirmExitMessageBox);
 			}
 		}
-		
+
+		private void ProceedToMainMenu()
+		{
+			SettingsManager.Instance.PlayerName = nameMenuEntry.InputText;
+
+			(ScreenManager.Game as MinerGame).CreateUserDirectories(SettingsManager.Instance.PlayerName);
+
+			ScreenManager.AddScreen(new MainMenuScreen());
+			if (SettingsManager.PlayerSettingsExist(nameMenuEntry.InputText))
+			{
+				SettingsManager.LoadPlayerSettings(nameMenuEntry.InputText);
+				ScreenManager.ShowMessage("Settings for player " + nameMenuEntry.InputText + " loaded", TimeSpan.FromSeconds(1), false);
+			}
+		}
+
 		public override void HandleInput(GameTime gameTime, InputState input)
 		{
 			if (nameMenuEntry.IsSelected) 

@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Miner.GameCore;
 using Miner.GameInterface.MenuEntries;
@@ -86,11 +87,18 @@ namespace Miner.GameInterface.GameScreens
 
 	    void NewGameMenuEntryEntered(object sender, EventArgs e)
 	    {
-			ScreenManager.GameStateKeeper.ClearStoredGameplay();
-			(ScreenManager.Game as MinerGame).NewGame();
-			var gameplayScreen = new GameplayScreen();
-			LoadingScreen.Load(ScreenManager, true, true, gameplayScreen);
-        }
+		    try
+		    {
+			    ScreenManager.GameStateKeeper.ClearStoredGameplay();
+			    (ScreenManager.Game as MinerGame).NewGame();
+			    var gameplayScreen = new GameplayScreen();
+			    LoadingScreen.Load(ScreenManager, true, true, gameplayScreen);
+		    }
+		    catch (Exception xcp)
+		    {
+			    MessageBox.Show(xcp.Message);
+		    }
+	    }
 
         void OptionsMenuEntryEntered(object sender, EventArgs e)
         {

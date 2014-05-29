@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Windows.Forms;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Miner.Enums;
-using Microsoft.Xna.Framework.Input;
 using Miner.GameInterface;
 using Miner.GameLogic.Serializable;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace Miner.GameCore
 {
@@ -70,9 +71,10 @@ namespace Miner.GameCore
 		public static SettingsManager Instance
 		{
 			get { return _instance ?? (_instance = new SettingsManager()); }
+			private set { _instance = value; }
 		}
 
-	    private EDifficulty _difficulty;
+		private EDifficulty _difficulty;
 
 		/// <summary>
 		/// Słownik z ustawieniami sterowania. Klucze - akcje , wartości - klawisze
@@ -139,18 +141,28 @@ namespace Miner.GameCore
 		/// </summary>
 	    public void InitializeDefault()
         {
-			Controls.Add(EAction.Jump, new InputAction(new Keys[] { Keys.Up }, false));
-			Controls.Add(EAction.MoveLeft, new InputAction(new Keys[] { Keys.Left }, false));
-			Controls.Add(EAction.MoveRight, new InputAction(new Keys[] { Keys.Right }, false));
-			//Controls.Add(EAction.MoveUp, new InputAction(new Keys[] { Keys.Up }, false));
-			Controls.Add(EAction.MoveDown, new InputAction(new Keys[] { Keys.Down }, false));
-			Controls.Add(EAction.SetDynamite, new InputAction(new Keys[] { Keys.Space }, true));
-            PlayerName = "Player";
-			Difficulty = EDifficulty.Medium;
-			SetOptionsForDifficulty(Difficulty);
-		    Debug = false;
-            Sound = true;
-            Resolution = new Vector2(800, 600);
+			try
+			{
+				var settings = Deserialize(ConfigurationManager.AppSettings["DefaultSettingsFileName"]);
+				Instance = settings;
+			}
+			catch (Exception xcp)
+			{
+				MessageBox.Show("Error loading default settings file:" + xcp.Message);
+
+				Controls.Add(EAction.Jump, new InputAction(new Keys[] { Keys.Up }, false));
+				Controls.Add(EAction.MoveLeft, new InputAction(new Keys[] { Keys.Left }, false));
+				Controls.Add(EAction.MoveRight, new InputAction(new Keys[] { Keys.Right }, false));
+				//Controls.Add(EAction.MoveUp, new InputAction(new Keys[] { Keys.Up }, false));
+				Controls.Add(EAction.MoveDown, new InputAction(new Keys[] { Keys.Down }, false));
+				Controls.Add(EAction.SetDynamite, new InputAction(new Keys[] { Keys.Space }, true));
+				PlayerName = "Player";
+				Difficulty = EDifficulty.Medium;
+				SetOptionsForDifficulty(Difficulty);
+				Debug = false;
+				Sound = true;
+				Resolution = new Vector2(800, 600);
+			}
         }
 
 		/// <summary>
