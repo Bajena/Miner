@@ -45,7 +45,7 @@ namespace Miner.GameLogic.Objects.Collectibles
 		public override void OnCollected(Player player)
 		{
 			base.OnCollected(player);
-			player.Points += 10000;
+			player.Points += 1000;
 		}
 	}
 }

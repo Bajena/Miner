@@ -11,6 +11,9 @@ using Miner.GameLogic.Serializable;
 
 namespace Miner.GameCore
 {
+	/// <summary>
+	/// G³ówna klasa gry
+	/// </summary>
     public class MinerGame : Game
     {
 		/// <summary>

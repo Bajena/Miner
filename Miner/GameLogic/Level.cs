@@ -24,6 +24,9 @@ using Miner.Helpers;
 
 namespace Miner.GameLogic
 {
+	/// <summary>
+	/// Klasa reprezentująca poziom gry
+	/// </summary>
 	public class Level
 	{
 		public static string GetLevelPath(string levelName)

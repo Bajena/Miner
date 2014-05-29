@@ -6,6 +6,9 @@ using Microsoft.Xna.Framework;
 
 namespace Miner.GameInterface.GameScreens
 {
+	/// <summary>
+	/// Klasa służąca do czasowego wyświetlania okna z wiadomością
+	/// </summary>
 	public class TimedPopupScreen : MessageBoxScreen
 	{
 		private readonly TimeSpan _timeToHide;

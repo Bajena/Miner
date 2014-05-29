@@ -99,6 +99,11 @@ namespace Miner.GameLogic.Objects
 		/// </summary>
 		private float _jumpSpeed = -400.0f;
 
+		/// <summary>
+		/// Prędkość, po osiągnięciu której gracz ginie podczas kolizji z podłożem.
+		/// </summary>
+		public float MinDeathSpeed = 1500.0f;
+
 		private SoundEffect _deathSound;
 
 		/// <summary>

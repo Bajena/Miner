@@ -23,6 +23,12 @@ namespace Miner.GameLogic.Components
 		{
 			var player = (ParentObject as Player);
 
+			if (direction == EDirection.Vertical && player.Velocity.Y > player.MinDeathSpeed &&
+			    (tile.CollisionType == ETileCollisionType.Platform || tile.CollisionType == ETileCollisionType.Impassable))
+			{
+				player.OnDied();
+			}
+
 			player.IsCollidingWithLadder = false;
 			if (tile.TileType == ETileType.LadderMiddle || tile.TileType==ETileType.LadderTop)
 			{
