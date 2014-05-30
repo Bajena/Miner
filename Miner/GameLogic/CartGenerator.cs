@@ -15,23 +15,24 @@ namespace Miner.GameLogic
 	public class CartGenerator
 	{
 		private readonly MinerGame _game;
-		private readonly Level _level;
 
 		private GameTimer _timer;
 		private List<Tile> _tunnelTiles;
 		private List<Cart> _newCarts; 
 
-		public CartGenerator(MinerGame game,Level level)
+		public CartGenerator(MinerGame game)
 		{
 			_game = game;
-			_level = level;
+
+			var currentLevel = _game.CurrentLevel;
+
 			_timer = new GameTimer(TimeSpan.FromSeconds(5),true);
 
 			_timer.Tick += CreateNewCarts;
 
 			_tunnelTiles = new List<Tile>();
 
-			foreach (var tile in _level.Tiles)
+			foreach (var tile in currentLevel.Tiles)
 			{
 				if (tile.TileType == ETileType.TunnelStart)
 				{

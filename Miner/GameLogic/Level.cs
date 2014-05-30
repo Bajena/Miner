@@ -144,7 +144,7 @@ namespace Miner.GameLogic
 			InitializeGameObjects(levelData, _saveData != null);
 			InitializeTileMap(levelData);
 
-			_cartGenerator = new CartGenerator(_game, this);
+			_cartGenerator = new CartGenerator(_game);
 			Camera = new Camera(_game.GraphicsDevice.Viewport, this, Player);
 			Size = new Vector2(Tiles.GetLength(0) * _tileDimensions.X, Tiles.GetLength(1) * _tileDimensions.Y);
 		}
